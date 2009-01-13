@@ -23,8 +23,11 @@ h1, h2 { font-size: 2em; margin: 0.5em 0; }
   <body>
     <h2>Sparklines</h2>
     <p>Sparklines are tiny graphs <span id="sparkline" class="sparkline"></span> that you can use inline.  You can use more than one <span id="sparkline_2" class="sparkline"></span> in a document.</p>
+
+    <h2>Bar Graph</h2>
+    <div id="bargraph" class="linegraph"></div>
     
-    <h2>Simple Line Graph</h2>
+    <h2>Line Graph</h2>
     <div id="linegraph_4" class="linegraph"></div>
     <div id="linegraph" class="linegraph"></div>
     <div id="linegraph_2" class="linegraph"></div>
@@ -35,6 +38,8 @@ h1, h2 { font-size: 2em; margin: 0.5em 0; }
 /* [21,41,72,98,67,25,8,31,73,0,91,19,28,81,12,68,88,25,98,51,15,10,96,15,93] */
 var sparkline = new Sparkline($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23]);
 var sparkline_2 = new Sparkline($('sparkline_2'), [2, 32, 5, 1, 1, 33, 32, 9, 1]);
+
+var bargraph = new BarGraph($('bargraph'), { one: $R(1, 25).collect(function() { return (Math.random() * 100).round() }) });
 
 var linegraph_4 = new LineGraph($('linegraph_4'), $R(1, 25).collect(function() { return (Math.random()) } ));
 var linegraph = new LineGraph($('linegraph'), { one: [2, 5, 1, 10, 15, 33, 20, 25, 1], two: [10, 9, 3, 30, 1, 10, 5, 33, 33], three: [3, 4, 10, 1, 30, 11, 33, 12, 22]}, { one: '#990000', two: '#009900', three: '#000099' });
