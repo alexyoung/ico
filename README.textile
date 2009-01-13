@@ -1,0 +1,24 @@
+h2. Introduction
+
+Ico is a JavaScript graph library that uses "Raphael":http://raphaeljs.com/ to draw.  This means it can draw charts in multiple browsers.
+
+The current version is a basic implementation to test out the feasibility of the concept.
+
+h3. Targeted graph types
+
+* Sparklines
+* Line graphs
+* Bar charts
+
+h2. Examples
+
+See index.html for current API usage.  This will change as I evolve the API to support the targeted graph types.
+
+h2. Requirements
+
+* "Prototype":http://prototypejs.org
+* "Raphael":http://raphaeljs.com
+
+h2. Library style
+
+I've added semicolons to line endings to make compressing/obscuring the library easier (if you do that sort of thing).
