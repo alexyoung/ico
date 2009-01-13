@@ -12,6 +12,15 @@ h3. Targeted graph types
 * Line graphs
 * Bar charts
 
+h3. Todo
+
+* Labels
+* Horizontally oriented bar graphs (useful for wide text labels)
+* Wrap wide label text in boxes
+* Data sets that don't start at 0 (zoom into data set? is this best practice?)
+* Determine library structure
+* Humanize labels: rather than showing 1,000,000 optionally show "1m"
+
 h2. Examples
 
 See index.html for current API usage.  This will change as I evolve the API to support the targeted graph types.
