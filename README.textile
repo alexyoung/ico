@@ -4,6 +4,8 @@ Ico is a JavaScript graph library that uses "Raphael":http://raphaeljs.com/ to d
 
 The current version is a basic implementation to test out the feasibility of the concept.
 
+<a href="http://dl.getdropbox.com/u/221414/graphs.png"><img src="http://dl.getdropbox.com/u/221414/graphs.png" width="200" /></a>
+
 h3. Targeted graph types
 
 * Sparklines
