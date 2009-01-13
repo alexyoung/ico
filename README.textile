@@ -12,6 +12,19 @@ h3. Targeted graph types
 * Line graphs
 * Bar charts
 
+h3. Design considerations and goals
+
+* Clarity: Use of white-space to help lend clarity to graphs
+* Simplicity: Minimal use of decorations and lines, reliance on the Gestalt principle of closure
+* Conciseness: Avoidance of graph types that don't efficiently present data (pie charts, radar maps)
+
+These goals are based on recommendations in Stephen Few's books:
+
+* Show Me the Numbers: Designing Tables and Graphs to Enlighten
+* Information Dashboard Design
+
+Which was generally in turn based on Edward Tufte's work.
+
 h3. Todo
 
 * Labels

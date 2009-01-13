@@ -67,22 +67,22 @@ var BaseGraph = Class.create({
   initialize: function(element, data, options) {
     this.element = element;
 
-    this.dataSets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
-    this.flatData = this.dataSets.collect(function(dataSet) { return dataSet[1] }).flatten();
+    this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
+    this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1] }).flatten();
     this.range = this.calculateRange();
-    this.dataSize = this.longestDataSetLength();
+    this.data_size = this.longestdata_setLength();
     
     this.options = {
       width:                  parseInt(element.getStyle('width')),
       height:                 parseInt(element.getStyle('height')),
-      labels:                 $A($R(1, this.dataSize)),             // Label data
+      labels:                 $A($R(1, this.data_size)),             // Label data
       plot_padding:           10,                                   // Padding for the graph line/bar plots
       font_size:              10,                                   // Label font size
       show_horizontal_labels: true,
       show_vertical_labels:   true,
       colours:                this.makeRandomColours(),             // Line colours
-      backgroundColour:       element.getStyle('backgroundColor'),
-      labelColour:            '#666'                                // Label text colour
+      background_colour:      element.getStyle('backgroundColor'),
+      label_colour:           '#666'                                // Label text colour
     };
     Object.extend(this.options, options || { });
     
@@ -97,15 +97,13 @@ var BaseGraph = Class.create({
     this.y_padding_bottom = 20 + this.paddingBottomOffset();
     this.y_padding = this.y_padding_top + this.y_padding_bottom;
     
-    this.options['label_colour'] = '#666';
-    
     this.graph_width = this.options['width'] - (this.x_padding);
     this.graph_height = this.options['height'] - (this.y_padding);
     
     this.step = this.calculateStep();
     this.paper = Raphael(this.element, this.options['width'], this.options['height']);
     this.background = this.paper.rect(this.x_padding_left, this.y_padding_top, this.graph_width, this.graph_height);
-    this.background.attr({fill: this.options['backgroundColour'], stroke: null });
+    this.background.attr({fill: this.options['background_colour'], stroke: null });
     
     this.setChartSpecificOptions();
     this.draw();
@@ -129,16 +127,16 @@ var BaseGraph = Class.create({
   
   makeRandomColours: function(number) {
     var colours = {};
-    this.dataSets.each(function(data) {
+    this.data_sets.each(function(data) {
       colours[data[0]] = Raphael.hsb2rgb(Math.random(), 1, .75).hex;
     });
     return colours;
   },
   
-  longestDataSetLength: function() {
+  longestdata_setLength: function() {
     var length = 0;
-    this.dataSets.each(function(dataSet) { 
-      length = dataSet[1].length > length ? dataSet[1].length : length;
+    this.data_sets.each(function(data_set) { 
+      length = data_set[1].length > length ? data_set[1].length : length;
     });
     return length;
   },
@@ -156,7 +154,7 @@ var BaseGraph = Class.create({
   
   paddingLeftOffset: function() {
     /* Find the longest label and multiply it by the font size */
-    var data = this.flatData;
+    var data = this.flat_data;
 
     // Round values
     data = this.roundValues(data, 2);
@@ -173,7 +171,7 @@ var BaseGraph = Class.create({
   
   /* Subtract the largest and smallest values from the data sets */
   calculateRange: function() {
-    var ranges = this.dataSets.collect(function(data) {
+    var ranges = this.data_sets.collect(function(data) {
       return [data[1].max(), data[1].min()];
     });
     this.max = ranges.sort(function(a, b) { return a[0] > b[0] }).first().first();
@@ -197,7 +195,7 @@ var BaseGraph = Class.create({
   },
   
   draw: function() {
-    this.dataSets.each(function(data, index) {
+    this.data_sets.each(function(data, index) {
       this.drawLines(data[0], this.options['colours'][data[0]], this.normaliseData(data[1]));
     }.bind(this));
     
@@ -218,7 +216,7 @@ var LineGraph = Class.create(BaseGraph, {
   },
   
   calculateStep: function() {
-    return (this.graph_width - (this.options['plot_padding'] * 2)) / (this.dataSize - 1);
+    return (this.graph_width - (this.options['plot_padding'] * 2)) / (this.data_size - 1);
   },
   
   drawLines: function(label, colour, data) {
@@ -236,7 +234,7 @@ var LineGraph = Class.create(BaseGraph, {
   },
   
   drawVerticalLabels: function() {
-    var step = labelStep(this.flatData),
+    var step = labelStep(this.flat_data),
         normalised_step = this.normalise(step),
         x = this.x_padding_left - 1,
         y = this.options['height'] - this.y_padding_bottom,
@@ -285,7 +283,7 @@ var BarGraph = Class.create(BaseGraph, {
   },
   
   calculateStep: function() {
-    return (this.graph_width - (this.options['plot_padding'] * 2) - (this.bar_padding / 2)) / (this.dataSize - 1);
+    return (this.graph_width - (this.options['plot_padding'] * 2) - (this.bar_padding / 2)) / (this.data_size - 1);
   },
   
   drawLines: function(label, colour, data) {
@@ -301,7 +299,7 @@ var BarGraph = Class.create(BaseGraph, {
   },
   
   drawVerticalLabels: function() {
-    var step = labelStep(this.flatData),
+    var step = labelStep(this.flat_data),
         normalised_step = this.normalise(step),
         x = this.x_padding_left - 1,
         y = this.options['height'] - this.y_padding_bottom,
