@@ -10,11 +10,11 @@ h3. Targeted graph types
 
 * Sparklines
 * Line graphs
-* Bar charts
+* Bar graphs
 
 h3. Design considerations and goals
 
-* Clarity: Use of white-space to help lend clarity to graphs
+* Clarity: Use of white-space to help lend clarity to graphs, nominal scale vs. ordinal scale
 * Simplicity: Minimal use of decorations and lines, reliance on the Gestalt principle of closure
 * Conciseness: Avoidance of graph types that don't efficiently present data (pie charts, radar maps)
 
@@ -27,8 +27,7 @@ Which was generally in turn based on Edward Tufte's work.
 
 h3. Todo
 
-* Labels
-* Horizontally oriented bar graphs (useful for wide text labels)
+* Label wrapping
 * Wrap wide label text in boxes
 * Data sets that don't start at 0 (zoom into data set? is this best practice?)
 * Determine library structure
