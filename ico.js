@@ -33,7 +33,8 @@ var Sparkline = Class.create({
       width:                  parseInt(element.getStyle('width')),
       height:                 parseInt(element.getStyle('height')),
       highlight:              false,
-      background_colour:      element.getStyle('backgroundColor')
+      background_colour:      element.getStyle('backgroundColor'),
+      colour:                 '#036'
     };
     Object.extend(this.options, options || { });
 
@@ -66,16 +67,21 @@ var Sparkline = Class.create({
   
   draw: function() {
     var data = this.normalisedData();
-    var line = this.paper.path({stroke: "#036"}).moveTo(0, this.options['height'] - data.first());
-    var x = 0;
-    $A(data.slice(1)).each(function(value) {
-      x = x + this.step;
-      line.lineTo(x, this.options['height'] - value);
-    }.bind(this))
+    
+    this.drawLines('', this.options['colour'], data);
     
     if (this.options['highlight']) {
       this.showHighlight(data);
     }
+  },
+  
+  drawLines: function(label, colour, data) {
+    var line = this.paper.path({ stroke: colour }).moveTo(0, this.options['height'] - data.first());
+    var x = 0;
+    data.slice(1).each(function(value) {
+      x = x + this.step;
+      line.lineTo(x, this.options['height'] - value);
+    }.bind(this))
   },
   
   showHighlight: function(data) {
@@ -90,11 +96,26 @@ var Sparkline = Class.create({
     }
 
     var circle = this.paper.circle(x, this.options['height'] - y, size);
-    
     circle.attr({ stroke: false, fill: this.options['highlight']['colour']})
   }
 });
 
+var SparkBar = Class.create(Sparkline, {
+  calculateStep: function() {
+    return this.options['width'] / this.data.length;
+  },
+
+  drawLines: function(label, colour, data) {
+    var width = this.step > 2 ? this.step - 1 : this.step;
+    var x = width;
+    var line = this.paper.path({ stroke: colour, 'stroke-width': width });
+    data.each(function(value) {
+      line.moveTo(x, this.options['height'] - value)
+      line.lineTo(x, this.options['height']);
+      x = x + this.step;
+    }.bind(this))
+  }
+})
 
 var BaseGraph = Class.create({
   initialize: function(element, data, options) {

@@ -54,9 +54,9 @@ p.example .sparkline { width: 50px; }
     <div id="linegraph_8" class="linegraph"></div>
     
     <script type="text/javascript">
-var sparkline = new Sparkline($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { background_colour: '#ccc' });
-var sparkline_2 = new Sparkline($('sparkline_2'), [2, 32, 5, 1, 1, 33, 32, 9, 1], { background_colour: '#ccc' });
-var sparkline_3 = new Sparkline($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
+var sparkline = new Sparkline($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
+var sparkline_2 = new SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
+var sparkline_3 = new Sparkline($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
 
 var bargraph = new BarGraph($('bargraph'), { one: $R(1, 25).collect(function() { return Math.random() }) });
 
