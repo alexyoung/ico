@@ -124,19 +124,20 @@ var BaseGraph = Class.create({
     this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
     this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1] }).flatten();
     this.range = this.calculateRange();
-    this.data_size = this.longestdata_setLength();
+    this.data_size = this.longestDataSetLength();
+    this.start_value = this.calculateStartValue();
     
     this.options = {
       width:                  parseInt(element.getStyle('width')),
       height:                 parseInt(element.getStyle('height')),
-      labels:                 $A($R(1, this.data_size)),             // Label data
+      labels:                 $A($R(1, this.data_size)),            // Label data
       plot_padding:           10,                                   // Padding for the graph line/bar plots
       font_size:              10,                                   // Label font size
       show_horizontal_labels: true,
       show_vertical_labels:   true,
       colours:                this.makeRandomColours(),             // Line colours
       background_colour:      element.getStyle('backgroundColor'),
-      label_colour:           '#666'                                // Label text colour
+      label_colour:           '#666',                               // Label text colour
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -159,7 +160,7 @@ var BaseGraph = Class.create({
     this.paper = Raphael(this.element, this.options['width'], this.options['height']);
     this.background = this.paper.rect(this.x_padding_left, this.y_padding_top, this.graph_width, this.graph_height);
     this.background.attr({fill: this.options['background_colour'], stroke: null });
-    
+
     this.setChartSpecificOptions();
     this.draw();
   },
@@ -184,6 +185,11 @@ var BaseGraph = Class.create({
     /* Define in child classes */
   },
   
+  calculateStartValue: function() {
+    var min = this.flat_data.min();
+    return this.range < min || min < 0 ? min.round() : 0;
+  },
+  
   makeRandomColours: function(number) {
     var colours = {};
     this.data_sets.each(function(data) {
@@ -192,7 +198,7 @@ var BaseGraph = Class.create({
     return colours;
   },
   
-  longestdata_setLength: function() {
+  longestDataSetLength: function() {
     var length = 0;
     this.data_sets.each(function(data_set) { 
       length = data_set[1].length > length ? data_set[1].length : length;
@@ -246,10 +252,10 @@ var BaseGraph = Class.create({
   },
   
   normalise: function(value) {
-    if (this.range  < 5) {
+    if (this.range < 5) {
       return (this.graph_height - this.options['plot_padding']) * value;
     } else {
-      return ((this.graph_height - this.options['plot_padding']) / this.max) * value;
+      return ((this.graph_height - this.options['plot_padding']) / this.range) * value;
     }
   },
   
@@ -265,6 +271,22 @@ var BaseGraph = Class.create({
     if (this.options['show_horizontal_labels']) {
       this.drawHorizontalLabels();
     }
+    
+    if (this.start_value != 0) {
+      this.drawFocusHint();
+    }
+  },
+  
+  drawFocusHint: function() {
+    var length = 5,
+        x = this.x_padding_left + (length / 2) - 1,
+        y = this.options['height'] - this.y_padding_bottom;
+    var cursor = this.paper.path({stroke: this.options['label_colour'], 'stroke-width': 2});
+    
+    cursor.moveTo(x, y);
+    cursor.lineTo(x - length, y - length);
+    cursor.moveTo(x, y - length);
+    cursor.lineTo(x - length, y - (length * 2));
   }
 });
 
@@ -284,14 +306,16 @@ var LineGraph = Class.create(BaseGraph, {
   
   drawLines: function(label, colour, data) {
     var x = this.x_padding_left + this.options['plot_padding'];
-    var cursor = this.paper.path({stroke: colour, 'stroke-width': '3px'}).moveTo(x, this.options['height'] - data.first() - this.y_padding_bottom);
-    
+    var cursor = this.paper.path({stroke: colour, 'stroke-width': '3px'}).moveTo(x, this.options['height'] - data.first() - this.y_padding_bottom + this.normalise(this.start_value));
+
     $A(data.slice(1)).each(function(value) {
+      var y = this.options['height'] - value - this.y_padding_bottom + this.normalise(this.start_value);
       x = x + this.step;
+      
       if (this.curve_amount) {
-        cursor.cplineTo(x, this.options['height'] - value - this.y_padding_bottom, this.curve_amount);
+        cursor.cplineTo(x, y, this.curve_amount);
       } else {
-        cursor.lineTo(x, this.options['height'] - value - this.y_padding_bottom);
+        cursor.lineTo(x, y);
       }
     }.bind(this))
   },
@@ -302,12 +326,11 @@ var LineGraph = Class.create(BaseGraph, {
         x = this.x_padding_left - 1,
         y = this.options['height'] - this.y_padding_bottom,
         top = this.y_padding_top + normalised_step,
-        label = 0;
+        label = this.start_value;
     var cursor = this.paper.path({stroke: this.options['label_colour']});
-    
+
     cursor.moveTo(x, y + 1);
     cursor.lineTo(x, this.y_padding_top);
-    
     while (y > top) {
       y = y - normalised_step;
       label = this.roundValue((label + step), 2);
@@ -323,10 +346,10 @@ var LineGraph = Class.create(BaseGraph, {
         x = this.x_padding_left + this.options['plot_padding'],
         y = this.options['height'] - this.y_padding_bottom + 1;
     var cursor = this.paper.path({stroke: this.options['label_colour']});
-    
+
     cursor.moveTo(this.x_padding_left - 1, y);
     cursor.lineTo(this.graph_width + this.x_padding_left, y);
-      
+
     for (var i = 0; x < limit; i++) {
       cursor.moveTo(x, y);
       cursor.lineTo(x, y + 5);
@@ -363,7 +386,7 @@ var BarGraph = Class.create(BaseGraph, {
     var cursor = this.paper.path({stroke: colour, 'stroke-width': this.bar_width + 'px'}).moveTo(x, start_y);
     
     $A(data).each(function(value) {
-      cursor.lineTo(x, this.options['height'] - value - this.y_padding_bottom);
+      cursor.lineTo(x, this.options['height'] - value - this.y_padding_bottom + this.normalise(this.start_value));
       x = x + this.step;
       cursor.moveTo(x, start_y)
     }.bind(this))
@@ -375,7 +398,7 @@ var BarGraph = Class.create(BaseGraph, {
         x = this.x_padding_left - 1,
         y = this.options['height'] - this.y_padding_bottom,
         top = this.y_padding_top + normalised_step,
-        label = 0;
+        label = this.start_value;
     var cursor = this.paper.path({stroke: this.options['label_colour']});
     
     cursor.moveTo(x, y + 1);
@@ -421,10 +444,10 @@ var HorizontalBarGraph = Class.create(BarGraph, {
   },
 
   normalise: function(value) {
-    if (this.range  < 5) {
+    if (this.range < 5) {
       return (this.graph_width - this.options['plot_padding'] - this.x_padding_left) * value;
     } else {
-      return ((this.graph_width - this.options['plot_padding'] - this.x_padding_left) / this.max) * value;
+      return ((this.graph_width - this.options['plot_padding'] - this.x_padding_left) / this.range) * value;
     }
   },
 
@@ -447,7 +470,7 @@ var HorizontalBarGraph = Class.create(BarGraph, {
     var cursor = this.paper.path({stroke: colour, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
 
     $A(data).each(function(value) {;
-      cursor.lineTo(x + value, y);
+      cursor.lineTo(x + value - this.normalise(this.start_value), y);
       y = y - this.step;
       cursor.moveTo(x, y)
     }.bind(this))
@@ -468,9 +491,8 @@ var HorizontalBarGraph = Class.create(BarGraph, {
 
       cursor.moveTo(x, offset_y);
       cursor.lineTo(x - 5, offset_y);
-      
-      this.paper.text(x - 8, offset_y, label).attr({"text-anchor": 'end', "font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"});
-      
+      this.paper.text(x - 8, offset_y + (this.options['font_size'] / 5), label).attr({"text-anchor": 'end', "font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"});
+
       y = y - step;
     }
   },
@@ -481,7 +503,7 @@ var HorizontalBarGraph = Class.create(BarGraph, {
         limit = this.graph_width - normalised_step,
         x = this.x_padding_left,
         y = this.options['height'] - this.y_padding_bottom + 1,
-        label = 0;
+        label = this.start_value;
     var cursor = this.paper.path({stroke: this.options['label_colour']});
     
     cursor.moveTo(this.x_padding_left - 1, y);
@@ -495,5 +517,18 @@ var HorizontalBarGraph = Class.create(BarGraph, {
       cursor.lineTo(x, y + 5);
       this.paper.text(x, y + this.options['font_size'] + 7, label).attr({"font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"}).toBack();
     }
+  },
+  
+  /* Horizontal version */
+  drawFocusHint: function() {
+    var length = 5,
+        x = this.x_padding_left + (this.step * 2),
+        y = this.options['height'] - this.y_padding_bottom;
+    var cursor = this.paper.path({stroke: this.options['label_colour'], 'stroke-width': 2});
+    
+    cursor.moveTo(x, y);
+    cursor.lineTo(x - length, y + length);
+    cursor.moveTo(x - length, y);
+    cursor.lineTo(x - (length * 2), y + length);
   }
 });
