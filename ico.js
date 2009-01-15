@@ -328,24 +328,24 @@ var BaseGraph = Class.create({
     Object.extend(font_options, extra_font_options || {});
     
     labels.each(function(label) {
-      x = x + x_offset(step);
-      y = y + y_offset(step);
       cursor.moveTo(x, y);
       cursor.lineTo(x + y_offset(5), y + x_offset(5));
-      this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toBack();
+      this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toFront();
+      x = x + x_offset(step);
+      y = y + y_offset(step);
+
     }.bind(this));
   },
   
   drawVerticalLabels: function() {
-    var y_step = labelStep(this.flat_data),
-        y_label_size = ((this.graph_height - this.y_padding_top) / this.normalise(y_step)).round(),
+    var y_step = this.normalise(labelStep(this.flat_data)),
+        y_label_size = ((this.graph_height - this.y_padding_top) / y_step).round(),
         y_labels = this.makeValueLabels(y_label_size);
-    this.drawMarkers(y_labels, [0, -1], this.normalise(y_step), 0, [-8, -2], { "text-anchor": 'end' });
+    this.drawMarkers(y_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
   
   drawHorizontalLabels: function() {
-    var x_start = this.options['plot_padding'];
-    this.drawMarkers(this.options['labels'], [1, 0], this.step, x_start, [0, (this.options['font_size'] + 7) * -1]);
+    this.drawMarkers(this.options['labels'], [1, 0], this.step, this.options['plot_padding'], [0, (this.options['font_size'] + 7) * -1]);
   }
 });
 
@@ -415,7 +415,7 @@ var BarGraph = Class.create(BaseGraph, {
 
   /* Change the standard options to correctly offset against the bars */
   drawHorizontalLabels: function() {
-    var x_start = (this.options['plot_padding'] + this.bar_padding) - (this.step);
+    var x_start = this.bar_padding + this.options['plot_padding'];
     this.drawMarkers(this.options['labels'], [1, 0], this.step, x_start, [0, (this.options['font_size'] + 7) * -1]);
   }
 });
@@ -464,49 +464,6 @@ var HorizontalBarGraph = Class.create(BarGraph, {
     }.bind(this))
   },
 
-  drawVerticalLabels: function() {
-    var step = this.step,
-        x = this.x_padding_left - 1,
-        y = this.options['height'] - this.y_padding_bottom;
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
-    
-    //cursor.moveTo(x, y + 1);
-    //cursor.lineTo(x, this.y_padding_top);
-
-    for (var i = 0; i < this.options['labels'].length; i++) {
-      var offset_y = y - (step / 2);
-      var label = this.options['labels'][i];
-
-      cursor.moveTo(x, offset_y);
-      cursor.lineTo(x - 5, offset_y);
-      this.paper.text(x - 8, offset_y + (this.options['font_size'] / 5), label).attr({"text-anchor": 'end', "font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"});
-
-      y = y - step;
-    }
-  },
-  
-  drawHorizontalLabels: function() {
-    var step = labelStep(this.flat_data),
-        normalised_step = this.normalise(step),
-        limit = this.graph_width - normalised_step,
-        x = this.x_padding_left,
-        y = this.options['height'] - this.y_padding_bottom + 1,
-        label = this.start_value;
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
-    
-    //cursor.moveTo(this.x_padding_left - 1, y);
-    //cursor.lineTo(this.graph_width + this.x_padding_right, y);
-
-    for (var i = 0; x < limit; i++) {
-      x += normalised_step;
-
-      label = this.roundValue(label + step, 2);
-      cursor.moveTo(x, y);
-      cursor.lineTo(x, y + 5);
-      this.paper.text(x, y + this.options['font_size'] + 7, label).attr({"font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"}).toBack();
-    }
-  },
-  
   /* Horizontal version */
   drawFocusHint: function() {
     var length = 5,
@@ -518,5 +475,18 @@ var HorizontalBarGraph = Class.create(BarGraph, {
     cursor.lineTo(x - length, y + length);
     cursor.moveTo(x - length, y);
     cursor.lineTo(x - (length * 2), y + length);
+  },
+  
+  drawVerticalLabels: function() {
+    var y_start = (this.step / 2) - this.options['plot_padding'];
+    this.drawMarkers(this.options['labels'], [0, -1], this.step, y_start, [-8, -(this.options['font_size'] / 5)], { "text-anchor": 'end' });
+  },
+  
+  drawHorizontalLabels: function() {
+    var x_step = this.normalise(labelStep(this.flat_data)),
+        x_label_size = ((this.graph_width - this.x_padding_left) / x_step).round(),
+        x_labels = this.makeValueLabels(x_label_size);
+
+    this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options['font_size'] + 7) * -1]);
   }
 });
