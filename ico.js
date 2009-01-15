@@ -173,10 +173,6 @@ var BaseGraph = Class.create({
     /* Define in child class */
   },
   
-  drawVerticalLabels: function() {
-    /* Define in child class */
-  },
-  
   drawHorizontalLabels: function() {
     /* Define in child class */
   },
@@ -264,6 +260,8 @@ var BaseGraph = Class.create({
       this.drawLines(data[0], this.options['colours'][data[0]], this.normaliseData(data[1]));
     }.bind(this));
     
+    this.drawAxis();
+    
     if (this.options['show_vertical_labels']) {
       this.drawVerticalLabels();
     }
@@ -287,6 +285,67 @@ var BaseGraph = Class.create({
     cursor.lineTo(x - length, y - length);
     cursor.moveTo(x, y - length);
     cursor.lineTo(x - length, y - (length * 2));
+  },
+  
+  drawAxis: function() {
+    var cursor = this.paper.path({stroke: this.options['label_colour']});
+
+    cursor.moveTo(this.x_padding_left - 1, this.options['height'] - this.y_padding_bottom);
+    cursor.lineTo(this.graph_width + this.x_padding_left, this.options['height'] - this.y_padding_bottom);
+    
+    cursor.moveTo(this.x_padding_left - 1, this.options['height'] - this.y_padding_bottom);
+    cursor.lineTo(this.x_padding_left - 1, this.y_padding_top);
+  },
+  
+  makeValueLabels: function(steps) {
+    var step = labelStep(this.flat_data),
+        label = this.start_value,
+        labels = [];
+
+    for (var i = 0; i < steps; i++) {
+      label = this.roundValue((label + step), 2);
+      labels.push(label);
+    }
+    return labels;
+  },
+  
+  drawMarkers: function(labels, direction, step, start_offset, font_offsets, extra_font_options) {
+    function x_offset(value) {
+      return value * direction[0];
+    }
+    
+    function y_offset(value) {
+      return value * direction[1];
+    }
+    
+    /* Start at the origin */
+    var x = this.x_padding_left - 1 + x_offset(start_offset),
+        y = this.options['height'] - this.y_padding_bottom + y_offset(start_offset);
+    
+    var cursor = this.paper.path({stroke: this.options['label_colour']});
+    
+    font_options = {"font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"};
+    Object.extend(font_options, extra_font_options || {});
+    
+    labels.each(function(label) {
+      x = x + x_offset(step);
+      y = y + y_offset(step);
+      cursor.moveTo(x, y);
+      cursor.lineTo(x + y_offset(5), y + x_offset(5));
+      this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toBack();
+    }.bind(this));
+  },
+  
+  drawVerticalLabels: function() {
+    var y_step = labelStep(this.flat_data),
+        y_label_size = ((this.graph_height - this.y_padding_top) / this.normalise(y_step)).round(),
+        y_labels = this.makeValueLabels(y_label_size);
+    this.drawMarkers(y_labels, [0, -1], this.normalise(y_step), 0, [-8, -2], { "text-anchor": 'end' });
+  },
+  
+  drawHorizontalLabels: function() {
+    var x_start = this.options['plot_padding'];
+    this.drawMarkers(this.options['labels'], [1, 0], this.step, x_start, [0, (this.options['font_size'] + 7) * -1]);
   }
 });
 
@@ -318,44 +377,6 @@ var LineGraph = Class.create(BaseGraph, {
         cursor.lineTo(x, y);
       }
     }.bind(this))
-  },
-  
-  drawVerticalLabels: function() {
-    var step = labelStep(this.flat_data),
-        normalised_step = this.normalise(step),
-        x = this.x_padding_left - 1,
-        y = this.options['height'] - this.y_padding_bottom,
-        top = this.y_padding_top + normalised_step,
-        label = this.start_value;
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
-
-    cursor.moveTo(x, y + 1);
-    cursor.lineTo(x, this.y_padding_top);
-    while (y > top) {
-      y = y - normalised_step;
-      label = this.roundValue((label + step), 2);
-
-      cursor.moveTo(x, y);
-      cursor.lineTo(x - 5, y);
-      this.paper.text(x - 8, y + 2, label).attr({"text-anchor": 'end', "font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"}).toBack();
-    }
-  },
-  
-  drawHorizontalLabels: function() {
-    var limit = this.graph_width + this.x_padding_left,
-        x = this.x_padding_left + this.options['plot_padding'],
-        y = this.options['height'] - this.y_padding_bottom + 1;
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
-
-    cursor.moveTo(this.x_padding_left - 1, y);
-    cursor.lineTo(this.graph_width + this.x_padding_left, y);
-
-    for (var i = 0; x < limit; i++) {
-      cursor.moveTo(x, y);
-      cursor.lineTo(x, y + 5);
-      this.paper.text(x, y + this.options['font_size'] + 7, this.options['labels'][i]).attr({"font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"}).toBack();
-      x = x + this.step;
-    }
   }
 });
 
@@ -391,44 +412,11 @@ var BarGraph = Class.create(BaseGraph, {
       cursor.moveTo(x, start_y)
     }.bind(this))
   },
-  
-  drawVerticalLabels: function() {
-    var step = labelStep(this.flat_data),
-        normalised_step = this.normalise(step),
-        x = this.x_padding_left - 1,
-        y = this.options['height'] - this.y_padding_bottom,
-        top = this.y_padding_top + normalised_step,
-        label = this.start_value;
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
-    
-    cursor.moveTo(x, y + 1);
-    cursor.lineTo(x, this.y_padding_top);
-    
-    while (y > top) {
-      y = y - normalised_step;
-      label = this.roundValue((label + step), 2);
-      
-      cursor.moveTo(x, y);
-      cursor.lineTo(x - 5, y);
-      this.paper.text(x - 8, y + 2, label).attr({"text-anchor": 'end', "font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"}).toBack();
-    }
-  },
-  
+
+  /* Change the standard options to correctly offset against the bars */
   drawHorizontalLabels: function() {
-    var limit = this.graph_width + this.x_padding_left,
-        x = this.x_padding_left + this.options['plot_padding'] + this.bar_padding,
-        y = this.options['height'] - this.y_padding_bottom + 1;
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
-    
-    cursor.moveTo(this.x_padding_left - 1, y);
-    cursor.lineTo(this.graph_width + this.x_padding_left, y);
-      
-    for (var i = 0; x < limit; i++) {
-      cursor.moveTo(x, y);
-      cursor.lineTo(x, y + 5);
-      this.paper.text(x, y + this.options['font_size'] + 7, this.options['labels'][i]).attr({"font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"}).toBack();
-      x = x + this.step;
-    }
+    var x_start = (this.options['plot_padding'] + this.bar_padding) - (this.step);
+    this.drawMarkers(this.options['labels'], [1, 0], this.step, x_start, [0, (this.options['font_size'] + 7) * -1]);
   }
 });
 
@@ -482,8 +470,8 @@ var HorizontalBarGraph = Class.create(BarGraph, {
         y = this.options['height'] - this.y_padding_bottom;
     var cursor = this.paper.path({stroke: this.options['label_colour']});
     
-    cursor.moveTo(x, y + 1);
-    cursor.lineTo(x, this.y_padding_top);
+    //cursor.moveTo(x, y + 1);
+    //cursor.lineTo(x, this.y_padding_top);
 
     for (var i = 0; i < this.options['labels'].length; i++) {
       var offset_y = y - (step / 2);
@@ -506,8 +494,8 @@ var HorizontalBarGraph = Class.create(BarGraph, {
         label = this.start_value;
     var cursor = this.paper.path({stroke: this.options['label_colour']});
     
-    cursor.moveTo(this.x_padding_left - 1, y);
-    cursor.lineTo(this.graph_width + this.x_padding_right, y);
+    //cursor.moveTo(this.x_padding_left - 1, y);
+    //cursor.lineTo(this.graph_width + this.x_padding_right, y);
 
     for (var i = 0; x < limit; i++) {
       x += normalised_step;
