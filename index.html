@@ -64,28 +64,28 @@ p.example .sparkline { width: 50px; }
     <div id="bar_negative_and_positive" class="linegraph"></div>
     <div id="horizontal_negative_and_positive" class="linegraph"></div>
     <script type="text/javascript">
-var sparkline = new Sparkline($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
-var sparkline_2 = new SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
-var sparkline_3 = new Sparkline($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
+var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
+var sparkline_2 = new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
+var sparkline_3 = new Ico.SparkLine($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
 
-var bargraph = new BarGraph($('bargraph'), { one: $R(1, 25).collect(function() { return Math.random() }) });
+var bargraph = new Ico.BarGraph($('bargraph'), { one: $R(1, 25).collect(function() { return Math.random() }) });
 
-var linegraph = new LineGraph($('linegraph'), { one: [2, 5, 1, 10, 15, 33, 20, 25, 1], two: [10, 9, 3, 30, 1, 10, 5, 33, 33], three: [3, 4, 10, 1, 30, 11, 33, 12, 22]}, { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'] });
-var linegraph_2 = new LineGraph($('linegraph_2'), $R(1, 25).collect(function() { return (Math.random() * 100).round() } ));
-var linegraph_3 = new LineGraph($('linegraph_3'), $R(1, 25).collect(function() { return (Math.random() * 10000).round() } ));
-var linegraph_4 = new LineGraph($('linegraph_4'), $R(1, 25).collect(function() { return Math.random() } ));
+var linegraph = new Ico.LineGraph($('linegraph'), { one: [2, 5, 1, 10, 15, 33, 20, 25, 1], two: [10, 9, 3, 30, 1, 10, 5, 33, 33], three: [3, 4, 10, 1, 30, 11, 33, 12, 22]}, { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'] });
+var linegraph_2 = new Ico.LineGraph($('linegraph_2'), $R(1, 25).collect(function() { return (Math.random() * 100).round() } ));
+var linegraph_3 = new Ico.LineGraph($('linegraph_3'), $R(1, 25).collect(function() { return (Math.random() * 10000).round() } ));
+var linegraph_4 = new Ico.LineGraph($('linegraph_4'), $R(1, 25).collect(function() { return Math.random() } ));
 
-var bargraph_5 = new HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'] });
-var bargraph_6 = new BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
-var bargraph_7 = new HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
-var bargraph_8 = new HorizontalBarGraph($('bargraph_8'), $R(1, 9).collect(function() { return Math.random() }), { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
+var bargraph_5 = new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'] });
+var bargraph_6 = new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
+var bargraph_7 = new Ico.HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
+var bargraph_8 = new Ico.HorizontalBarGraph($('bargraph_8'), $R(1, 9).collect(function() { return Math.random() }), { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
 
-var linegraph_small_high = new LineGraph($('linegraph_small_high'), $R(1, 25).collect(function() { return (Math.random() + 100) } ));
-var linegraph_med_high = new LineGraph($('linegraph_med_high'), $R(1, 25).collect(function() { return (Math.random() * 10).round() + 1000 } ));
-var linegraph_negative = new LineGraph($('linegraph_negative'), [57,-31,-87,-66,-30,-77,-88,75,-25,48,-56,-91,16,-41,87,69,65,-62,-58,15,-49,-75,42,-78,-79]);
-var linegraph_negative_and_positive = new LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77,-88,-75,-25,-48,-56,-91,-16,-41,-87,-69,-65,-62,-58,-15,-49,-75,-42,-78,-79]);
-var bar_negative_and_positive = new BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
-var horizontal_negative_and_positive = new HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
+var linegraph_small_high = new Ico.LineGraph($('linegraph_small_high'), $R(1, 25).collect(function() { return (Math.random() + 100) } ));
+var linegraph_med_high = new Ico.LineGraph($('linegraph_med_high'), $R(1, 25).collect(function() { return (Math.random() * 10).round() + 1000 } ));
+var linegraph_negative = new Ico.LineGraph($('linegraph_negative'), [57,-31,-87,-66,-30,-77,-88,75,-25,48,-56,-91,16,-41,87,69,65,-62,-58,15,-49,-75,42,-78,-79]);
+var linegraph_negative_and_positive = new Ico.LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77,-88,-75,-25,-48,-56,-91,-16,-41,-87,-69,-65,-62,-58,-15,-49,-75,-42,-78,-79]);
+var bar_negative_and_positive = new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
+var horizontal_negative_and_positive = new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
     </script>
   </body>
 </html>

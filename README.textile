@@ -29,7 +29,6 @@ h3. Todo
 
 * Label wrapping
 * Wrap wide label text in boxes
-* Data sets that don't start at 0 (zoom into data set? is this best practice?)
 * Determine library structure
 * Humanize labels: rather than showing 1,000,000 optionally show "1m"
 

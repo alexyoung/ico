@@ -1,30 +1,44 @@
-/* Returns a suitable set of labels for given data points on the Y axis */
-function labelStep(data) {
-  var min = data.min(),
-      max = data.max(),
-      range = max - min,
-      step = 0;
-
-  if (range < 2) {
-    step = 0.1;
-  } else if (range < 3) {
-    step = 0.2;
-  } else if (range < 5) {
-    step = 0.5;
-  } else if (range < 11) {
-    step = 1;
-  } else if (range < 50) {
-    step = 5;
-  } else if (range < 100) {
-    step = 10;
-  } else {
-    step = Math.pow(10, (Math.log(range) / Math.LN10).round() - 1);
-  }
+var Ico = {
+  Base: {},
   
-  return step;
+  SparkLine: {},
+  SparkBar: {},
+
+  BaseGraph: {},
+  LineGraph: {},
+  BarGraph: {},
+  HorizontalBarGraph: {}
 }
 
-var Sparkline = Class.create({
+Ico.Base = Class.create({
+  /* Returns a suitable set of labels for given data points on the Y axis */
+  labelStep: function(data) {
+    var min = data.min(),
+        max = data.max(),
+        range = max - min,
+        step = 0;
+
+    if (range < 2) {
+      step = 0.1;
+    } else if (range < 3) {
+      step = 0.2;
+    } else if (range < 5) {
+      step = 0.5;
+    } else if (range < 11) {
+      step = 1;
+    } else if (range < 50) {
+      step = 5;
+    } else if (range < 100) {
+      step = 10;
+    } else {
+      step = Math.pow(10, (Math.log(range) / Math.LN10).round() - 1);
+    }
+    
+    return step;
+  }
+});
+
+Ico.SparkLine = Class.create(Ico.Base, {
   initialize: function(element, data, options) {
     this.element = element;
     this.data = data;
@@ -100,7 +114,7 @@ var Sparkline = Class.create({
   }
 });
 
-var SparkBar = Class.create(Sparkline, {
+Ico.SparkBar = Class.create(Ico.SparkLine, {
   calculateStep: function() {
     return this.options['width'] / this.data.length;
   },
@@ -117,7 +131,7 @@ var SparkBar = Class.create(Sparkline, {
   }
 })
 
-var BaseGraph = Class.create({
+Ico.BaseGraph = Class.create(Ico.Base, {
   initialize: function(element, data, options) {
     this.element = element;
 
@@ -298,7 +312,7 @@ var BaseGraph = Class.create({
   },
   
   makeValueLabels: function(steps) {
-    var step = labelStep(this.flat_data),
+    var step = this.labelStep(this.flat_data),
         label = this.start_value,
         labels = [];
 
@@ -338,7 +352,7 @@ var BaseGraph = Class.create({
   },
   
   drawVerticalLabels: function() {
-    var y_step = this.normalise(labelStep(this.flat_data)),
+    var y_step = this.normalise(this.labelStep(this.flat_data)),
         y_label_size = ((this.graph_height - this.y_padding_top) / y_step).round(),
         y_labels = this.makeValueLabels(y_label_size);
     this.drawMarkers(y_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
@@ -350,7 +364,7 @@ var BaseGraph = Class.create({
 });
 
 
-var LineGraph = Class.create(BaseGraph, {
+Ico.LineGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function() {
     return { plot_padding: 10 };
   },
@@ -381,7 +395,7 @@ var LineGraph = Class.create(BaseGraph, {
 });
 
 /* This is based on the line graph, I can probably inherit from a shared class here */
-var BarGraph = Class.create(BaseGraph, {
+Ico.BarGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function() {
     return { plot_padding: 0 };
   },
@@ -421,7 +435,7 @@ var BarGraph = Class.create(BaseGraph, {
 });
 
 /* This is based on the line graph, I can probably inherit from a shared class here */
-var HorizontalBarGraph = Class.create(BarGraph, {
+Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
     this.x_padding_left = 12 + this.longestLabel() * (this.options['font_size'] / 2);
@@ -483,7 +497,7 @@ var HorizontalBarGraph = Class.create(BarGraph, {
   },
   
   drawHorizontalLabels: function() {
-    var x_step = this.normalise(labelStep(this.flat_data)),
+    var x_step = this.normalise(this.labelStep(this.flat_data)),
         x_label_size = ((this.graph_width - this.x_padding_left) / x_step).round(),
         x_labels = this.makeValueLabels(x_label_size);
 
