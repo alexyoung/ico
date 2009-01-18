@@ -140,7 +140,15 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.range = this.calculateRange();
     this.data_size = this.longestDataSetLength();
     this.start_value = this.calculateStartValue();
-    
+
+    /* If one colour is specified, map it to a compatible set */
+    if (options && options['colour']) {
+      options['colours'] = {};
+      this.data_sets.keys().each(function(key) {
+        options['colours'][key] = options['colour'];
+      });
+    }
+
     this.options = {
       width:                  parseInt(element.getStyle('width')),
       height:                 parseInt(element.getStyle('height')),
