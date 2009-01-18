@@ -160,6 +160,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       colours:                this.makeRandomColours(),             // Line colours
       background_colour:      element.getStyle('backgroundColor'),
       label_colour:           '#666',                               // Label text colour
+      markers:                false,                                // false, circle
+      marker_size:            5
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -330,7 +332,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
     return labels;
   },
-  
+ 
+  /* Axis label markers */
   drawMarkers: function(labels, direction, step, start_offset, font_offsets, extra_font_options) {
     function x_offset(value) {
       return value * direction[0];
@@ -397,6 +400,10 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         cursor.cplineTo(x, y, this.curve_amount);
       } else {
         cursor.lineTo(x, y);
+      }
+      if (this.options['markers'] == 'circle') {
+        var circle = this.paper.circle(x, y, this.options['marker_size']);
+        circle.attr({ 'stroke-width': '1px', stroke: this.options['background_colour'], fill: colour });
       }
     }.bind(this))
   }
