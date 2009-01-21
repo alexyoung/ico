@@ -141,6 +141,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.data_size = this.longestDataSetLength();
     this.start_value = this.calculateStartValue();
 
+    if (this.start_value == 0) {
+      this.range = this.max;
+    }
+
     /* If one colour is specified, map it to a compatible set */
     if (options && options['colour']) {
       options['colours'] = {};
@@ -162,19 +166,17 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       label_colour:           '#666',                               // Label text colour
       markers:                false,                                // false, circle
       marker_size:            5,
-      meanline:               false
+      meanline:               false,
+      y_padding_top:          20
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
-    
-    /* Sets how curvy lines are */
-    this.curve_amount = 10;
     
     /* Padding around the graph area to make room for labels */
     this.x_padding_left = 10 + this.paddingLeftOffset();
     this.x_padding_right = 20;
     this.x_padding = this.x_padding_left + this.x_padding_right;
-    this.y_padding_top = 20;
+    this.y_padding_top = this.options['y_padding_top'];
     this.y_padding_bottom = 20 + this.paddingBottomOffset();
     this.y_padding = this.y_padding_top + this.y_padding_bottom;
     
@@ -184,8 +186,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.step = this.calculateStep();
     this.label_step = this.labelStep(this.flat_data);
 
-    /* Calculate how many y labels are required */
-    this.y_label_count = (this.range / this.label_step).round() + 1;
+    /* Calculate how many labels are required */
+    this.y_label_count = (this.range / this.label_step).round();
 
     this.paper = Raphael(this.element, this.options['width'], this.options['height']);
     this.background = this.paper.rect(this.x_padding_left, this.y_padding_top, this.graph_width, this.graph_height);
@@ -271,6 +273,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     });
     this.max = ranges.sort(function(a, b) { return a[0] < b[0] }).first().first();
     this.min = ranges.sort(function(a, b) { return a[1] < b[1] }).first().last();
+
     return this.max - this.min;
   },
   
@@ -286,6 +289,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
   
   draw: function() {
+    if (this.options['grid']) {
+      this.drawGrid();
+    }
+
     if (this.options['meanline']) {
       this.drawMeanLine(this.normaliseData(this.flat_data));
     }
@@ -306,6 +313,33 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     
     if (this.start_value != 0) {
       this.drawFocusHint();
+    }
+  },
+
+  drawGrid: function() {
+    var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
+
+    if (this.options['show_vertical_labels']) {
+      var y = this.graph_height + this.y_padding_top;
+      for (i = 0; i < this.y_label_count; i++) {
+        y = y - (this.graph_height / this.y_label_count);
+        path.moveTo(this.x_padding_left, y);
+        path.lineTo(this.x_padding_left + this.graph_width, y);
+      }
+    }
+ 
+    if (this.options['show_horizontal_labels']) {
+      var x = this.x_padding_left + this.options['plot_padding'] - 1,
+          x_labels = this.options['labels'].length;
+      for (i = 0; i < x_labels; i++) {
+        path.moveTo(x, this.y_padding_top);
+        path.lineTo(x, this.y_padding_top + this.graph_height);
+        x = x + this.step;
+      }
+
+      x = x - this.options['plot_padding'] - 1;
+      path.moveTo(x, this.y_padding_top);
+      path.lineTo(x, this.y_padding_top + this.graph_height);
     }
   },
 
@@ -421,7 +455,9 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   },
 
   setChartSpecificOptions: function() {
-    this.curve_amount = 10;
+    if (typeof(this.options['curve_amount']) == 'undefined') {
+      this.options['curve_amount'] = 10
+    }
   },
   
   calculateStep: function() {
@@ -437,8 +473,8 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       return this.startPlot(cursor, x, y, colour);
     }
 
-    if (this.curve_amount) {
-      cursor.cplineTo(x, y, this.curve_amount);
+    if (this.options['curve_amount']) {
+      cursor.cplineTo(x, y, this.options['curve_amount']);
     } else {
       cursor.lineTo(x, y);
     }
