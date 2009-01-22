@@ -54,14 +54,13 @@ Ico.SparkLine = Class.create(Ico.Base, {
 
     this.step = this.calculateStep();
     this.paper = Raphael(this.element, this.options['width'], this.options['height']);
-    
     if (this.options['acceptable_range']) {
       this.background = this.paper.rect(0, this.options['height'] - this.normalise(this.options['acceptable_range'][1]),
                                         this.options['width'], this.options['height'] - this.normalise(this.options['acceptable_range'][0]));
     } else {
       this.background = this.paper.rect(0, 0, this.options['width'], this.options['height']);
     }
-    this.background.attr({fill: this.options['background_colour'], stroke: null });
+    this.background.attr({fill: this.options['background_colour'], stroke: 'none' });
     this.draw();
   },
   
@@ -191,7 +190,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     this.paper = Raphael(this.element, this.options['width'], this.options['height']);
     this.background = this.paper.rect(this.x_padding_left, this.y_padding_top, this.graph_width, this.graph_height);
-    this.background.attr({fill: this.options['background_colour'], stroke: null });
+    this.background.attr({fill: this.options['background_colour'], stroke: 'none' });
 
     if (this.options['meanline'] === true) {
       this.options['meanline'] = { 'stroke-width': '2px', stroke: '#BBBBBB' };
