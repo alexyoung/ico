@@ -27,6 +27,7 @@ Which was generally in turn based on Edward Tufte's work.
 
 h3. Todo
 
+* IE bugs: text alignment for none centre labels (Raphael/VML issue), sparklines aren't inline
 * Label wrapping
 * Wrap wide label text in boxes
 * Determine library structure
