@@ -270,9 +270,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var ranges = this.data_sets.collect(function(data) {
       return [data[1].max(), data[1].min()];
     });
-    this.max = ranges.sort(function(a, b) { return a[0] < b[0] }).first().first();
-    this.min = ranges.sort(function(a, b) { return a[1] < b[1] }).first().last();
-
+    this.max = ranges.sortBy(function(a, b) { return a[0] > b[0] }).last().first();
+    this.min = ranges.sortBy(function(a, b) { return a[1] < b[1] }).first().last();
     return this.max - this.min;
   },
   
