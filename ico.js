@@ -267,11 +267,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   
   /* Subtract the largest and smallest values from the data sets */
   calculateRange: function() {
-    var ranges = this.data_sets.collect(function(data) {
-      return [data[1].max(), data[1].min()];
-    });
-    this.max = ranges.sortBy(function(a, b) { return a[0] > b[0] }).last().first();
-    this.min = ranges.sortBy(function(a, b) { return a[1] < b[1] }).first().last();
+    this.max = this.flat_data.max();
+    this.min = this.flat_data.min();
     return this.max - this.min;
   },
   
