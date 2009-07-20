@@ -63,6 +63,24 @@ p.example { color: #555; }
     <div id="linegraph_negative_and_positive" class="linegraph"></div>
     <div id="bar_negative_and_positive" class="linegraph"></div>
     <div id="horizontal_negative_and_positive" class="linegraph"></div>
+
+    <h2>Contributed Examples</h2>
+
+    <p>Min and max are the same:</p>
+    <div class="linegraph" id="rics_poll"></div>
+
+    <p>Small range difference, but should still start at 0:</p>
+    <div class="linegraph" id="rics_poll4"></div>
+
+    <p>Small range difference, but should still start at 0 (it's a bar chart):</p>
+    <div class="linegraph" id="rics_poll5"></div>
+
+    <p>Large min max set to the same:</p>
+    <div class="linegraph" id="rics_poll3"></div>
+
+    <p>Negative values should always be above the axis (not fixed yet):</p>
+    <div class="linegraph" id="rics_poll2"></div>
+
     <script type="text/javascript">
 var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
 var sparkline_2 = new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
@@ -76,7 +94,7 @@ var linegraph_2 = new Ico.LineGraph($('linegraph_2'), [100, 10, 90, 20, 80, 30, 
 var linegraph_3 = new Ico.LineGraph($('linegraph_3'), $R(1, 25).collect(function() { return (Math.random() * 10000).round() } ));
 var linegraph_4 = new Ico.LineGraph($('linegraph_4'), $R(1, 25).collect(function() { return Math.random() } ));
 
-var linegraph_5 = new Ico.LineGraph($('linegraph_5'),{shoe_size: [11,10,5]},{ markers: 'circle', colours: {shoe_size: '#990000' }, grid: true });
+var linegraph_5 = new Ico.LineGraph($('linegraph_5'),{shoe_size: [15,14,10]},{ markers: 'circle', colours: {shoe_size: '#990000' }, grid: true });
 
 var bargraph_5 = new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099' });
 var bargraph_6 = new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
@@ -88,7 +106,12 @@ var linegraph_med_high = new Ico.LineGraph($('linegraph_med_high'), $R(1, 25).co
 var linegraph_negative = new Ico.LineGraph($('linegraph_negative'), [57,-31,-87,-66,-30,-77,-88,75,-25,48,-56,-91,16,-41,87,69,65,-62,-58,15,-49,-75,42,-78,-79]);
 var linegraph_negative_and_positive = new Ico.LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77,-88,-75,-25,-48,-56,-91,-16,-41,-87,-69,-65,-62,-58,-15,-49,-75,-42,-78,-79]);
 var bar_negative_and_positive = new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
-var horizontal_negative_and_positive = new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
+var horizontal_negative_and_positive = new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-20,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
+var rics_poll = new Ico.BarGraph($('rics_poll'), [20, 20],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+var rics_poll = new Ico.BarGraph($('rics_poll4'), [20, 19, 15, 10],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+var rics_poll = new Ico.BarGraph($('rics_poll5'), [10.1, 10.2, 10.5, 11],  { font_size: 10, colour: '#ff0099' });
+var rics_poll2 = new Ico.BarGraph($('rics_poll2'), [20, -20, -30],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+var rics_poll2 = new Ico.BarGraph($('rics_poll3'), [2000, 2000],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
     </script>
   </body>
 </html>

@@ -25,12 +25,14 @@ These goals are based on recommendations in Stephen Few's books:
 
 Which was generally in turn based on Edward Tufte's work.
 
+h3. Test-Driven
+
+I've been rebuilding sections of the library with <code>unittest.js</code> from scriptaculous.  Unit tests can be run in a browser by loading the HTML files.  I'm also using these tests to help profile the library and improve performance. 
+
 h3. Todo
 
-* IE bugs: text alignment for none centre labels (Raphael/VML issue), sparklines aren't inline
-* Label wrapping
-* Wrap wide label text in boxes
-* Determine library structure
+* Remove JavaScript library dependency
+* Package more normalisation code
 * Humanize labels: rather than showing 1,000,000 optionally show "1m"
 
 h2. Examples
