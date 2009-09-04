@@ -81,6 +81,9 @@ p.example { color: #555; }
     <p>Negative values should always be above the axis (not fixed yet):</p>
     <div class="linegraph" id="rics_poll2"></div>
 
+    <p>Origin should be 0 for sets with the same values like this:</p>
+    <div class="linegraph" id="rre1"></div>
+
     <script type="text/javascript">
 var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
 var sparkline_2 = new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
@@ -112,6 +115,15 @@ var rics_poll = new Ico.BarGraph($('rics_poll4'), [20, 19, 15, 10],  { font_size
 var rics_poll = new Ico.BarGraph($('rics_poll5'), [10.1, 10.2, 10.5, 11],  { font_size: 10, colour: '#ff0099' });
 var rics_poll2 = new Ico.BarGraph($('rics_poll2'), [20, -20, -30],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
 var rics_poll2 = new Ico.BarGraph($('rics_poll3'), [2000, 2000],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+
+var rre = new Ico.LineGraph($('rre1'), { "Your Forecast": [10, 10, 10, 10, 10, 10], "Market": [5, 5, 5, 5, 5, 5] },
+                               { colours: {"Your Forecast": '#000099', "Market": '#999999' },
+                                 font_size: 9,
+                                 plot_padding: 2,
+                                 marker_size: 3,
+                                 curve_amount: false,
+                                 markers: 'circle' });
+
     </script>
   </body>
 </html>

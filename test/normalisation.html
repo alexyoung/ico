@@ -67,14 +67,6 @@
       assertEqual(-30, normaliser.start_value);
     }},
 
-    test_rounding: function() { with(this) {
-      var normaliser = new Ico.Normaliser([]);
-      normaliser.standard_deviation = 1.0;
-      assertEqual(10, normaliser.round(10));
-      assertEqual(-100, normaliser.round(-81, 2));
-      assertEqual(-80, normaliser.round(-81, 1));
-    }},
-
     test_90_100: function() { with(this) {
       var normaliser = new Ico.Normaliser([90, 95, 100], { start_value: 0 });
       assertEqual(10, normaliser.step);
@@ -98,6 +90,12 @@
       /* Negative values are the only case where start_value should be ignored */
       var normaliser = new Ico.Normaliser([-10, 1, 20], { start_value: 0 });
       assertEqual(-10, normaliser.start_value);
+    }},
+
+    test_rre_bug: function() { with(this) {
+      var normaliser = new Ico.Normaliser([10, 10, 10, 5, 5, 5]);
+      assertEqual(1, normaliser.step);
+      assertEqual(0, normaliser.start_value);
     }},
 
     test_max_has_headrom: function() { with(this) {

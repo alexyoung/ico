@@ -64,10 +64,16 @@ Ico.Normaliser = Class.create({
     this.process();
   },
 
-  calculateStart: function(offset) {
-    offset = offset || 1;
+  calculateStart: function() {
     var min = this.options.start_value != null && this.min >= 0 ? this.options.start_value : this.min;
-    return this.round(min, offset);
+    start_value = this.round(min, 1);
+
+    /* This is a boundary condition */
+    if (this.min > 0 && start_value > this.min) {
+      return 0;
+    }
+
+    return start_value;
   },
 
   /* Given a value, this method rounds it to the nearest good value for an origin */
@@ -76,7 +82,7 @@ Ico.Normaliser = Class.create({
     if (this.standard_deviation > 0.1) {
       var multiplier = Math.pow(10, -offset);
       value = Math.round(value * multiplier) / multiplier;
-      
+
       /* Drop down a notch for values that round to more than the minimum */
       if (value < 0 && value > this.min) {
         value -= Math.pow(10, offset);
