@@ -60,6 +60,21 @@
       assertEqual(-100, normaliser.start_value);
     }},
 
+    test_negative_medium_range: function() { with(this) {
+      var normaliser = new Ico.Normaliser([10, 10, 10, 10, 10, 10, 5, 6, 9, 11, 14, -25]);
+      assertEqual(10, normaliser.step);
+      assertEqual(-25, normaliser.min);
+      assertEqual(-30, normaliser.start_value);
+    }},
+
+    test_rounding: function() { with(this) {
+      var normaliser = new Ico.Normaliser([]);
+      normaliser.standard_deviation = 1.0;
+      assertEqual(10, normaliser.round(10));
+      assertEqual(-100, normaliser.round(-81, 2));
+      assertEqual(-80, normaliser.round(-81, 1));
+    }},
+
     test_90_100: function() { with(this) {
       var normaliser = new Ico.Normaliser([90, 95, 100], { start_value: 0 });
       assertEqual(10, normaliser.step);
