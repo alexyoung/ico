@@ -230,6 +230,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       markers:                false,                                // false, circle
       marker_size:            5,
       meanline:               false,
+      grid:                   false,
+      grid_colour:            '#ccc',
       y_padding_top:          20
     };
     Object.extend(this.options, this.chartDefaults() || { });
@@ -370,7 +372,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   drawGrid: function() {
-    var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
+    var path = this.paper.path({ stroke: this.options['grid_colour'], 'stroke-width': '1px' });
 
     if (this.options['show_vertical_labels']) {
       var y = this.graph_height + this.y_padding_top;
