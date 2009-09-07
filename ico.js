@@ -457,7 +457,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     for (var i = 0; i < steps; i++) {
       label = this.roundValue((label + step), 2);
       labels.push(label);
-      console.log(label)
     }
     return labels;
   },
@@ -483,11 +482,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     
     labels.each(function(label) {
       cursor.moveTo(x, y);
-
-      if (label.length > 0) {
-        cursor.lineTo(x + y_offset(5), y + x_offset(5));
-        this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toFront();
-      }
+      cursor.lineTo(x + y_offset(5), y + x_offset(5));
+      this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toFront();
       x = x + x_offset(step);
       y = y + y_offset(step);
     }.bind(this));
