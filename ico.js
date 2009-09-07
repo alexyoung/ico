@@ -59,7 +59,7 @@ Ico.Normaliser = Class.create({
     this.max = data.max();
     this.standard_deviation = data.standard_deviation();
     this.range = 0;
-    this.step = 1;
+    this.step = this.labelStep(this.max - this.min);
     this.start_value = this.calculateStart();
     this.process();
   },
@@ -79,25 +79,26 @@ Ico.Normaliser = Class.create({
   /* Given a value, this method rounds it to the nearest good value for an origin */
   round: function(value, offset) {
     offset = offset || 1;
+    roundedValue = value;
+
     if (this.standard_deviation > 0.1) {
       var multiplier = Math.pow(10, -offset);
-      value = Math.round(value * multiplier) / multiplier;
+      roundedValue = Math.round(value * multiplier) / multiplier;
 
-      /* Drop down a notch for values that round to more than the minimum */
-      if (value < 0 && value > this.min) {
-        value -= Math.pow(10, offset);
+      if (roundedValue > this.min) {
+        return this.round(value - this.step);
       }
     }
-    return value;
+    return roundedValue;
   },
 
   process: function() {
     this.range = this.max - this.start_value;
-    this.step = this.labelStep();
+    this.step = this.labelStep(this.range);
   },
 
-  labelStep: function() {
-    return Math.pow(10, (Math.log(this.range) / Math.LN10).round() - 1)
+  labelStep: function(value) {
+    return Math.pow(10, (Math.log(value) / Math.LN10).round() - 1)
   }
 });
 
