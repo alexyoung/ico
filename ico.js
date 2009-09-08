@@ -252,7 +252,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.step = this.calculateStep();
 
     /* Calculate how many labels are required */
-    this.y_label_count = (this.range / this.label_step).round();
+    this.y_label_count = (this.range / this.label_step).ceil();
     if ((this.normaliser.min + (this.y_label_count * this.normaliser.step)) < this.normaliser.max) {
       this.y_label_count += 1;
     }
