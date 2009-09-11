@@ -505,6 +505,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 });
 
 Ico.LineGraph = Class.create(Ico.BaseGraph, {
+  normalise: function(value) {
+    var total = this.start_value == 0 ? this.top_value : this.top_value - this.start_value;
+    return ((value / total) * (this.graph_height));
+  },
+
   chartDefaults: function() {
     return { plot_padding: 10 };
   },

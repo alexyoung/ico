@@ -81,12 +81,6 @@ p.example { color: #555; }
     <p>Negative values should always be above the axis (not fixed yet):</p>
     <div class="linegraph" id="rics_poll2"></div>
 
-    <p>Origin should be 0 for sets with the same values like this:</p>
-    <div class="linegraph" id="rre1"></div>
-
-    <p>This should zoom into the range correctly:</p>
-    <div class="linegraph" id="rre2"></div>
-
     <script type="text/javascript">
 var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
 var sparkline_2 = new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
@@ -118,24 +112,6 @@ var rics_poll = new Ico.BarGraph($('rics_poll4'), [20, 19, 15, 10],  { font_size
 var rics_poll = new Ico.BarGraph($('rics_poll5'), [10.1, 10.2, 10.5, 11],  { font_size: 10, colour: '#ff0099' });
 var rics_poll2 = new Ico.BarGraph($('rics_poll2'), [20, -20, -30],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two', 'label three'] });
 var rics_poll2 = new Ico.BarGraph($('rics_poll3'), [2000, 2000],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
-
-var rre = new Ico.LineGraph($('rre1'), { "Your Forecast": [10, 10, 10, 10, 10, 10], "Market": [5, 5, 5, 5, 5, 5] },
-                               { colours: {"Your Forecast": '#000099', "Market": '#999999' },
-                                 font_size: 9,
-                                 plot_padding: 2,
-                                 marker_size: 3,
-                                 curve_amount: false,
-                                 markers: 'circle' });
-
-var rre2 = new Ico.LineGraph($('rre2'), { 'values': [100.3, 100.4, 101.3, 100.4, 101.2, 101.8, 102.0, 103.5, 103.7, 103.1, 104.1, 103.0, 102.6, 104.2, 104.1, 103.3, 103.9, 104.6, 103.4, 104.5, 103.5, 103.6, 104.6, 104.4, 104.5, 103.7, 103.8, 102.9, 102.5, 102.3, 101.8, 103.1, 102.0, 100.8, 100.4, 100.3, 100.7, 100.7, 101.3, 101.6, 102.6, 98.0, 100.1, 100.8, 100.7, 100.3, 100.1, 100.9, 99.2, 100.1, 99.8, 99.9, 99.8, 99.3, 100.1, 100.2, 99.5, 99.8, 99.7, 100.8, 100.7, 100.0, 101.2, 101.2, 100.7, 101.3, 102.0, 101.6, 101.4, 101.1, 101.4, 100.3, 100.2, 100.6, 99.8, 100.0, 101.1, 100.6, 100.8, 100.3, 100.2, 100.7, 99.6, 100.2, 100.4, 100.4, 100.5, 100.3, 99.6, 99.5, 99.1, 98.3, 99.0, 99.1, 99.6, 100.2, 100.6, 100.3, 101.2, 100.0, 100.5, 100.4, 100.6, 100.1, 100.7, 100.7, 101.2, 100.3, 100.6, 100.3, 100.1, 100.5, 100.2, 99.8, 100.3, 100.5, 101.1, 101.5, 101.5, 101.2, 101.1, 100.9, 100.8, 101.4, 101.2, 101.3, 101.2, 100.9, 101.0, 100.6, 100.6, 99.9, 99.8, 99.5, 98.8, 98.6] },
-                                   { colours: { 'values': '#000099' },
-                                     labels: ["1999", "", "", "", "", "", "", "", "", "", "", "", "2000", "", "", "", "", "", "", "", "", "", "", "", "2001", "", "", "", "", "", "", "", "", "", "", "", "2002", "", "", "", "", "", "", "", "", "", "", "", "2003", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2004", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2005", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2006", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2007", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "2008", "", "", "", "", "", "", "", ""],
-                                     font_size: 9,
-                                     plot_padding: 2,
-                                     curve_amount: false,
-                                     grid: true,
-                                     grid_colour: '#eee',
-                                     markers: false });
     </script>
   </body>
 </html>
