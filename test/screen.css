@@ -1,0 +1,18 @@
+html, body, div, ul, ol, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, fieldset, input { margin: 0; padding: 0; }
+h1, h2, h3, h4, h5, h6, pre, code, address, caption, cite, code, em, strong, th { font-size: 1em; font-weight: normal; font-style: normal; }
+fieldset, img { border: none; }
+body { font-family: "Lucida Grande", Helvetica, sans-serif; font-size: 12px; background-color: #fff; padding: 0; margin: 10px 5%; color: #000 }
+h1, h2 { font-size: 2em; margin: 0.5em 0; }
+
+p { margin: 1em 0; }
+p.example { color: #555; }
+
+.sparkline { display: inline-block; height: 14px; margin: 0 4px }
+.sparkline div { display: inline-block; }
+
+.linegraph, .linegraph_dark, .linegraph_small { width: 600px; height: 300px; background-color: #fff; margin-bottom: 20px; }
+.linegraph_dark { background-color: #999; }
+.linegraph_small { width: 400px; height: 200px; }
+
+.highlight { color: red; }
+
