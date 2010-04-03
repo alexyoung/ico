@@ -31,8 +31,6 @@ I've been rebuilding sections of the library with <code>unittest.js</code> from 
 
 h3. Todo
 
-* Remove JavaScript library dependency
-* Package more normalisation code
 * Humanize labels: rather than showing 1,000,000 optionally show "1m"
 
 h2. Examples
