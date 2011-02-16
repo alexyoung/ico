@@ -421,7 +421,8 @@
     },
 
     longestLabel: function() {
-      return this.options.labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
+      var labels = this.options.labels;
+      return labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
     },
 
     paddingLeftOffset: function() {
