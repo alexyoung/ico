@@ -62,6 +62,7 @@ p.example { color: #555; }
 
     <h2>Bar Graph</h2>
     <div id="bargraph" class="linegraph"></div>
+    <div id="bargraph_bug" class="linegraph"></div>
     <div id="bargraph_9" class="linegraph"></div>
     
     <h2>Line Graph</h2>
@@ -111,6 +112,7 @@ new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], {
 new Ico.SparkLine($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
 
 new Ico.BarGraph($('bargraph'), { one: $random(1, 25) });
+new Ico.BarGraph($('bargraph_bug'), [1.0]);
 new Ico.BarGraph($('bargraph_9'),  {shoe_size: [1, 1, 1, 0, 2, 4, 6, 8, 3, 9, 6]}, { colours: {shoe_size: '#990000' }, grid: true });
 
 new Ico.LineGraph($('linegraph'), { one: [30, 5, 1, 10, 15, 18, 20, 25, 1], two: [10, 9, 3, 30, 1, 10, 5, 33, 33], three: [5, 4, 10, 1, 30, 11, 33, 12, 22]}, { markers: 'circle', colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], meanline: true, grid: true});

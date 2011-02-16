@@ -10,6 +10,10 @@
     }
   };
 
+  function validStepDivider(value) {
+    return value > 1 ? value - 1 : 1;
+  }
+
   function getStyle(el, styleProp) {
     var style;
     if (el.currentStyle) {
@@ -201,7 +205,7 @@
     },
 
     calculateStep: function() {
-      return this.options.width / (this.data.length - 1);
+      return this.options.width / validStepDivider(this.data.length);
     },
 
     normalise: function(value) {
@@ -252,7 +256,7 @@
   Object.extend(Ico.SparkBar.prototype, Ico.SparkLine.prototype);
   Object.extend(Ico.SparkBar.prototype, {
     calculateStep: function() {
-      return this.options.width / this.data.length;
+      return this.options.width / validStepDivider(this.data.length);
     },
 
     drawLines: function(label, colour, data) {
@@ -505,8 +509,8 @@
           pathString = '';
 
       for (var i = 0; i < coords.length; i++) {
-        var x = coords[i][0],
-            y = coords[i][1];
+        var x = coords[i][0] || 0,
+            y = coords[i][1] || 0;
         pathString = this.drawPlot(i, pathString, x, y, colour);
       }
 
@@ -630,7 +634,7 @@
     },
     
     calculateStep: function() {
-      return (this.graph_width - (this.options.plot_padding * 2)) / (this.data_size - 1);
+      return (this.graph_width - (this.options.plot_padding * 2)) / validStepDivider(this.data_size);
     },
 
     startPlot: function(pathString, x, y, colour) {
@@ -686,7 +690,7 @@
     },
     
     calculateStep: function() {
-      return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
+      return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / validStepDivider(this.data_size);
     },
    
     drawPlot: function(index, pathString, x, y, colour) {
@@ -734,7 +738,7 @@
     },
     
     calculateStep: function() {
-      return (this.graph_height - (this.options.plot_padding * 2)) / (this.data_size);
+      return (this.graph_height - (this.options.plot_padding * 2)) / validStepDivider(this.data_size);
     },
     
     drawLines: function(label, colour, data) {
