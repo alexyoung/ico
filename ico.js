@@ -419,7 +419,11 @@
       }
       return roundedData;
     },
-    
+
+    longestLabel: function() {
+      return this.options.labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
+    },
+
     paddingLeftOffset: function() {
       /* Find the longest label and multiply it by the font size */
       var data = this.roundValues(this.flat_data, 2),
@@ -628,6 +632,9 @@
     },
 
     setChartSpecificOptions: function() {
+      // Approximate the width required by the labels
+      this.x_padding_left = 30 + this.longestLabel() * (this.options.font_size / 2);
+
       if (typeof this.options.curve_amount === 'undefined') {
         this.options.curve_amount = 10;
       }
@@ -726,10 +733,6 @@
     normalise: function(value) {
       var offset = this.x_padding_left;
       return ((value / this.range) * (this.graph_width - offset));
-    },
-
-    longestLabel: function() {
-      return this.options.labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
     },
 
     /* Height */
