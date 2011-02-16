@@ -420,8 +420,8 @@
       return roundedData;
     },
 
-    longestLabel: function() {
-      var labels = this.options.labels;
+    longestLabel: function(values) {
+      var labels = Array.prototype.slice.call(values || this.options.labels, 0);
       return labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
     },
 
@@ -435,7 +435,7 @@
       })[0].toString().length;
 
       longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
-      return longest_label_length * this.options.font_size;
+      return 10 + (longest_label_length * this.options.font_size);
     },
     
     paddingBottomOffset: function() {
@@ -634,7 +634,7 @@
 
     setChartSpecificOptions: function() {
       // Approximate the width required by the labels
-      this.x_padding_left = 30 + this.longestLabel() * (this.options.font_size / 2);
+      this.x_padding_left = 30 + this.longestLabel(this.value_labels) * (this.options.font_size / 2);
 
       if (typeof this.options.curve_amount === 'undefined') {
         this.options.curve_amount = 10;
