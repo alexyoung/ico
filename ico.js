@@ -283,10 +283,6 @@
       this.data_sets = this.buildDataSets(data, options);
       this.flat_data = this.flatten(data);
 
-      this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
-      this.label_step = this.normaliser.step;
-      this.range = this.normaliser.range;
-      this.start_value = this.normaliser.start_value;
       this.data_size = this.longestDataSetLength();
 
       /* If one colour is specified, map it to a compatible set */
@@ -317,6 +313,11 @@
       };
       Object.extend(this.options, this.chartDefaults() || { });
       Object.extend(this.options, options || { });
+
+      this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
+      this.label_step = this.normaliser.step;
+      this.range = this.normaliser.range;
+      this.start_value = this.normaliser.start_value;
 
       /* Padding around the graph area to make room for labels */
       this.x_padding_left = 10 + this.paddingLeftOffset();
@@ -640,7 +641,11 @@
         this.options.curve_amount = 10;
       }
     },
-    
+
+    normaliserOptions: function() {
+      return { start_value: this.options.start_value };
+    },
+
     calculateStep: function() {
       return (this.graph_width - (this.options.plot_padding * 2)) / validStepDivider(this.data_size);
     },
