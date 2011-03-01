@@ -6,6 +6,10 @@ Raphael is the only dependency.
 
 <a href="http://dl.getdropbox.com/u/221414/graphs.png">View Examples.</a>
 
+h3. News
+
+* [2011-03-01] 0.2.2 released: Ico.SparkLine will now work correctly, particularly in IE6
+
 h3. Targeted graph types
 
 * Sparklines

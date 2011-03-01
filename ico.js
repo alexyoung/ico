@@ -3,7 +3,7 @@
 
 (function(global) {
   var Ico = {
-    VERSION: '0.2.1',
+    VERSION: '0.2.2',
     round: function(num, dec) {
       var result = Math.round(num * Math.pow(10, dec)) / Math.pow(10,dec);
       return result;
@@ -179,7 +179,6 @@
     initialize: function(element, data, options) {
       this.element = element;
       this.data = data;
-
       this.options = {
         width:             parseInt(getStyle(element, 'width'), 10),
         height:            parseInt(getStyle(element, 'height'), 10),
@@ -228,12 +227,12 @@
           i = 0;
 
       pathString = 'M0,' + (this.options.height - data[0]);
-      this.lastPoint = { x: 0, y: this.options.height - data[0] };
-      for (i = 0; i < data.length; i++) {
+      for (i = 1; i < data.length; i++) {
         x = x + this.step;
-        pathString += 'L' + x +',' + (this.options.height - data[i]);
+        pathString += 'L' + x +',' + Ico.round(this.options.height - data[i], 2);
       }
       this.paper.path(pathString).attr({stroke: colour});
+      this.lastPoint = { x: 0, y: this.options.height - data[0] };
     },
     
     showHighlight: function(data) {
