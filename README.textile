@@ -4,7 +4,7 @@ Ico is a JavaScript graph library that uses "Raphael":http://raphaeljs.com/ to d
 
 Raphael is the only dependency.
 
-* "Documentation":http://github.com/alexyoung/ico
+* "Documentation":http://alexyoung.github.com/ico
 * "Examples":http://alexyoung.github.com/ico/examples.html
 
 h3. News
