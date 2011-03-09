@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>Raphael Ico</title>
+    <script src="raphael.js" type="text/javascript" charset="utf-8"></script>
+    <script src="ico-min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+function $(id) {
+  return document.getElementById(id);
+}
+
+function $R(min, max) {
+  var a = [], i;
+  for (i = min; i < max; i++) {
+    a.push(i);
+  }
+  return a;
+}
+
+function $map(min, max, method) {
+  var a = [], i;
+  for (i = min; i < max; i++) {
+    a.push(method.apply(this, [i]));
+  }
+  return a;
+}
+
+function $random(min, max) {
+  return $map(min, max, function() { return Math.random(); });
+}
+    </script>
+    <style type="text/css" media="screen">
+html, body, div, ul, ol, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, fieldset, input { margin: 0; padding: 0; }
+h1, h2, h3, h4, h5, h6, pre, code, address, caption, cite, code, em, strong, th { font-size: 1em; font-weight: normal; font-style: normal; }
+fieldset, img { border: none; }
+body { font-family: "Lucida Grande", Helvetica, sans-serif; font-size: 12px; background-color: #fff; padding: 0; margin: 10px 5%; color: #000 }
+h1, h2 { font-size: 2em; margin: 0.5em 0; }
+
+p { margin: 1em 0; }
+p.example { color: #555; }
+
+.sparkline { display: inline-block; height: 14px; margin: 0 4px }
+.sparkline div { display: inline-block; }
+
+.linegraph, .linegraph_dark, .linegraph_small { width: 600px; height: 300px; background-color: #fff; margin-bottom: 20px; }
+.linegraph_dark { background-color: #999; }
+.linegraph_small { width: 400px; height: 200px; }
+
+.highlight { color: red; }
+    </style>
+  </head>
+  <body>
+    <h2>Sparklines</h2>
+    <p>Sparklines are tiny graphs <span id="sparkline" class="sparkline"></span> that you can use inline.  You can use more than one <span id="sparkline_2" class="sparkline"></span> in a document.</p>
+
+    <p>Sometimes it's useful to highlight a value in a sparkline:</p>
+    
+    <p class="example">Today there were <span id="sparkline_3" class="sparkline"></span> <span class="highlight">5</span> daily defects.</p>
+
+    <p>That example also showed a range using a background colour.  This could represent a set of acceptable values.</p>
+
+    <h2>Bar Graph</h2>
+    <div id="bargraph" class="linegraph"></div>
+    <div id="bargraph_bug" class="linegraph"></div>
+    <div id="bargraph_9" class="linegraph"></div>
+    
+    <h2>Line Graph</h2>
+    <div id="linegraph_4" class="linegraph"></div>
+    <div id="linegraph" class="linegraph"></div>
+    <div id="linegraph_2" class="linegraph"></div>
+    <div id="linegraph_3" class="linegraph"></div>
+    <div id="linegraph_5" class="linegraph"></div>
+    
+    <h2>Horizontal Bar Graph</h2>
+    <div id="bargraph_5" class="linegraph"></div>
+    <div id="bargraph_6" class="linegraph"></div>
+    <div id="bargraph_7" class="linegraph"></div>
+    <div id="bargraph_8" class="linegraph"></div>
+    
+    <h2>Focused Data Ranges</h2>
+    
+    <p>Centre onto awkward data ranges:</p>
+    
+    <div id="linegraph_small_high" class="linegraph"></div>
+    <div id="linegraph_med_high" class="linegraph"></div>
+    <div id="linegraph_negative" class="linegraph"></div>
+    <div id="linegraph_negative_and_positive" class="linegraph"></div>
+    <div id="bar_negative_and_positive" class="linegraph"></div>
+    <div id="horizontal_negative_and_positive" class="linegraph"></div>
+
+    <h2>Contributed Examples</h2>
+
+    <p>Min and max are the same:</p>
+    <div class="linegraph" id="rics_poll"></div>
+
+    <p>Small range difference, but should still start at 0:</p>
+    <div class="linegraph" id="rics_poll4"></div>
+
+    <p>Small range difference, but should still start at 0 (it's a bar chart):</p>
+    <div class="linegraph" id="rics_poll5"></div>
+
+    <p>Large min max set to the same:</p>
+    <div class="linegraph" id="rics_poll3"></div>
+
+    <p>Negative values should always be above the axis (not fixed yet):</p>
+    <div class="linegraph" id="rics_poll2"></div>
+
+    <script type="text/javascript">
+new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
+new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
+new Ico.SparkLine($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
+
+new Ico.BarGraph($('bargraph'), { one: $random(1, 25) });
+new Ico.BarGraph($('bargraph_bug'), [1.0]);
+new Ico.BarGraph($('bargraph_9'),  {shoe_size: [1, 1, 1, 0, 2, 4, 6, 8, 3, 9, 6]}, { colours: {shoe_size: '#990000' }, grid: true });
+
+new Ico.LineGraph($('linegraph'), { one: [30, 5, 1, 10, 15, 18, 20, 25, 1], two: [10, 9, 3, 30, 1, 10, 5, 33, 33], three: [5, 4, 10, 1, 30, 11, 33, 12, 22]}, { markers: 'circle', colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], meanline: true, grid: true});
+new Ico.LineGraph($('linegraph_2'), [100, 10, 90, 20, 80, 30, 70, 40, 60, 50, 55, 10, 9, 38, 65, 40, 79, 83, 48, 75, 14, 67, 20, 89, 48], { meanline: { stroke: '#AA0000' }, grid: true } );
+new Ico.LineGraph($('linegraph_3'), $map(1, 25, function() { return Math.round(Math.random() * 10000); }), { start_value: 0 });
+new Ico.LineGraph($('linegraph_4'), $random(1, 25));
+
+new Ico.LineGraph($('linegraph_5'),{shoe_size: [15,14,10]},{ markers: 'circle', colours: {shoe_size: '#990000' }, grid: true });
+
+new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#ccc' });
+new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
+new Ico.HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
+new Ico.HorizontalBarGraph($('bargraph_8'), [0.23, 0.1, 0.9, 0.95, 0.99, 0.3, 0.5, 0.35, 0.3], { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
+
+new Ico.LineGraph($('linegraph_small_high'), $map(1, 25, function() { return Math.round(Math.random() + 100); }));
+new Ico.LineGraph($('linegraph_med_high'), $map(1, 25, function() { return Math.round((Math.random() * 10) + 1000); } ));
+new Ico.LineGraph($('linegraph_negative'), [57,-31,-87,-66,-30,-77,-88,75,-25,48,-56,-91,16,-41,87,69,65,-62,-58,15,-49,-75,42,-78,-79]);
+new Ico.LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77,-88,-75,-25,-48,-56,-91,-16,-41,-87,-69,-65,-62,-58,-15,-49,-75,-42,-78,-79]);
+new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
+new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-20,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
+new Ico.BarGraph($('rics_poll'), [20, 20],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+new Ico.BarGraph($('rics_poll4'), [20, 19, 15, 10],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+new Ico.BarGraph($('rics_poll5'), [10.1, 10.2, 10.5, 11],  { font_size: 10, colour: '#ff0099' });
+new Ico.BarGraph($('rics_poll2'), [20, -20, -30],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two', 'label three'] });
+new Ico.BarGraph($('rics_poll3'), [2000, 2000],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+    </script>
+  </body>
+</html>
