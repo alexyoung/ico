@@ -1,0 +1,1282 @@
+<html>
+	<head>
+		<title>Ico</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<style>body {
+    margin: 0;
+    padding: 0;
+    font: 14px/1.5 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    color: #252519;
+}
+a {
+    color: #252519;
+}
+a:hover {
+    text-decoration: underline;
+    color: #19469D;
+}
+p {
+    margin: 12px 0;
+}
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+}
+table#source {
+    width: 100%;
+    border-collapse: collapse;
+}
+table#source td:first-child {
+    padding: 30px 40px 30px 40px;
+    vertical-align: top;
+}
+table#source td:first-child,
+table#source td:first-child pre {
+    width: 450px;
+}
+table#source td:last-child {
+    padding: 30px 0 30px 40px;
+    border-left: 1px solid #E5E5EE;
+    background: #F5F5FF;
+}
+table#source tr {
+    border-bottom: 1px solid #E5E5EE;
+}
+table#source tr.filename {
+    padding-top: 40px;
+    border-top: 1px solid #E5E5EE;
+}
+table#source tr.filename td:first-child {
+    text-transform: capitalize;
+}
+table#source tr.filename td:last-child {
+    font-size: 12px;
+}
+table#source tr.filename h2 {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+table#source tr.code h1,
+table#source tr.code h2,
+table#source tr.code h3 {
+    margin-top: 30px;
+    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
+    font-size: 18px;
+}
+table#source tr.code h2 {
+    font-size: 16px;
+}
+table#source tr.code h3 {
+    font-size: 14px;
+}
+table#source tr.code ul {
+    margin: 15px 0 15px 35px;
+    padding: 0;
+}
+table#source tr.code ul li {
+    margin: 0;
+    padding: 1px 0;
+}
+table#source tr.code ul li p {
+    margin: 0;
+    padding: 0;
+}
+table#source tr.code td:first-child pre {
+    padding: 20px;
+}
+#ribbon {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+code .string { color: #219161; }
+code .regexp { color: #219161; }
+code .keyword { color: #954121; }
+code .number { color: #19469D; }
+code .comment { color: #bbb; }
+code .this { color: #19469D; }</style>
+		<script>
+			$(function(){
+				$('tr.code').hide();
+				$('tr.filename').toggle(function(){
+					$(this).nextUntil('.filename').fadeIn();
+				}, function(){
+					$(this).nextUntil('.filename').fadeOut();
+				});
+			});
+		</script>
+	</head>
+	<body>
+<table id="source"><tbody><tr><td><h1>Ico</h1><p>Ico is a JavaScript graph library that uses <a href="http://raphaeljs.com/">Raphael</a> to draw.  This means it can draw charts in multiple browsers (including IE).</p>
+
+<p>Get it at GitHub: <a href="https://github.com/alexyoung/ico">alexyoung / ico</a> or <a href="https://github.com/alexyoung/ico/examples.html">view examples</a>.</p>
+
+<p>The API uses a data parameter then an additional option for customisation:</p>
+
+<pre><code> new Ico.BarGraph(dom_element, data, options);</code></pre>
+
+<p>An array or object can be passed as data:</p>
+
+<pre><code> new Ico.BarGraph(dom_element, [1, 2, 3, 4], { grid: true });
+
+ new Ico.BarGraph($('dom_element'), {
+     shoe_size: [1, 1, 1, 0, 2, 4, 6, 8, 3, 9, 6]
+   },
+   { colours: {shoe_size: '#990000' },
+     grid: true });</code></pre></td><td></td></tr><tr class="filename"><td><h2 id="src/base.js"><a href="#">base</a></h2></td><td>src/base.js</td></tr><tr class="code">
+<td class="docs">
+<p>The Ico.Base object which contains useful generic functions.
+ </p>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">Base</span> = {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Runs this.normalise on each value.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Array</em>  data Values to normalise</p></li><li><p><strong>returns</strong>: <em>Array</em>  Normalised values</p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">normaliseData</span>: <span class="keyword">function</span>(<span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">values</span> = [],
+        <span class="variable">i</span>      = <span class="number integer">0</span>;
+    <span class="keyword">for</span> (<span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="variable">values</span>.<span class="variable">push</span>(<span class="this">this</span>.<span class="variable">normalise</span>(<span class="variable">data</span>[<span class="variable">i</span>]));
+    }
+    <span class="keyword">return</span> <span class="variable">values</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Flattens objects into an array.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Object</em>  data Values to flatten</p></li><li><p><strong>returns</strong>: <em>Array</em>  Flattened values</p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">flatten</span>: <span class="keyword">function</span>(<span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">flat_data</span> = [];
+
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">data</span>.<span class="variable">length</span> === <span class="string">'undefined'</span>) {
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">data</span> === <span class="string">'object'</span>) {
+        <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">key</span> <span class="keyword">in</span> <span class="variable">data</span>) {
+          <span class="keyword">if</span> (<span class="variable">data</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">key</span>))
+            <span class="variable">flat_data</span> = <span class="variable">flat_data</span>.<span class="variable">concat</span>(<span class="this">this</span>.<span class="variable">flatten</span>(<span class="variable">data</span>[<span class="variable">key</span>]));
+        }
+      } <span class="keyword">else</span> {
+        <span class="keyword">return</span> [];
+      }
+    }
+
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">data</span>[<span class="variable">i</span>].<span class="variable">length</span> === <span class="string">'number'</span>) {
+        <span class="variable">flat_data</span> = <span class="variable">flat_data</span>.<span class="variable">concat</span>(<span class="this">this</span>.<span class="variable">flatten</span>(<span class="variable">data</span>[<span class="variable">i</span>]));
+      } <span class="keyword">else</span> {
+        <span class="variable">flat_data</span>.<span class="variable">push</span>(<span class="variable">data</span>[<span class="variable">i</span>]);
+      }
+    }
+    <span class="keyword">return</span> <span class="variable">flat_data</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Handy method to produce an array of numbers.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Integer</em>  start A number to start at</p></li><li><p><strong>param</strong>: <em>Integer</em>  end A number to end at</p></li><li><p><strong>returns</strong>: <em>Array</em>  An array of values</p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">makeRange</span>: <span class="keyword">function</span>(<span class="variable">start</span>, <span class="variable">end</span>) {
+    <span class="keyword">var</span> <span class="variable">values</span> = [], <span class="variable">i</span>;
+    <span class="keyword">for</span> (<span class="variable">i</span> = <span class="variable">start</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">end</span>; <span class="variable">i</span>++) {
+      <span class="variable">values</span>.<span class="variable">push</span>(<span class="variable">i</span>);
+    }
+    <span class="keyword">return</span> <span class="variable">values</span>;
+  }
+};
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/end.js"><a href="#">end</a></h2></td><td>src/end.js</td></tr><tr class="code">
+<td class="docs">
+<p>Assign the Ico object as a global property.
+   </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">global</span>.<span class="class">Ico</span> = <span class="class">Ico</span>;
+})(<span class="keyword">typeof</span> <span class="variable">window</span> === <span class="string">'undefined'</span> ? <span class="this">this</span> : <span class="variable">window</span>);
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/helpers.js"><a href="#">helpers</a></h2></td><td>src/helpers.js</td></tr><tr class="code">
+<td class="docs">
+<p>Determines if a value is valid as a 'step' value.
+Steps are the increments between each bar or line.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Integer</em>  value A number to test</p></li><li><p><strong>returns</strong>: <em>Integer</em>  A valid step value</p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="keyword">function</span> <span class="variable">validStepDivider</span>(<span class="variable">value</span>) {
+  <span class="keyword">return</span> <span class="variable">value</span> &<span class="variable">gt</span>; <span class="number integer">1</span> ? <span class="variable">value</span> - <span class="number integer">1</span> : <span class="number integer">1</span>;
+}</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Gets a CSS style property.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Object</em>  el A DOM element</p></li><li><p><strong>param</strong>: <em>String</em>  styleProp The name of a style property</p></li><li><p><strong>returns</strong>: <em>Object</em>  The style value</p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="keyword">function</span> <span class="variable">getStyle</span>(<span class="variable">el</span>, <span class="variable">styleProp</span>) {
+  <span class="keyword">var</span> <span class="variable">style</span>;
+  <span class="keyword">if</span> (<span class="variable">el</span>.<span class="variable">currentStyle</span>) {
+    <span class="variable">style</span> = <span class="variable">el</span>.<span class="variable">currentStyle</span>[<span class="variable">styleProp</span>];
+  } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">window</span>.<span class="variable">getComputedStyle</span>) {
+    <span class="variable">style</span> = <span class="variable">document</span>.<span class="variable">defaultView</span>.<span class="variable">getComputedStyle</span>(<span class="variable">el</span>, <span class="keyword">null</span>).<span class="variable">getPropertyValue</span>(<span class="variable">styleProp</span>);
+  }
+  <span class="keyword">if</span> (<span class="variable">style</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; <span class="variable">style</span>.<span class="variable">length</span> === <span class="number integer">0</span>) {
+    <span class="variable">style</span> = <span class="keyword">null</span>;
+  }
+  <span class="keyword">return</span> <span class="variable">style</span>;
+}
+
+<span class="comment">// TODO: Move</span>
+<span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">sum</span> = <span class="keyword">function</span>() {
+  <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>, <span class="variable">sum</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="this">this</span>.<span class="variable">length</span>; <span class="variable">sum</span> += <span class="this">this</span>[<span class="variable">i</span>++]) {}
+  <span class="keyword">return</span> <span class="variable">sum</span>;
+};
+
+<span class="comment">// TODO: Move</span>
+<span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">max</span> === <span class="string">'undefined'</span>) {
+  <span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">max</span> = <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">max</span>.<span class="variable">apply</span>({}, <span class="this">this</span>);
+  };
+}
+
+<span class="comment">// TODO: Move</span>
+<span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">min</span> === <span class="string">'undefined'</span>) {
+  <span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">min</span> = <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">min</span>.<span class="variable">apply</span>({}, <span class="this">this</span>);
+  };
+}
+
+<span class="comment">// TODO: Move</span>
+<span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">mean</span> = <span class="keyword">function</span>() {
+  <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">sum</span>() / <span class="this">this</span>.<span class="variable">length</span>;
+};
+
+<span class="comment">// TODO: Move</span>
+<span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">variance</span> = <span class="keyword">function</span>() {
+  <span class="keyword">var</span> <span class="variable">mean</span> = <span class="this">this</span>.<span class="variable">mean</span>(),
+      <span class="variable">variance</span> = <span class="number integer">0</span>;
+  <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="this">this</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+    <span class="variable">variance</span> += <span class="class">Math</span>.<span class="variable">pow</span>(<span class="this">this</span>[<span class="variable">i</span>] - <span class="variable">mean</span>, <span class="number integer">2</span>);
+  }
+  <span class="keyword">return</span> <span class="variable">variance</span> / (<span class="this">this</span>.<span class="variable">length</span> - <span class="number integer">1</span>);
+};
+
+<span class="comment">// TODO: Move</span>
+<span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">standard_deviation</span> = <span class="keyword">function</span>() {
+  <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">sqrt</span>(<span class="this">this</span>.<span class="variable">variance</span>());
+};
+
+<span class="comment">// TODO: Move</span>
+<span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="class">Object</span>.<span class="variable">extend</span> === <span class="string">'undefined'</span>) {
+  <span class="class">Object</span>.<span class="variable">extend</span> = <span class="keyword">function</span>(<span class="variable">destination</span>, <span class="variable">source</span>) {
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">property</span> <span class="keyword">in</span> <span class="variable">source</span>) {
+      <span class="keyword">if</span> (<span class="variable">source</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">property</span>)) {
+        <span class="variable">destination</span>[<span class="variable">property</span>] = <span class="variable">source</span>[<span class="variable">property</span>];
+      }
+    }
+    <span class="keyword">return</span> <span class="variable">destination</span>;
+  };
+}
+
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/normaliser.js"><a href="#">normaliser</a></h2></td><td>src/normaliser.js</td></tr><tr class="code">
+<td class="docs">
+<p>Normalises lists of values to fit inside a graph.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Array</em>  data A list of values</p></li><li><p><strong>param</strong>: <em>Object</em>  options Can be used to set the <code>start_value</code></p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">Normaliser</span> = <span class="keyword">function</span>(<span class="variable">data</span>, <span class="variable">options</span>) {
+  <span class="this">this</span>.<span class="variable">options</span> = {
+    <span class="variable">start_value</span>: <span class="keyword">null</span>
+  };
+
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">options</span> !== <span class="string">'undefined'</span>) {
+    <span class="this">this</span>.<span class="variable">options</span> = <span class="variable">options</span>;
+  }
+
+  <span class="this">this</span>.<span class="variable">min</span> = <span class="variable">data</span>.<span class="variable">min</span>();
+  <span class="this">this</span>.<span class="variable">max</span> = <span class="variable">data</span>.<span class="variable">max</span>();
+  <span class="this">this</span>.<span class="variable">standard_deviation</span> = <span class="variable">data</span>.<span class="variable">standard_deviation</span>();
+  <span class="this">this</span>.<span class="variable">range</span> = <span class="number integer">0</span>;
+  <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">labelStep</span>(<span class="this">this</span>.<span class="variable">max</span> - <span class="this">this</span>.<span class="variable">min</span>);
+  <span class="this">this</span>.<span class="variable">start_value</span> = <span class="this">this</span>.<span class="variable">calculateStart</span>();
+  <span class="this">this</span>.<span class="variable">process</span>();
+};
+
+<span class="class">Ico</span>.<span class="class">Normaliser</span>.<span class="variable">prototype</span> = {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Calculates the start value.  This is often 0.
+## </p>
+
+<ul><li><p><strong>returns</strong>: <em>Float</em>  The start value </p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">calculateStart</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">min</span> = <span class="keyword">typeof</span> <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">start_value</span> !== <span class="string">'undefined'</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; <span class="this">this</span>.<span class="variable">min</span> &<span class="variable">gt</span>;= <span class="number integer">0</span> ? <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">start_value</span> : <span class="this">this</span>.<span class="variable">min</span>,
+        <span class="variable">start_value</span> = <span class="this">this</span>.<span class="variable">round</span>(<span class="variable">min</span>, <span class="number integer">1</span>);</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> This is a boundary condition </p>
+</td>
+<td class="code">
+<pre><code><span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">min</span> &<span class="variable">gt</span>; <span class="number integer">0</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; <span class="variable">start_value</span> &<span class="variable">gt</span>; <span class="this">this</span>.<span class="variable">min</span>) {
+      <span class="keyword">return</span> <span class="number integer">0</span>;
+    }
+
+    <span class="keyword">return</span> <span class="variable">start_value</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Given a value, this method rounds it to the nearest good value for an origin </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">round</span>: <span class="keyword">function</span>(<span class="variable">value</span>, <span class="variable">offset</span>) {
+    <span class="variable">offset</span> = <span class="variable">offset</span> || <span class="number integer">1</span>;
+    <span class="keyword">var</span> <span class="variable">roundedValue</span> = <span class="variable">value</span>;
+
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">standard_deviation</span> &<span class="variable">gt</span>; <span class="number float">0.1</span>) {
+      <span class="keyword">var</span> <span class="variable">multiplier</span> = <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, -<span class="variable">offset</span>);
+      <span class="variable">roundedValue</span> = <span class="class">Math</span>.<span class="variable">round</span>(<span class="variable">value</span> * <span class="variable">multiplier</span>) / <span class="variable">multiplier</span>;
+
+      <span class="keyword">if</span> (<span class="variable">roundedValue</span> &<span class="variable">gt</span>; <span class="this">this</span>.<span class="variable">min</span>) {
+        <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">round</span>(<span class="variable">value</span> - <span class="this">this</span>.<span class="variable">step</span>);
+      }
+    }
+    <span class="keyword">return</span> <span class="variable">roundedValue</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Calculates the range and step values.
+   </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">process</span>: <span class="keyword">function</span>() {
+    <span class="this">this</span>.<span class="variable">range</span> = <span class="this">this</span>.<span class="variable">max</span> - <span class="this">this</span>.<span class="variable">start_value</span>;
+    <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">labelStep</span>(<span class="this">this</span>.<span class="variable">range</span>);
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Calculates the label step value.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Float</em>  value A value to convert to a label position</p></li><li><p><strong>returns</strong>: <em>Float</em>  The rounded label step result</p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">labelStep</span>: <span class="keyword">function</span>(<span class="variable">value</span>) {
+    <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, <span class="class">Math</span>.<span class="variable">round</span>((<span class="class">Math</span>.<span class="variable">log</span>(<span class="variable">value</span>) / <span class="class">Math</span>.<span class="class">LN10</span>)) - <span class="number integer">1</span>);
+  }
+};
+
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/start.js"><a href="#">start</a></h2></td><td>src/start.js</td></tr><tr class="code">
+<td class="docs">
+<p>The Ico object.
+ </p>
+</td>
+<td class="code">
+<pre><code>(<span class="keyword">function</span>(<span class="variable">global</span>) {
+  <span class="keyword">var</span> <span class="class">Ico</span> = {
+    <span class="class">VERSION</span>: <span class="string">'0.3.0'</span>,</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Rounds a float to the specified number of decimal places.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Float</em>  num A number to round</p></li><li><p><strong>param</strong>: <em>Integer</em>  dec The number of decimal places</p></li><li><p><strong>returns</strong>: <em>Float</em>  The rounded result</p><p> </p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">round</span>: <span class="keyword">function</span>(<span class="variable">num</span>, <span class="variable">dec</span>) {
+      <span class="keyword">var</span> <span class="variable">result</span> = <span class="class">Math</span>.<span class="variable">round</span>(<span class="variable">num</span> * <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, <span class="variable">dec</span>)) / <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, <span class="variable">dec</span>);
+      <span class="keyword">return</span> <span class="variable">result</span>;
+    }
+  };
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/graphs/bar.js"><a href="#">bar</a></h2></td><td>src/graphs/bar.js</td></tr><tr class="code">
+<td class="docs">
+<p>The BarGraph class.</p>
+
+<h2>Example</h2>
+
+<pre><code>    new Ico.LineGraph($('linegraph_2'),
+      [100, 10, 90, 20, 80, 30],
+      { meanline: { stroke: '#AA0000' },
+        grid: true } );</code></pre>
+
+<p> </p>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">BarGraph</span> = <span class="keyword">function</span>() { <span class="this">this</span>.<span class="variable">initialize</span>.<span class="variable">apply</span>(<span class="this">this</span>, <span class="variable">arguments</span>); };
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">BarGraph</span>.<span class="variable">prototype</span>, <span class="class">Ico</span>.<span class="class">BaseGraph</span>.<span class="variable">prototype</span>);
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">BarGraph</span>.<span class="variable">prototype</span>, {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Sensible defaults for BarGraph.
+   </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">chartDefaults</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> { <span class="variable">plot_padding</span>: <span class="number integer">0</span> };
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Ensures the normalises is always 0.
+   </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">normaliserOptions</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> { <span class="variable">start_value</span>: <span class="number integer">0</span> };
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Options specific to BarGraph.
+   </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">setChartSpecificOptions</span>: <span class="keyword">function</span>() {
+    <span class="this">this</span>.<span class="variable">bar_padding</span> = <span class="number integer">5</span>;
+    <span class="this">this</span>.<span class="variable">bar_width</span> = <span class="this">this</span>.<span class="variable">calculateBarWidth</span>();
+    <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> = (<span class="this">this</span>.<span class="variable">bar_width</span> / <span class="number integer">2</span>);
+    <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">calculateStep</span>();
+    <span class="this">this</span>.<span class="variable">grid_start_offset</span> = <span class="this">this</span>.<span class="variable">bar_padding</span> - <span class="number integer">1</span>;
+    <span class="this">this</span>.<span class="variable">start_y</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Calculates the width of each bar.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>returns</strong>: <em>Integer</em>  The bar width</p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">calculateBarWidth</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> (<span class="this">this</span>.<span class="variable">graph_width</span> / <span class="this">this</span>.<span class="variable">data_size</span>) - <span class="this">this</span>.<span class="variable">bar_padding</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Calculates step used to move from one bar to another.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>returns</strong>: <em>Float</em>  The start value </p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">calculateStep</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> (<span class="this">this</span>.<span class="variable">graph_width</span> - (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> * <span class="number integer">2</span>) - (<span class="this">this</span>.<span class="variable">bar_padding</span> * <span class="number integer">2</span>)) / <span class="variable">validStepDivider</span>(<span class="this">this</span>.<span class="variable">data_size</span>);
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p>Generates paths for Raphael.</p>
+
+<h2></h2>
+
+<ul><li><p><strong>param</strong>: <em>Integer</em>  index The index of the data value to plot</p></li><li><p><strong>param</strong>: <em>String</em>  pathString The pathString so far</p></li><li><p><strong>param</strong>: <em>Integer</em>  x The x-coord to plot </p></li><li><p><strong>param</strong>: <em>Integer</em>  y The y-coord to plot </p></li><li><p><strong>param</strong>: <em>String</em>  colour A string that represents a colour</p></li><li><p><strong>returns</strong>: <em>String</em>  The resulting path string </p></li></ul>
+</td>
+<td class="code">
+<pre><code><span class="variable">drawPlot</span>: <span class="keyword">function</span>(<span class="variable">index</span>, <span class="variable">pathString</span>, <span class="variable">x</span>, <span class="variable">y</span>, <span class="variable">colour</span>) {
+    <span class="variable">x</span> = <span class="variable">x</span> + <span class="this">this</span>.<span class="variable">bar_padding</span>;
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="this">this</span>.<span class="variable">start_y</span>;
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>;
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({<span class="variable">stroke</span>: <span class="variable">colour</span>, <span class="string">'stroke-width'</span>: <span class="this">this</span>.<span class="variable">bar_width</span> + <span class="string">'px'</span>});
+    <span class="variable">pathString</span> = <span class="string">''</span>;
+    <span class="variable">x</span> = <span class="variable">x</span> + <span class="this">this</span>.<span class="variable">step</span>;
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="this">this</span>.<span class="variable">start_y</span>;
+    <span class="keyword">return</span> <span class="variable">pathString</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Change the standard options to correctly offset against the bars </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">drawHorizontalLabels</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">x_start</span> = <span class="this">this</span>.<span class="variable">bar_padding</span> + <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span>;
+    <span class="this">this</span>.<span class="variable">drawMarkers</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">labels</span>, [<span class="number integer">1</span>, <span class="number integer">0</span>], <span class="this">this</span>.<span class="variable">step</span>, <span class="variable">x_start</span>, [<span class="number integer">0</span>, (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span> + <span class="number integer">7</span>) * -<span class="number integer">1</span>]);
+  }
+});
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/graphs/base.js"><a href="#">base</a></h2></td><td>src/graphs/base.js</td></tr><tr class="code">
+<td class="docs">
+<p>Ico.BaseGraph is extended by most of the other graphs.  It
+uses a simple pattern with methods that can be overridden.
+ </p>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">BaseGraph</span> = <span class="keyword">function</span>() { <span class="this">this</span>.<span class="variable">initialize</span>.<span class="variable">apply</span>(<span class="this">this</span>, <span class="variable">arguments</span>); };
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">BaseGraph</span>.<span class="variable">prototype</span>, <span class="class">Ico</span>.<span class="class">Base</span>);
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">BaseGraph</span>.<span class="variable">prototype</span>, {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Data is expected to be a list, the list names are used as labels </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">initialize</span>: <span class="keyword">function</span>(<span class="variable">element</span>, <span class="variable">data</span>, <span class="variable">options</span>) {
+    <span class="this">this</span>.<span class="variable">element</span> = <span class="variable">element</span>;
+
+    <span class="this">this</span>.<span class="variable">data_sets</span> = <span class="this">this</span>.<span class="variable">buildDataSets</span>(<span class="variable">data</span>, <span class="variable">options</span>);
+    <span class="this">this</span>.<span class="variable">flat_data</span> = <span class="this">this</span>.<span class="variable">flatten</span>(<span class="variable">data</span>);
+
+    <span class="this">this</span>.<span class="variable">data_size</span> = <span class="this">this</span>.<span class="variable">longestDataSetLength</span>();</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> If one colour is specified, map it to a compatible set </p>
+</td>
+<td class="code">
+<pre><code><span class="keyword">if</span> (<span class="variable">options</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; <span class="variable">options</span>.<span class="variable">colour</span>) {
+      <span class="variable">options</span>.<span class="variable">colours</span> = {};
+      <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">key</span> <span class="keyword">in</span> <span class="this">this</span>.<span class="variable">data_sets</span>) {
+        <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">data_sets</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">key</span>))
+          <span class="variable">options</span>.<span class="variable">colours</span>[<span class="variable">key</span>] = <span class="variable">options</span>.<span class="variable">colour</span>;
+      }
+    }
+
+    <span class="this">this</span>.<span class="variable">options</span> = {
+      <span class="variable">width</span>:                  <span class="variable">parseInt</span>(<span class="variable">getStyle</span>(<span class="variable">element</span>, <span class="string">'width'</span>), <span class="number integer">10</span>),
+      <span class="variable">height</span>:                 <span class="variable">parseInt</span>(<span class="variable">getStyle</span>(<span class="variable">element</span>, <span class="string">'height'</span>), <span class="number integer">10</span>),
+      <span class="variable">labels</span>:                 <span class="this">this</span>.<span class="variable">makeRange</span>(<span class="number integer">1</span>, <span class="this">this</span>.<span class="variable">data_size</span> + <span class="number integer">1</span>), <span class="comment">// Label data</span>
+      <span class="variable">plot_padding</span>:           <span class="number integer">10</span>,                                    <span class="comment">// Padding for the graph line/bar plots</span>
+      <span class="variable">font_size</span>:              <span class="number integer">10</span>,                                    <span class="comment">// Label font size</span>
+      <span class="variable">show_horizontal_labels</span>: <span class="variable">true</span>,
+      <span class="variable">show_vertical_labels</span>:   <span class="variable">true</span>,
+      <span class="variable">background_colour</span>:      <span class="variable">getStyle</span>(<span class="variable">element</span>, <span class="string">'backgroundColor'</span>) || <span class="string">'#ffffff'</span>,
+      <span class="variable">label_colour</span>:           <span class="string">'#666'</span>,                                <span class="comment">// Label text colour</span>
+      <span class="variable">markers</span>:                <span class="variable">false</span>,                                 <span class="comment">// false, circle</span>
+      <span class="variable">marker_size</span>:            <span class="number integer">5</span>,
+      <span class="variable">meanline</span>:               <span class="variable">false</span>,
+      <span class="variable">grid</span>:                   <span class="variable">false</span>,
+      <span class="variable">grid_colour</span>:            <span class="string">'#ccc'</span>,
+      <span class="variable">y_padding_top</span>:          <span class="number integer">20</span>,
+      <span class="variable">draw</span>:                   <span class="variable">true</span>
+    };
+    <span class="class">Object</span>.<span class="variable">extend</span>(<span class="this">this</span>.<span class="variable">options</span>, <span class="this">this</span>.<span class="variable">chartDefaults</span>() || { });
+    <span class="class">Object</span>.<span class="variable">extend</span>(<span class="this">this</span>.<span class="variable">options</span>, <span class="variable">options</span> || { });
+
+    <span class="this">this</span>.<span class="variable">normaliser</span> = <span class="keyword">new</span> <span class="class">Ico</span>.<span class="class">Normaliser</span>(<span class="this">this</span>.<span class="variable">flat_data</span>, <span class="this">this</span>.<span class="variable">normaliserOptions</span>());
+    <span class="this">this</span>.<span class="variable">label_step</span> = <span class="this">this</span>.<span class="variable">normaliser</span>.<span class="variable">step</span>;
+    <span class="this">this</span>.<span class="variable">range</span> = <span class="this">this</span>.<span class="variable">normaliser</span>.<span class="variable">range</span>;
+    <span class="this">this</span>.<span class="variable">start_value</span> = <span class="this">this</span>.<span class="variable">normaliser</span>.<span class="variable">start_value</span>;</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Padding around the graph area to make room for labels </p>
+</td>
+<td class="code">
+<pre><code><span class="this">this</span>.<span class="variable">x_padding_left</span> = <span class="number integer">10</span> + <span class="this">this</span>.<span class="variable">paddingLeftOffset</span>();
+    <span class="this">this</span>.<span class="variable">x_padding_right</span> = <span class="number integer">20</span>;
+    <span class="this">this</span>.<span class="variable">x_padding</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span> + <span class="this">this</span>.<span class="variable">x_padding_right</span>;
+    <span class="this">this</span>.<span class="variable">y_padding_top</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">y_padding_top</span>;
+    <span class="this">this</span>.<span class="variable">y_padding_bottom</span> = <span class="number integer">20</span> + <span class="this">this</span>.<span class="variable">paddingBottomOffset</span>();
+    <span class="this">this</span>.<span class="variable">y_padding</span> = <span class="this">this</span>.<span class="variable">y_padding_top</span> + <span class="this">this</span>.<span class="variable">y_padding_bottom</span>;
+    
+    <span class="this">this</span>.<span class="variable">graph_width</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span> - (<span class="this">this</span>.<span class="variable">x_padding</span>);
+    <span class="this">this</span>.<span class="variable">graph_height</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - (<span class="this">this</span>.<span class="variable">y_padding</span>);
+
+    <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">calculateStep</span>();</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Calculate how many labels are required </p>
+</td>
+<td class="code">
+<pre><code><span class="this">this</span>.<span class="variable">y_label_count</span> = <span class="class">Math</span>.<span class="variable">ceil</span>(<span class="this">this</span>.<span class="variable">range</span> / <span class="this">this</span>.<span class="variable">label_step</span>);
+    <span class="keyword">if</span> ((<span class="this">this</span>.<span class="variable">normaliser</span>.<span class="variable">min</span> + (<span class="this">this</span>.<span class="variable">y_label_count</span> * <span class="this">this</span>.<span class="variable">normaliser</span>.<span class="variable">step</span>)) &<span class="variable">lt</span>; <span class="this">this</span>.<span class="variable">normaliser</span>.<span class="variable">max</span>) {
+      <span class="this">this</span>.<span class="variable">y_label_count</span> += <span class="number integer">1</span>;
+    }
+    <span class="this">this</span>.<span class="variable">value_labels</span> = <span class="this">this</span>.<span class="variable">makeValueLabels</span>(<span class="this">this</span>.<span class="variable">y_label_count</span>);
+    <span class="this">this</span>.<span class="variable">top_value</span> = <span class="this">this</span>.<span class="variable">value_labels</span>[<span class="this">this</span>.<span class="variable">value_labels</span>.<span class="variable">length</span> - <span class="number integer">1</span>];</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Grid control options </p>
+</td>
+<td class="code">
+<pre><code><span class="this">this</span>.<span class="variable">grid_start_offset</span> = -<span class="number integer">1</span>;</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Drawing </p>
+</td>
+<td class="code">
+<pre><code><span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">draw</span>) {
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">colours</span> === <span class="string">'undefined'</span>) {
+        <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">colours</span> = <span class="this">this</span>.<span class="variable">makeRandomColours</span>();
+      }
+
+      <span class="this">this</span>.<span class="variable">paper</span> = <span class="class">Raphael</span>(<span class="this">this</span>.<span class="variable">element</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span>);
+      <span class="this">this</span>.<span class="variable">background</span> = <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">rect</span>(<span class="number integer">0</span>, <span class="number integer">0</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span>);
+      <span class="this">this</span>.<span class="variable">background</span>.<span class="variable">attr</span>({<span class="variable">fill</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">background_colour</span>, <span class="variable">stroke</span>: <span class="string">'none'</span> });
+
+      <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">meanline</span> === <span class="variable">true</span>) {
+        <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">meanline</span> = { <span class="string">'stroke-width'</span>: <span class="string">'2px'</span>, <span class="variable">stroke</span>: <span class="string">'#BBBBBB'</span> };
+      }
+
+      <span class="this">this</span>.<span class="variable">setChartSpecificOptions</span>();
+      <span class="this">this</span>.<span class="variable">lastPoint</span> = { <span class="variable">x</span>: <span class="number integer">0</span>, <span class="variable">y</span>: <span class="number integer">0</span> };
+      <span class="this">this</span>.<span class="variable">draw</span>();
+    }
+  },
+
+  <span class="variable">buildDataSets</span>: <span class="keyword">function</span>(<span class="variable">data</span>, <span class="variable">options</span>) {
+    <span class="keyword">return</span> (<span class="keyword">typeof</span> <span class="variable">data</span>.<span class="variable">length</span> !== <span class="string">'undefined'</span>) ? { <span class="string">'one'</span>: <span class="variable">data</span> } : <span class="variable">data</span>;
+  },
+
+  <span class="variable">normaliserOptions</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> {};
+  },
+  
+  <span class="variable">chartDefaults</span>: <span class="keyword">function</span>() {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Define in child class </p>
+</td>
+<td class="code">
+<pre><code><span class="keyword">return</span> {};
+  },
+ 
+  <span class="variable">drawPlot</span>: <span class="keyword">function</span>(<span class="variable">index</span>, <span class="variable">pathString</span>, <span class="variable">x</span>, <span class="variable">y</span>, <span class="variable">colour</span>) {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Define in child class </p>
+</td>
+<td class="code">
+<pre><code>},
+  
+  <span class="variable">calculateStep</span>: <span class="keyword">function</span>() {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Define in child classes </p>
+</td>
+<td class="code">
+<pre><code>},
+  
+  <span class="variable">makeRandomColours</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">colours</span> = {};
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">key</span> <span class="keyword">in</span> <span class="this">this</span>.<span class="variable">data_sets</span>) {
+      <span class="keyword">if</span> (!<span class="variable">colours</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">key</span>))
+        <span class="variable">colours</span>[<span class="variable">key</span>] = <span class="class">Raphael</span>.<span class="variable">hsb2rgb</span>(<span class="class">Math</span>.<span class="variable">random</span>(), <span class="number integer">1</span>, <span class="number float">0.75</span>).<span class="variable">hex</span>;
+    }
+    <span class="keyword">return</span> <span class="variable">colours</span>;
+  },
+  
+  <span class="variable">longestDataSetLength</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">length</span> = <span class="number integer">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">key</span> <span class="keyword">in</span> <span class="this">this</span>.<span class="variable">data_sets</span>) {
+      <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">data_sets</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">key</span>)) {
+        <span class="variable">length</span> = <span class="this">this</span>.<span class="variable">data_sets</span>[<span class="variable">key</span>].<span class="variable">length</span> &<span class="variable">gt</span>; <span class="variable">length</span> ? <span class="this">this</span>.<span class="variable">data_sets</span>[<span class="variable">key</span>].<span class="variable">length</span> : <span class="variable">length</span>;
+      }
+    }
+    <span class="keyword">return</span> <span class="variable">length</span>;
+  },
+  
+  <span class="variable">roundValue</span>: <span class="keyword">function</span>(<span class="variable">value</span>, <span class="variable">length</span>) {
+    <span class="keyword">var</span> <span class="variable">multiplier</span> = <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, <span class="variable">length</span>);
+    <span class="variable">value</span> *= <span class="variable">multiplier</span>;
+    <span class="variable">value</span> = <span class="class">Math</span>.<span class="variable">round</span>(<span class="variable">value</span>) / <span class="variable">multiplier</span>;
+    <span class="keyword">return</span> <span class="variable">value</span>;
+  },
+  
+  <span class="variable">roundValues</span>: <span class="keyword">function</span>(<span class="variable">data</span>, <span class="variable">length</span>) {
+    <span class="keyword">var</span> <span class="variable">roundedData</span> = [];
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="variable">roundedData</span>.<span class="variable">push</span>(<span class="this">this</span>.<span class="variable">roundValue</span>(<span class="variable">data</span>[<span class="variable">i</span>], <span class="variable">length</span>));
+    }
+    <span class="keyword">return</span> <span class="variable">roundedData</span>;
+  },
+
+  <span class="variable">longestLabel</span>: <span class="keyword">function</span>(<span class="variable">values</span>) {
+    <span class="keyword">var</span> <span class="variable">labels</span> = <span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">slice</span>.<span class="variable">call</span>(<span class="variable">values</span> || <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">labels</span>, <span class="number integer">0</span>);
+    <span class="keyword">return</span> <span class="variable">labels</span>.<span class="variable">sort</span>(<span class="keyword">function</span>(<span class="variable">a</span>, <span class="variable">b</span>) { <span class="keyword">return</span> <span class="variable">a</span>.<span class="variable">toString</span>().<span class="variable">length</span> &<span class="variable">lt</span>; <span class="variable">b</span>.<span class="variable">toString</span>().<span class="variable">length</span>; })[<span class="number integer">0</span>].<span class="variable">toString</span>().<span class="variable">length</span>;
+  },
+
+  <span class="variable">paddingLeftOffset</span>: <span class="keyword">function</span>() {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Find the longest label and multiply it by the font size </p>
+</td>
+<td class="code">
+<pre><code><span class="keyword">var</span> <span class="variable">data</span> = <span class="this">this</span>.<span class="variable">roundValues</span>(<span class="this">this</span>.<span class="variable">flat_data</span>, <span class="number integer">2</span>),
+        <span class="variable">longest_label_length</span> = <span class="number integer">0</span>;
+
+    <span class="variable">longest_label_length</span> = <span class="variable">data</span>.<span class="variable">sort</span>(<span class="keyword">function</span>(<span class="variable">a</span>, <span class="variable">b</span>) { 
+      <span class="keyword">return</span> <span class="variable">a</span>.<span class="variable">toString</span>().<span class="variable">length</span> &<span class="variable">lt</span>; <span class="variable">b</span>.<span class="variable">toString</span>().<span class="variable">length</span>;
+    })[<span class="number integer">0</span>].<span class="variable">toString</span>().<span class="variable">length</span>;
+
+    <span class="variable">longest_label_length</span> = <span class="variable">longest_label_length</span> &<span class="variable">gt</span>; <span class="number integer">2</span> ? <span class="variable">longest_label_length</span> - <span class="number integer">1</span> : <span class="variable">longest_label_length</span>;
+    <span class="keyword">return</span> <span class="number integer">10</span> + (<span class="variable">longest_label_length</span> * <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span>);
+  },
+  
+  <span class="variable">paddingBottomOffset</span>: <span class="keyword">function</span>() {</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Find the longest label and multiply it by the font size </p>
+</td>
+<td class="code">
+<pre><code><span class="keyword">return</span> <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span>;
+  },
+  
+  <span class="variable">normalise</span>: <span class="keyword">function</span>(<span class="variable">value</span>) {
+    <span class="keyword">var</span> <span class="variable">total</span> = <span class="this">this</span>.<span class="variable">start_value</span> === <span class="number integer">0</span> ? <span class="this">this</span>.<span class="variable">top_value</span> : <span class="this">this</span>.<span class="variable">range</span>;
+    <span class="keyword">return</span> ((<span class="variable">value</span> / <span class="variable">total</span>) * (<span class="this">this</span>.<span class="variable">graph_height</span>));
+  },
+  
+  <span class="variable">draw</span>: <span class="keyword">function</span>() {
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">grid</span>) {
+      <span class="this">this</span>.<span class="variable">drawGrid</span>();
+    }
+
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">meanline</span>) {
+      <span class="this">this</span>.<span class="variable">drawMeanLine</span>(<span class="this">this</span>.<span class="variable">normaliseData</span>(<span class="this">this</span>.<span class="variable">flat_data</span>));
+    }
+
+    <span class="this">this</span>.<span class="variable">drawAxis</span>();
+    
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">show_vertical_labels</span>) {
+      <span class="this">this</span>.<span class="variable">drawVerticalLabels</span>();
+    }
+    
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">show_horizontal_labels</span>) {
+      <span class="this">this</span>.<span class="variable">drawHorizontalLabels</span>();
+    }
+
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">key</span> <span class="keyword">in</span> <span class="this">this</span>.<span class="variable">data_sets</span>) {
+      <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">data_sets</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">key</span>)) {
+        <span class="keyword">var</span> <span class="variable">data</span> = <span class="this">this</span>.<span class="variable">data_sets</span>[<span class="variable">key</span>];
+        <span class="this">this</span>.<span class="variable">drawLines</span>(<span class="variable">key</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">colours</span>[<span class="variable">key</span>], <span class="this">this</span>.<span class="variable">normaliseData</span>(<span class="variable">data</span>));
+      }
+    }
+    
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">start_value</span> !== <span class="number integer">0</span>) {
+      <span class="this">this</span>.<span class="variable">drawFocusHint</span>();
+    }
+  },
+
+  <span class="variable">drawGrid</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">pathString</span> = <span class="string">''</span>, <span class="variable">i</span>;
+
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">show_vertical_labels</span>) {
+      <span class="keyword">var</span> <span class="variable">y</span> = <span class="this">this</span>.<span class="variable">graph_height</span> + <span class="this">this</span>.<span class="variable">y_padding_top</span>;
+      <span class="keyword">for</span> (<span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="this">this</span>.<span class="variable">y_label_count</span>; <span class="variable">i</span>++) {
+        <span class="variable">y</span> = <span class="variable">y</span> - (<span class="this">this</span>.<span class="variable">graph_height</span> / <span class="this">this</span>.<span class="variable">y_label_count</span>);
+        <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="this">this</span>.<span class="variable">x_padding_left</span> + <span class="string">','</span> + <span class="variable">y</span>;
+        <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="this">this</span>.<span class="variable">x_padding_left</span> + <span class="this">this</span>.<span class="variable">graph_width</span>) + <span class="string">','</span> + <span class="variable">y</span>;
+      }
+    }
+ 
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">show_horizontal_labels</span>) {
+      <span class="keyword">var</span> <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span> + <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> + <span class="this">this</span>.<span class="variable">grid_start_offset</span>,
+          <span class="variable">x_labels</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">labels</span>.<span class="variable">length</span>;
+
+      <span class="keyword">for</span> (<span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">x_labels</span>; <span class="variable">i</span>++) {
+        <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="this">this</span>.<span class="variable">y_padding_top</span>;
+        <span class="variable">pathString</span> += <span class="string">'L'</span> + <span class="variable">x</span> +<span class="string">','</span> + (<span class="this">this</span>.<span class="variable">y_padding_top</span> + <span class="this">this</span>.<span class="variable">graph_height</span>);
+        <span class="variable">x</span> = <span class="variable">x</span> + <span class="this">this</span>.<span class="variable">step</span>;
+      }
+
+      <span class="variable">x</span> = <span class="variable">x</span> - <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> - <span class="number integer">1</span>;
+      <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="this">this</span>.<span class="variable">y_padding_top</span>;
+      <span class="variable">pathString</span> += <span class="string">'L'</span> + <span class="variable">x</span> + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">y_padding_top</span> + <span class="this">this</span>.<span class="variable">graph_height</span>);
+    }
+
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({ <span class="variable">stroke</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">grid_colour</span>, <span class="string">'stroke-width'</span>: <span class="string">'1px'</span>});
+  },
+
+  <span class="variable">drawLines</span>: <span class="keyword">function</span>(<span class="keyword">label</span>, <span class="variable">colour</span>, <span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">coords</span> = <span class="this">this</span>.<span class="variable">calculateCoords</span>(<span class="variable">data</span>),
+        <span class="variable">pathString</span> = <span class="string">''</span>;
+
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">coords</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="keyword">var</span> <span class="variable">x</span> = <span class="variable">coords</span>[<span class="variable">i</span>][<span class="number integer">0</span>] || <span class="number integer">0</span>,
+          <span class="variable">y</span> = <span class="variable">coords</span>[<span class="variable">i</span>][<span class="number integer">1</span>] || <span class="number integer">0</span>;
+      <span class="variable">pathString</span> = <span class="this">this</span>.<span class="variable">drawPlot</span>(<span class="variable">i</span>, <span class="variable">pathString</span>, <span class="variable">x</span>, <span class="variable">y</span>, <span class="variable">colour</span>);
+    }
+
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({<span class="variable">stroke</span>: <span class="variable">colour</span>, <span class="string">'stroke-width'</span>: <span class="string">'3px'</span>});
+  },
+
+  <span class="variable">calculateCoords</span>: <span class="keyword">function</span>(<span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span> + <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> - <span class="this">this</span>.<span class="variable">step</span>,
+        <span class="variable">y_offset</span> = (<span class="this">this</span>.<span class="variable">graph_height</span> + <span class="this">this</span>.<span class="variable">y_padding_top</span>) + <span class="this">this</span>.<span class="variable">normalise</span>(<span class="this">this</span>.<span class="variable">start_value</span>),
+        <span class="variable">y</span> = <span class="number integer">0</span>,
+        <span class="variable">coords</span> = [];
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="variable">y</span> = <span class="variable">y_offset</span> - <span class="variable">data</span>[<span class="variable">i</span>];
+      <span class="variable">x</span> = <span class="variable">x</span> + <span class="this">this</span>.<span class="variable">step</span>;
+      <span class="variable">coords</span>.<span class="variable">push</span>([<span class="variable">x</span>, <span class="variable">y</span>]);
+    }
+    <span class="keyword">return</span> <span class="variable">coords</span>;
+  },
+
+  <span class="variable">drawFocusHint</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">length</span> = <span class="number integer">5</span>,
+        <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span> + (<span class="variable">length</span> / <span class="number integer">2</span>) - <span class="number integer">1</span>,
+        <span class="variable">y</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span>,
+        <span class="variable">pathString</span> = <span class="string">''</span>;
+
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>;
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="variable">x</span> - <span class="variable">length</span>) + <span class="string">','</span> + (<span class="variable">y</span> - <span class="variable">length</span>);
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + (<span class="variable">y</span> - <span class="variable">length</span>);
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="variable">x</span> - <span class="variable">length</span>) + <span class="string">','</span> + (<span class="variable">y</span> - (<span class="variable">length</span> * <span class="number integer">2</span>));
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({<span class="variable">stroke</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">label_colour</span>, <span class="string">'stroke-width'</span>: <span class="number integer">2</span>});
+  },
+
+  <span class="variable">drawMeanLine</span>: <span class="keyword">function</span>(<span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">offset</span> = <span class="variable">data</span>.<span class="variable">sum</span>() / <span class="variable">data</span>.<span class="variable">length</span>,
+        <span class="variable">pathString</span> = <span class="string">''</span>;
+ 
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + (<span class="this">this</span>.<span class="variable">x_padding_left</span> - <span class="number integer">1</span>) + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span> - <span class="variable">offset</span>);
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="this">this</span>.<span class="variable">graph_width</span> + <span class="this">this</span>.<span class="variable">x_padding_left</span>) + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span> - <span class="variable">offset</span>);
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">meanline</span>);
+  },
+
+  <span class="variable">drawAxis</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">pathString</span> = <span class="string">''</span>;
+
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + (<span class="this">this</span>.<span class="variable">x_padding_left</span> - <span class="number integer">1</span>) + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span>);
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="this">this</span>.<span class="variable">graph_width</span> + <span class="this">this</span>.<span class="variable">x_padding_left</span>) + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span>); 
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + (<span class="this">this</span>.<span class="variable">x_padding_left</span> - <span class="number integer">1</span>) + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span>); 
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="this">this</span>.<span class="variable">x_padding_left</span> - <span class="number integer">1</span>) + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">y_padding_top</span>);
+
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({ <span class="variable">stroke</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">label_colour</span> });
+  },
+  
+  <span class="variable">makeValueLabels</span>: <span class="keyword">function</span>(<span class="variable">steps</span>) {
+    <span class="keyword">var</span> <span class="variable">step</span> = <span class="this">this</span>.<span class="variable">label_step</span>,
+        <span class="keyword">label</span> = <span class="this">this</span>.<span class="variable">start_value</span>,
+        <span class="variable">labels</span> = [];
+
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">steps</span>; <span class="variable">i</span>++) {
+      <span class="keyword">label</span> = <span class="this">this</span>.<span class="variable">roundValue</span>((<span class="keyword">label</span> + <span class="variable">step</span>), <span class="number integer">2</span>);
+      <span class="variable">labels</span>.<span class="variable">push</span>(<span class="keyword">label</span>);
+    }
+    <span class="keyword">return</span> <span class="variable">labels</span>;
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Axis label markers </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">drawMarkers</span>: <span class="keyword">function</span>(<span class="variable">labels</span>, <span class="variable">direction</span>, <span class="variable">step</span>, <span class="variable">start_offset</span>, <span class="variable">font_offsets</span>, <span class="variable">extra_font_options</span>) {
+    <span class="keyword">function</span> <span class="variable">x_offset</span>(<span class="variable">value</span>) {
+      <span class="keyword">return</span> <span class="variable">value</span> * <span class="variable">direction</span>[<span class="number integer">0</span>];
+    }
+    
+    <span class="keyword">function</span> <span class="variable">y_offset</span>(<span class="variable">value</span>) {
+      <span class="keyword">return</span> <span class="variable">value</span> * <span class="variable">direction</span>[<span class="number integer">1</span>];
+    }</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Start at the origin </p>
+</td>
+<td class="code">
+<pre><code><span class="keyword">var</span> <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span> - <span class="number integer">1</span> + <span class="variable">x_offset</span>(<span class="variable">start_offset</span>),
+        <span class="variable">y</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span> + <span class="variable">y_offset</span>(<span class="variable">start_offset</span>),
+        <span class="variable">pathString</span> = <span class="string">''</span>,
+        <span class="variable">font_options</span> = {&<span class="variable">quot</span>;<span class="variable">font</span>&<span class="variable">quot</span>;: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span> + <span class="string">'px &quot;Arial&quot;'</span>, <span class="variable">stroke</span>: &<span class="variable">quot</span>;<span class="variable">none</span>&<span class="variable">quot</span>;, <span class="variable">fill</span>: &<span class="variable">quot</span>;#<span class="number integer">000</span>&<span class="variable">quot</span>;};
+    <span class="class">Object</span>.<span class="variable">extend</span>(<span class="variable">font_options</span>, <span class="variable">extra_font_options</span> || {});
+    
+    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">labels</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>;
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">labels</span>[<span class="variable">i</span>] !== <span class="string">'undefined'</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; (<span class="variable">labels</span>[<span class="variable">i</span>] + <span class="string">''</span>).<span class="variable">length</span> &<span class="variable">gt</span>; <span class="number integer">0</span>) {
+        <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="variable">x</span> + <span class="variable">y_offset</span>(<span class="number integer">5</span>)) + <span class="string">','</span> + (<span class="variable">y</span> + <span class="variable">x_offset</span>(<span class="number integer">5</span>));
+        <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">text</span>(<span class="variable">x</span> + <span class="variable">font_offsets</span>[<span class="number integer">0</span>], <span class="variable">y</span> - <span class="variable">font_offsets</span>[<span class="number integer">1</span>], <span class="variable">labels</span>[<span class="variable">i</span>]).<span class="variable">attr</span>(<span class="variable">font_options</span>).<span class="variable">toFront</span>();
+      }
+      <span class="variable">x</span> = <span class="variable">x</span> + <span class="variable">x_offset</span>(<span class="variable">step</span>);
+      <span class="variable">y</span> = <span class="variable">y</span> + <span class="variable">y_offset</span>(<span class="variable">step</span>);
+    }
+
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({ <span class="variable">stroke</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">label_colour</span> });
+  },
+  
+  <span class="variable">drawVerticalLabels</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">y_step</span> = <span class="this">this</span>.<span class="variable">graph_height</span> / <span class="this">this</span>.<span class="variable">y_label_count</span>; 
+    <span class="this">this</span>.<span class="variable">drawMarkers</span>(<span class="this">this</span>.<span class="variable">value_labels</span>, [<span class="number integer">0</span>, -<span class="number integer">1</span>], <span class="variable">y_step</span>, <span class="variable">y_step</span>, [-<span class="number integer">8</span>, -<span class="number integer">2</span>], { &<span class="variable">quot</span>;<span class="variable">text</span>-<span class="variable">anchor</span>&<span class="variable">quot</span>;: <span class="string">'end'</span> });
+  },
+  
+  <span class="variable">drawHorizontalLabels</span>: <span class="keyword">function</span>() {
+    <span class="this">this</span>.<span class="variable">drawMarkers</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">labels</span>, [<span class="number integer">1</span>, <span class="number integer">0</span>], <span class="this">this</span>.<span class="variable">step</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span>, [<span class="number integer">0</span>, (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span> + <span class="number integer">7</span>) * -<span class="number integer">1</span>]);
+  }
+});
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/graphs/horizontal_bar.js"><a href="#">horizontal_bar</a></h2></td><td>src/graphs/horizontal_bar.js</td></tr><tr class="code">
+<td class="docs">
+<p>Draws horizontal bar graphs.</p>
+
+<h2>Example</h2>
+
+<pre><code>  new Ico.HorizontalBarGraph(element,
+     [2, 5, 1, 10, 15, 33, 20, 25, 1],
+     { font_size: 14 });        </code></pre>
+
+<p> </p>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">HorizontalBarGraph</span> = <span class="keyword">function</span>() { <span class="this">this</span>.<span class="variable">initialize</span>.<span class="variable">apply</span>(<span class="this">this</span>, <span class="variable">arguments</span>); };
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">HorizontalBarGraph</span>.<span class="variable">prototype</span>, <span class="class">Ico</span>.<span class="class">BaseGraph</span>.<span class="variable">prototype</span>);
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">HorizontalBarGraph</span>.<span class="variable">prototype</span>, {
+  <span class="variable">setChartSpecificOptions</span>: <span class="keyword">function</span>() {
+    <span class="comment">// Approximate the width required by the labels</span>
+    <span class="this">this</span>.<span class="variable">y_padding_top</span> = <span class="number integer">0</span>;
+    <span class="this">this</span>.<span class="variable">x_padding_left</span> = <span class="number integer">20</span> + <span class="this">this</span>.<span class="variable">longestLabel</span>() * (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span> / <span class="number integer">2</span>);
+    <span class="this">this</span>.<span class="variable">bar_padding</span> = <span class="number integer">5</span>;
+    <span class="this">this</span>.<span class="variable">bar_width</span> = <span class="this">this</span>.<span class="variable">calculateBarHeight</span>();
+    <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> = <span class="number integer">0</span>;
+    <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">calculateStep</span>();
+  },
+
+  <span class="variable">normalise</span>: <span class="keyword">function</span>(<span class="variable">value</span>) {
+    <span class="keyword">var</span> <span class="variable">offset</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span>;
+    <span class="keyword">return</span> ((<span class="variable">value</span> / <span class="this">this</span>.<span class="variable">range</span>) * (<span class="this">this</span>.<span class="variable">graph_width</span> - <span class="variable">offset</span>));
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Height </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">calculateBarHeight</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> (<span class="this">this</span>.<span class="variable">graph_height</span> / <span class="this">this</span>.<span class="variable">data_size</span>) - <span class="this">this</span>.<span class="variable">bar_padding</span>;
+  },
+  
+  <span class="variable">calculateStep</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span>) / <span class="variable">validStepDivider</span>(<span class="this">this</span>.<span class="variable">data_size</span>);
+  },
+  
+  <span class="variable">drawLines</span>: <span class="keyword">function</span>(<span class="keyword">label</span>, <span class="variable">colour</span>, <span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> * <span class="number integer">2</span>),
+        <span class="variable">y</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span> - (<span class="this">this</span>.<span class="variable">step</span> / <span class="number integer">2</span>),
+        <span class="variable">pathString</span> = <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>,
+        <span class="variable">i</span>;
+
+    <span class="keyword">for</span> (<span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="variable">x</span> + <span class="variable">data</span>[<span class="variable">i</span>] - <span class="this">this</span>.<span class="variable">normalise</span>(<span class="this">this</span>.<span class="variable">start_value</span>)) + <span class="string">','</span> + <span class="variable">y</span>;
+      <span class="variable">y</span> = <span class="variable">y</span> - <span class="this">this</span>.<span class="variable">step</span>;
+      <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>;
+    }
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({<span class="variable">stroke</span>: <span class="variable">colour</span>, <span class="string">'stroke-width'</span>: <span class="this">this</span>.<span class="variable">bar_width</span> + <span class="string">'px'</span>});
+  },</code></pre>
+</td>
+</tr>
+<tr class="code">
+<td class="docs">
+<p> Horizontal version </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">drawFocusHint</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">length</span> = <span class="number integer">5</span>,
+        <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">x_padding_left</span> + (<span class="this">this</span>.<span class="variable">step</span> * <span class="number integer">2</span>),
+        <span class="variable">y</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">y_padding_bottom</span>,
+        <span class="variable">pathString</span> = <span class="string">''</span>;
+    
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>;
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="variable">x</span> - <span class="variable">length</span>) + <span class="string">','</span> + (<span class="variable">y</span> + <span class="variable">length</span>);
+    <span class="variable">pathString</span> += <span class="string">'M'</span> + (<span class="variable">x</span> - <span class="variable">length</span>) + <span class="string">','</span> + <span class="variable">y</span>;
+    <span class="variable">pathString</span> += <span class="string">'L'</span> + (<span class="variable">x</span> - (<span class="variable">length</span> * <span class="number integer">2</span>)) + <span class="string">','</span> + (<span class="variable">y</span> + <span class="variable">length</span>);
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({<span class="variable">stroke</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">label_colour</span>, <span class="string">'stroke-width'</span>: <span class="number integer">2</span>});
+  },
+  
+  <span class="variable">drawVerticalLabels</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">y_start</span> = (<span class="this">this</span>.<span class="variable">step</span> / <span class="number integer">2</span>) - (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> * <span class="number integer">2</span>);
+    <span class="this">this</span>.<span class="variable">drawMarkers</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">labels</span>, [<span class="number integer">0</span>, -<span class="number integer">1</span>], <span class="this">this</span>.<span class="variable">step</span>, <span class="variable">y_start</span>, [-<span class="number integer">8</span>, (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span> / <span class="number integer">8</span>)], { <span class="string">'text-anchor'</span>: <span class="string">'end'</span> });
+  },
+  
+  <span class="variable">drawHorizontalLabels</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">x_step</span> = <span class="this">this</span>.<span class="variable">graph_width</span> / <span class="this">this</span>.<span class="variable">y_label_count</span>,
+        <span class="variable">x_labels</span> = <span class="this">this</span>.<span class="variable">makeValueLabels</span>(<span class="this">this</span>.<span class="variable">y_label_count</span>);
+    <span class="this">this</span>.<span class="variable">drawMarkers</span>(<span class="variable">x_labels</span>, [<span class="number integer">1</span>, <span class="number integer">0</span>], <span class="variable">x_step</span>, <span class="variable">x_step</span>, [<span class="number integer">0</span>, (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span> + <span class="number integer">7</span>) * -<span class="number integer">1</span>]);
+  }
+});
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/graphs/line.js"><a href="#">line</a></h2></td><td>src/graphs/line.js</td></tr><tr class="code">
+<td class="docs">
+<p>Draws line graphs.</p>
+
+<h2>Example</h2>
+
+<pre><code>   new Ico.LineGraph(element, [10, 5, 22, 44, 4]); </code></pre>
+
+<p> </p>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">LineGraph</span> = <span class="keyword">function</span>() { <span class="this">this</span>.<span class="variable">initialize</span>.<span class="variable">apply</span>(<span class="this">this</span>, <span class="variable">arguments</span>); };
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">LineGraph</span>.<span class="variable">prototype</span>, <span class="class">Ico</span>.<span class="class">BaseGraph</span>.<span class="variable">prototype</span>);
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">LineGraph</span>.<span class="variable">prototype</span>, {
+  <span class="variable">normalise</span>: <span class="keyword">function</span>(<span class="variable">value</span>) {
+    <span class="keyword">var</span> <span class="variable">total</span> = <span class="this">this</span>.<span class="variable">start_value</span> === <span class="number integer">0</span> ? <span class="this">this</span>.<span class="variable">top_value</span> : <span class="this">this</span>.<span class="variable">top_value</span> - <span class="this">this</span>.<span class="variable">start_value</span>;
+    <span class="keyword">return</span> ((<span class="variable">value</span> / <span class="variable">total</span>) * (<span class="this">this</span>.<span class="variable">graph_height</span>));
+  },
+
+  <span class="variable">chartDefaults</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> { <span class="variable">plot_padding</span>: <span class="number integer">10</span> };
+  },
+
+  <span class="variable">setChartSpecificOptions</span>: <span class="keyword">function</span>() {
+    <span class="comment">// Approximate the width required by the labels</span>
+    <span class="this">this</span>.<span class="variable">x_padding_left</span> = <span class="number integer">30</span> + <span class="this">this</span>.<span class="variable">longestLabel</span>(<span class="this">this</span>.<span class="variable">value_labels</span>) * (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">font_size</span> / <span class="number integer">2</span>);
+
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">curve_amount</span> === <span class="string">'undefined'</span>) {
+      <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">curve_amount</span> = <span class="number integer">10</span>;
+    }
+  },
+
+  <span class="variable">normaliserOptions</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> { <span class="variable">start_value</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">start_value</span> };
+  },
+
+  <span class="variable">calculateStep</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> (<span class="this">this</span>.<span class="variable">graph_width</span> - (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">plot_padding</span> * <span class="number integer">2</span>)) / <span class="variable">validStepDivider</span>(<span class="this">this</span>.<span class="variable">data_size</span>);
+  },
+
+  <span class="variable">startPlot</span>: <span class="keyword">function</span>(<span class="variable">pathString</span>, <span class="variable">x</span>, <span class="variable">y</span>, <span class="variable">colour</span>) {
+    <span class="this">this</span>.<span class="variable">lastPoint</span> = { <span class="variable">x</span>: <span class="variable">x</span>, <span class="variable">y</span>: <span class="variable">y</span> }; 
+    <span class="keyword">return</span> <span class="variable">pathString</span> + <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>;
+  },
+
+  <span class="variable">drawPlot</span>: <span class="keyword">function</span>(<span class="variable">index</span>, <span class="variable">pathString</span>, <span class="variable">x</span>, <span class="variable">y</span>, <span class="variable">colour</span>) {
+    <span class="keyword">var</span> <span class="variable">w</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">curve_amount</span>;
+
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">markers</span> === <span class="string">'circle'</span>) {
+      <span class="keyword">var</span> <span class="variable">circle</span> = <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">circle</span>(<span class="variable">x</span>, <span class="variable">y</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">marker_size</span>);
+      <span class="variable">circle</span>.<span class="variable">attr</span>({ <span class="string">'stroke-width'</span>: <span class="string">'1px'</span>, <span class="variable">stroke</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">background_colour</span>, <span class="variable">fill</span>: <span class="variable">colour</span> });
+    }
+    
+    <span class="keyword">if</span> (<span class="variable">index</span> === <span class="number integer">0</span>) {
+      <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">startPlot</span>(<span class="variable">pathString</span>, <span class="variable">x</span>, <span class="variable">y</span>, <span class="variable">colour</span>);
+    }
+
+    <span class="keyword">if</span> (<span class="variable">w</span>) {
+      <span class="variable">pathString</span> += [<span class="string">'C'</span>, <span class="this">this</span>.<span class="variable">lastPoint</span>.<span class="variable">x</span> + <span class="variable">w</span>, <span class="this">this</span>.<span class="variable">lastPoint</span>.<span class="variable">y</span>, <span class="variable">x</span> - <span class="variable">w</span>, <span class="variable">y</span>, <span class="variable">x</span>, <span class="variable">y</span>];
+    } <span class="keyword">else</span> {
+      <span class="variable">pathString</span> += <span class="string">'L'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="variable">y</span>;
+    }
+
+    <span class="this">this</span>.<span class="variable">lastPoint</span> = { <span class="variable">x</span>: <span class="variable">x</span>, <span class="variable">y</span>: <span class="variable">y</span> };
+    <span class="keyword">return</span> <span class="variable">pathString</span>;
+  }
+});
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/graphs/sparkbar.js"><a href="#">sparkbar</a></h2></td><td>src/graphs/sparkbar.js</td></tr><tr class="code">
+<td class="docs">
+<p>Draws spark bar graphs.</p>
+
+<h2>Example</h2>
+
+<pre><code>    new Ico.SparkBar($('sparkline_2'),
+      [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10],
+      { width: 30, height: 14, background_colour: '#ccc' });</code></pre>
+
+<p> </p>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">SparkBar</span> = <span class="keyword">function</span>() { <span class="this">this</span>.<span class="variable">initialize</span>.<span class="variable">apply</span>(<span class="this">this</span>, <span class="variable">arguments</span>); };
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">SparkBar</span>.<span class="variable">prototype</span>, <span class="class">Ico</span>.<span class="class">SparkLine</span>.<span class="variable">prototype</span>);
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">SparkBar</span>.<span class="variable">prototype</span>, {
+  <span class="variable">calculateStep</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span> / <span class="variable">validStepDivider</span>(<span class="this">this</span>.<span class="variable">data</span>.<span class="variable">length</span>);
+  },
+
+  <span class="variable">drawLines</span>: <span class="keyword">function</span>(<span class="keyword">label</span>, <span class="variable">colour</span>, <span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">width</span> = <span class="this">this</span>.<span class="variable">step</span> &<span class="variable">gt</span>; <span class="number integer">2</span> ? <span class="this">this</span>.<span class="variable">step</span> - <span class="number integer">1</span> : <span class="this">this</span>.<span class="variable">step</span>,
+        <span class="variable">x</span> = <span class="variable">width</span>,
+        <span class="variable">pathString</span>  = <span class="string">''</span>,
+        <span class="variable">i</span> = <span class="number integer">0</span>;
+    <span class="keyword">for</span> (<span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="variable">pathString</span> += <span class="string">'M'</span> + <span class="variable">x</span> + <span class="string">','</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="variable">data</span>[<span class="variable">i</span>]);
+      <span class="variable">pathString</span> += <span class="string">'L'</span> + <span class="variable">x</span> + <span class="string">','</span> + <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span>;
+      <span class="variable">x</span> = <span class="variable">x</span> + <span class="this">this</span>.<span class="variable">step</span>;
+    }
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({ <span class="variable">stroke</span>: <span class="variable">colour</span>, <span class="string">'stroke-width'</span>: <span class="variable">width</span> });
+  }
+});
+
+</code></pre>
+</td>
+</tr><tr class="filename"><td><h2 id="src/graphs/sparkline.js"><a href="#">sparkline</a></h2></td><td>src/graphs/sparkline.js</td></tr><tr class="code">
+<td class="docs">
+<p>Draws spark line graphs.</p>
+
+<h2>Example</h2>
+
+<pre><code>    new Ico.SparkLine(element,
+      [21, 41, 32, 1, 10, 5, 32, 10, 23],
+      { width: 30, height: 14,
+        background_colour: '#ccc' });</code></pre>
+
+<p> </p>
+</td>
+<td class="code">
+<pre><code><span class="class">Ico</span>.<span class="class">SparkLine</span> = <span class="keyword">function</span>() { <span class="this">this</span>.<span class="variable">initialize</span>.<span class="variable">apply</span>(<span class="this">this</span>, <span class="variable">arguments</span>); };
+<span class="class">Ico</span>.<span class="class">SparkLine</span>.<span class="variable">prototype</span> = {
+  <span class="variable">initialize</span>: <span class="keyword">function</span>(<span class="variable">element</span>, <span class="variable">data</span>, <span class="variable">options</span>) {
+    <span class="this">this</span>.<span class="variable">element</span> = <span class="variable">element</span>;
+    <span class="this">this</span>.<span class="variable">data</span> = <span class="variable">data</span>;
+    <span class="this">this</span>.<span class="variable">options</span> = {
+      <span class="variable">width</span>:             <span class="variable">parseInt</span>(<span class="variable">getStyle</span>(<span class="variable">element</span>, <span class="string">'width'</span>), <span class="number integer">10</span>),
+      <span class="variable">height</span>:            <span class="variable">parseInt</span>(<span class="variable">getStyle</span>(<span class="variable">element</span>, <span class="string">'height'</span>), <span class="number integer">10</span>),
+      <span class="variable">highlight</span>:         <span class="variable">false</span>,
+      <span class="variable">background_colour</span>: <span class="variable">getStyle</span>(<span class="variable">element</span>, <span class="string">'backgroundColor'</span>) || <span class="string">'#ffffff'</span>,
+      <span class="variable">colour</span>:            <span class="string">'#036'</span>
+    };
+    <span class="class">Object</span>.<span class="variable">extend</span>(<span class="this">this</span>.<span class="variable">options</span>, <span class="variable">options</span> || { });
+
+    <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">calculateStep</span>();
+    <span class="this">this</span>.<span class="variable">paper</span> = <span class="class">Raphael</span>(<span class="this">this</span>.<span class="variable">element</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span>);
+
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">acceptable_range</span>) {
+      <span class="this">this</span>.<span class="variable">background</span> = <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">rect</span>(<span class="number integer">0</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">normalise</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">acceptable_range</span>[<span class="number integer">1</span>]),
+                                           <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span>,
+                                           <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="this">this</span>.<span class="variable">normalise</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">acceptable_range</span>[<span class="number integer">0</span>]));
+    } <span class="keyword">else</span> {
+      <span class="this">this</span>.<span class="variable">background</span> = <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">rect</span>(<span class="number integer">0</span>, <span class="number integer">0</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span>);
+    }
+
+    <span class="this">this</span>.<span class="variable">background</span>.<span class="variable">attr</span>({<span class="variable">fill</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">background_colour</span>, <span class="variable">stroke</span>: <span class="string">'none'</span> });
+    <span class="this">this</span>.<span class="variable">draw</span>();
+  },
+
+  <span class="variable">calculateStep</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span> / <span class="variable">validStepDivider</span>(<span class="this">this</span>.<span class="variable">data</span>.<span class="variable">length</span>);
+  },
+
+  <span class="variable">normalise</span>: <span class="keyword">function</span>(<span class="variable">value</span>) {
+    <span class="keyword">return</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> / <span class="this">this</span>.<span class="variable">data</span>.<span class="variable">max</span>()) * <span class="variable">value</span>;
+  },
+  
+  <span class="variable">draw</span>: <span class="keyword">function</span>() {
+    <span class="keyword">var</span> <span class="variable">data</span> = <span class="this">this</span>.<span class="variable">normaliseData</span>(<span class="this">this</span>.<span class="variable">data</span>);
+    <span class="this">this</span>.<span class="variable">drawLines</span>(<span class="string">''</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">colour</span>, <span class="variable">data</span>);
+    
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">highlight</span>) {
+      <span class="this">this</span>.<span class="variable">showHighlight</span>(<span class="variable">data</span>);
+    }
+  },
+  
+  <span class="variable">drawLines</span>: <span class="keyword">function</span>(<span class="keyword">label</span>, <span class="variable">colour</span>, <span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">pathString</span> = <span class="string">''</span>,
+        <span class="variable">x</span> = <span class="number integer">0</span>,
+        <span class="variable">values</span> = <span class="variable">data</span>.<span class="variable">slice</span>(<span class="number integer">1</span>),
+        <span class="variable">i</span> = <span class="number integer">0</span>;
+
+    <span class="variable">pathString</span> = <span class="string">'M0,'</span> + (<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="variable">data</span>[<span class="number integer">0</span>]);
+    <span class="keyword">for</span> (<span class="variable">i</span> = <span class="number integer">1</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
+      <span class="variable">x</span> = <span class="variable">x</span> + <span class="this">this</span>.<span class="variable">step</span>;
+      <span class="variable">pathString</span> += <span class="string">'L'</span> + <span class="variable">x</span> +<span class="string">','</span> + <span class="class">Ico</span>.<span class="variable">round</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="variable">data</span>[<span class="variable">i</span>], <span class="number integer">2</span>);
+    }
+    <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">path</span>(<span class="variable">pathString</span>).<span class="variable">attr</span>({<span class="variable">stroke</span>: <span class="variable">colour</span>});
+    <span class="this">this</span>.<span class="variable">lastPoint</span> = { <span class="variable">x</span>: <span class="number integer">0</span>, <span class="variable">y</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="variable">data</span>[<span class="number integer">0</span>] };
+  },
+  
+  <span class="variable">showHighlight</span>: <span class="keyword">function</span>(<span class="variable">data</span>) {
+    <span class="keyword">var</span> <span class="variable">size</span> = <span class="number integer">2</span>,
+        <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">width</span> - <span class="variable">size</span>,
+        <span class="variable">i</span> = <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">highlight</span>.<span class="variable">index</span> || <span class="variable">data</span>.<span class="variable">length</span> - <span class="number integer">1</span>,
+        <span class="variable">y</span> = <span class="variable">data</span>[<span class="variable">i</span>] + (<span class="class">Math</span>.<span class="variable">round</span>(<span class="variable">size</span> / <span class="number integer">2</span>));
+
+    <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="this">this</span>.<span class="variable">options</span>.<span class="variable">highlight</span>.<span class="variable">index</span>) !== <span class="string">'undefined'</span>) {
+      <span class="variable">x</span> = <span class="this">this</span>.<span class="variable">step</span> * <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">highlight</span>.<span class="variable">index</span>;
+    }
+
+    <span class="keyword">var</span> <span class="variable">circle</span> = <span class="this">this</span>.<span class="variable">paper</span>.<span class="variable">circle</span>(<span class="variable">x</span>, <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">height</span> - <span class="variable">y</span>, <span class="variable">size</span>);
+    <span class="variable">circle</span>.<span class="variable">attr</span>({ <span class="variable">stroke</span>: <span class="variable">false</span>, <span class="variable">fill</span>: <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">highlight</span>.<span class="variable">colour</span>});
+  }
+};
+<span class="class">Object</span>.<span class="variable">extend</span>(<span class="class">Ico</span>.<span class="class">SparkLine</span>.<span class="variable">prototype</span>, <span class="class">Ico</span>.<span class="class">Base</span>);
+
+</code></pre>
+</td>
+</tr>	</body>
+</html></tbody></table>

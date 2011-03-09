@@ -4,10 +4,13 @@ Ico is a JavaScript graph library that uses "Raphael":http://raphaeljs.com/ to d
 
 Raphael is the only dependency.
 
-<a href="http://dl.getdropbox.com/u/221414/graphs.png">View Examples.</a>
+* "Documentation":http://github.com/alexyoung/ico
+* "Examples":http://alexyoung.github.com/ico/examples.html
 
 h3. News
 
+* [2011-03-09] Added documentation and published it to http://alexyoung.github.com/ico/
+* [2011-03-09] 0.3.0 released: Split project into separate files, added build script, fixes for HorizontalBarGraph
 * [2011-03-01] 0.2.2 released: Ico.SparkLine will now work correctly, particularly in IE6
 
 h3. Targeted graph types
