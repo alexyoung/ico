@@ -1,16 +1,47 @@
+/*!
+ * Ico
+ * Copyright (C) 2009-2011 Alex R. Young
+ * MIT Licensed
+ */
+
+/**
+ * The Ico object.
+ */
 (function(global) {
   var Ico = {
     VERSION: '0.3.0',
+
+    /**
+     * Rounds a float to the specified number of decimal places.
+     *
+     * @param {Float} num A number to round
+     * @param {Integer} dec The number of decimal places
+     * @returns {Float} The rounded result
+     */
     round: function(num, dec) {
-      var result = Math.round(num * Math.pow(10, dec)) / Math.pow(10,dec);
+      var result = Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
       return result;
     }
   };
 
+/**
+ * Determines if a value is valid as a 'step' value.
+ * Steps are the increments between each bar or line.
+ *
+ * @param {Integer} value A number to test
+ * @returns {Integer} A valid step value
+ */
 function validStepDivider(value) {
   return value > 1 ? value - 1 : 1;
 }
 
+/**
+ * Gets a CSS style property.
+ *
+ * @param {Object} el A DOM element
+ * @param {String} styleProp The name of a style property
+ * @returns {Object} The style value
+ */
 function getStyle(el, styleProp) {
   var style;
   if (el.currentStyle) {
@@ -24,27 +55,32 @@ function getStyle(el, styleProp) {
   return style;
 }
 
+// TODO: Move
 Array.prototype.sum = function() {
   for (var i = 0, sum = 0; i < this.length; sum += this[i++]) {}
   return sum;
 };
 
+// TODO: Move
 if (typeof Array.prototype.max === 'undefined') {
   Array.prototype.max = function() {
     return Math.max.apply({}, this);
   };
 }
 
+// TODO: Move
 if (typeof Array.prototype.min === 'undefined') {
   Array.prototype.min = function() {
     return Math.min.apply({}, this);
   };
 }
 
+// TODO: Move
 Array.prototype.mean = function() {
   return this.sum() / this.length;
 };
 
+// TODO: Move
 Array.prototype.variance = function() {
   var mean = this.mean(),
       variance = 0;
@@ -54,10 +90,12 @@ Array.prototype.variance = function() {
   return variance / (this.length - 1);
 };
 
+// TODO: Move
 Array.prototype.standard_deviation = function() {
   return Math.sqrt(this.variance());
 };
 
+// TODO: Move
 if (typeof Object.extend === 'undefined') {
   Object.extend = function(destination, source) {
     for (var property in source) {
@@ -70,6 +108,12 @@ if (typeof Object.extend === 'undefined') {
 }
 
 
+/**
+ * Normalises lists of values to fit inside a graph.
+ *
+ * @param {Array} data A list of values
+ * @param {Object} options Can be used to set the `start_value`
+ */
 Ico.Normaliser = function(data, options) {
   this.options = {
     start_value: null
@@ -89,6 +133,10 @@ Ico.Normaliser = function(data, options) {
 };
 
 Ico.Normaliser.prototype = {
+  /**
+   * Calculates the start value.  This is often 0.
+   * @returns {Float} The start value 
+   */
   calculateStart: function() {
     var min = typeof this.options.start_value !== 'undefined' && this.min >= 0 ? this.options.start_value : this.min,
         start_value = this.round(min, 1);
@@ -117,18 +165,42 @@ Ico.Normaliser.prototype = {
     return roundedValue;
   },
 
+  /**
+   * Calculates the range and step values.
+   */
   process: function() {
     this.range = this.max - this.start_value;
     this.step = this.labelStep(this.range);
   },
 
+  /**
+   * Calculates the label step value.
+   *
+   * @param {Float} value A value to convert to a label position
+   * @returns {Float} The rounded label step result
+   */
   labelStep: function(value) {
     return Math.pow(10, Math.round((Math.log(value) / Math.LN10)) - 1);
   }
 };
 
 
+/*!
+ * Ico
+ * Copyright (C) 2009-2011 Alex R. Young
+ * MIT Licensed
+ */
+
+/**
+ * The Ico.Base object which contains useful generic functions.
+ */
 Ico.Base = {
+  /**
+   * Runs this.normalise on each value.
+   *
+   * @param {Array} data Values to normalise
+   * @returns {Array} Normalised values
+   */
   normaliseData: function(data) {
     var values = [],
         i      = 0;
@@ -138,7 +210,12 @@ Ico.Base = {
     return values;
   },
 
-  /* TODO: Unit test */
+  /**
+   * Flattens objects into an array.
+   *
+   * @param {Object} data Values to flatten
+   * @returns {Array} Flattened values
+   */
   flatten: function(data) {
     var flat_data = [];
 
@@ -163,6 +240,13 @@ Ico.Base = {
     return flat_data;
   },
 
+  /**
+   * Handy method to produce an array of numbers.
+   *
+   * @param {Integer} start A number to start at
+   * @param {Integer} end A number to end at
+   * @returns {Array} An array of values
+   */
   makeRange: function(start, end) {
     var values = [], i;
     for (i = start; i < end; i++) {
@@ -171,6 +255,10 @@ Ico.Base = {
     return values;
   }
 };
+/**
+ * Ico.BaseGraph is extended by most of the other graphs.  It
+ * uses a simple pattern with methods that can be overridden.
+ */
 Ico.BaseGraph = function() { this.initialize.apply(this, arguments); };
 Object.extend(Ico.BaseGraph.prototype, Ico.Base);
 Object.extend(Ico.BaseGraph.prototype, {
@@ -517,17 +605,37 @@ Object.extend(Ico.BaseGraph.prototype, {
   }
 });
 
+/**
+ * The BarGraph class.
+ *
+ * Example:
+ * 
+ *         new Ico.LineGraph($('linegraph_2'),
+ *           [100, 10, 90, 20, 80, 30],
+ *           { meanline: { stroke: '#AA0000' },
+ *             grid: true } );
+ *
+ */
 Ico.BarGraph = function() { this.initialize.apply(this, arguments); };
 Object.extend(Ico.BarGraph.prototype, Ico.BaseGraph.prototype);
 Object.extend(Ico.BarGraph.prototype, {
+  /**
+   * Sensible defaults for BarGraph.
+   */
   chartDefaults: function() {
     return { plot_padding: 0 };
   },
 
+  /**
+   * Ensures the normalises is always 0.
+   */
   normaliserOptions: function() {
     return { start_value: 0 };
   },
-  
+
+  /**
+   * Options specific to BarGraph.
+   */
   setChartSpecificOptions: function() {
     this.bar_padding = 5;
     this.bar_width = this.calculateBarWidth();
@@ -537,14 +645,34 @@ Object.extend(Ico.BarGraph.prototype, {
     this.start_y = this.options.height - this.y_padding_bottom;
   },
 
+  /**
+   * Calculates the width of each bar.
+   *
+   * @returns {Integer} The bar width
+   */
   calculateBarWidth: function() {
     return (this.graph_width / this.data_size) - this.bar_padding;
   },
-  
+
+  /**
+   * Calculates step used to move from one bar to another.
+   * 
+   * @returns {Float} The start value 
+   */
   calculateStep: function() {
     return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / validStepDivider(this.data_size);
   },
- 
+
+  /**
+   * Generates paths for Raphael.
+   *
+   * @param {Integer} index The index of the data value to plot
+   * @param {String} pathString The pathString so far
+   * @param {Integer} x The x-coord to plot 
+   * @param {Integer} y The y-coord to plot 
+   * @param {String} colour A string that represents a colour
+   * @returns {String} The resulting path string 
+   */
   drawPlot: function(index, pathString, x, y, colour) {
     x = x + this.bar_padding;
     pathString += 'M' + x + ',' + this.start_y;
@@ -563,6 +691,16 @@ Object.extend(Ico.BarGraph.prototype, {
   }
 });
 
+/**
+ * Draws horizontal bar graphs.
+ *
+ * Example:
+ *
+ *       new Ico.HorizontalBarGraph(element,
+ *          [2, 5, 1, 10, 15, 33, 20, 25, 1],
+ *          { font_size: 14 });        
+ * 
+ */
 Ico.HorizontalBarGraph = function() { this.initialize.apply(this, arguments); };
 Object.extend(Ico.HorizontalBarGraph.prototype, Ico.BaseGraph.prototype);
 Object.extend(Ico.HorizontalBarGraph.prototype, {
@@ -630,6 +768,14 @@ Object.extend(Ico.HorizontalBarGraph.prototype, {
   }
 });
 
+/**
+ * Draws line graphs.
+ *
+ * Example:
+ *
+ *        new Ico.LineGraph(element, [10, 5, 22, 44, 4]); 
+ * 
+ */
 Ico.LineGraph = function() { this.initialize.apply(this, arguments); };
 Object.extend(Ico.LineGraph.prototype, Ico.BaseGraph.prototype);
 Object.extend(Ico.LineGraph.prototype, {
@@ -687,6 +833,18 @@ Object.extend(Ico.LineGraph.prototype, {
   }
 });
 
+/**
+ * Draws spark line graphs.
+ *
+ * Example:
+ *
+ *         new Ico.SparkLine(element,
+ *           [21, 41, 32, 1, 10, 5, 32, 10, 23],
+ *           { width: 30, height: 14,
+ *             background_colour: '#ccc' });
+ *        
+ * 
+ */
 Ico.SparkLine = function() { this.initialize.apply(this, arguments); };
 Ico.SparkLine.prototype = {
   initialize: function(element, data, options) {
@@ -764,6 +922,16 @@ Ico.SparkLine.prototype = {
 };
 Object.extend(Ico.SparkLine.prototype, Ico.Base);
 
+/**
+ * Draws spark bar graphs.
+ *
+ * Example:
+ *
+ *         new Ico.SparkBar($('sparkline_2'),
+ *           [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10],
+ *           { width: 30, height: 14, background_colour: '#ccc' });
+ * 
+ */
 Ico.SparkBar = function() { this.initialize.apply(this, arguments); };
 Object.extend(Ico.SparkBar.prototype, Ico.SparkLine.prototype);
 Object.extend(Ico.SparkBar.prototype, {
@@ -785,6 +953,9 @@ Object.extend(Ico.SparkBar.prototype, {
   }
 });
 
+  /**
+   * Assign the Ico object as a global property.
+   */
   global.Ico = Ico;
 })(typeof window === 'undefined' ? this : window);
 
