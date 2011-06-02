@@ -505,6 +505,16 @@ Object.extend(Ico.BaseGraph.prototype, {
     }
 
     this.paper.path(pathString).attr({stroke: colour, 'stroke-width': '3px'});
+    
+    // JSYANG: Draw the markers on TOP of the path, so mouseovers don't fail.
+    for (var i = 0; i < coords.length; i++) {
+      var x = coords[i][0] || 0,
+          y = coords[i][1] || 0;
+      if (this.options.markers === 'circle') {
+        var circle = this.paper.circle(x, y, this.options.marker_size);
+        circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
+      }
+    }
   },
 
   calculateCoords: function(data) {
@@ -813,10 +823,12 @@ Object.extend(Ico.LineGraph.prototype, {
   drawPlot: function(index, pathString, x, y, colour) {
     var w = this.options.curve_amount;
 
+    /* JSYANG
     if (this.options.markers === 'circle') {
       var circle = this.paper.circle(x, y, this.options.marker_size);
       circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
     }
+    */
     
     if (index === 0) {
       return this.startPlot(pathString, x, y, colour);
