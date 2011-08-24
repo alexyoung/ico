@@ -20,7 +20,8 @@ Object.extend(Ico.LineGraph.prototype, {
 
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
-    this.x_padding_left = 30 + this.longestLabel(this.value_labels) * (this.options.font_size / 2);
+    var longestLabel = this.longestLabel(this.value_labels);
+    this.x_padding_left = 30 + longestLabel * (this.options.font_size / 2);
 
     if (typeof this.options.curve_amount === 'undefined') {
       this.options.curve_amount = 10;

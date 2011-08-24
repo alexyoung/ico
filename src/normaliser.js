@@ -36,6 +36,10 @@ Ico.Normaliser.prototype = {
       return 0;
     }
 
+    if (this.min === this.max) {
+      return 0;
+    }
+
     return start_value;
   },
 

@@ -148,6 +148,10 @@ Ico.Normaliser.prototype = {
       return 0;
     }
 
+    if (this.min === this.max) {
+      return 0;
+    }
+
     return start_value;
   },
 
@@ -409,7 +413,10 @@ Object.extend(Ico.BaseGraph.prototype, {
 
   longestLabel: function(values) {
     var labels = Array.prototype.slice.call(values || this.options.labels, 0);
-    return labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
+    if (labels.length) {
+      return labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
+    }
+    return 0;
   },
 
   paddingLeftOffset: function() {
@@ -792,7 +799,8 @@ Object.extend(Ico.LineGraph.prototype, {
 
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
-    this.x_padding_left = 30 + this.longestLabel(this.value_labels) * (this.options.font_size / 2);
+    var longestLabel = this.longestLabel(this.value_labels);
+    this.x_padding_left = 30 + longestLabel * (this.options.font_size / 2);
 
     if (typeof this.options.curve_amount === 'undefined') {
       this.options.curve_amount = 10;

@@ -150,7 +150,10 @@ Object.extend(Ico.BaseGraph.prototype, {
 
   longestLabel: function(values) {
     var labels = Array.prototype.slice.call(values || this.options.labels, 0);
-    return labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
+    if (labels.length) {
+      return labels.sort(function(a, b) { return a.toString().length < b.toString().length; })[0].toString().length;
+    }
+    return 0;
   },
 
   paddingLeftOffset: function() {
