@@ -212,6 +212,10 @@ code .this { color: #19469D; }</style>
 </td>
 <td class="code">
 <pre><code><span class="variable">global</span>.<span class="class">Ico</span> = <span class="class">Ico</span>;
+
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">exports</span> !== <span class="string">'undefined'</span>) {
+    <span class="variable">module</span>.<span class="variable">exports</span> = <span class="class">Ico</span>;
+  }
 })(<span class="keyword">typeof</span> <span class="variable">window</span> === <span class="string">'undefined'</span> ? <span class="this">this</span> : <span class="variable">window</span>);
 
 </code></pre>
@@ -241,6 +245,8 @@ Steps are the increments between each bar or line.</p>
 </td>
 <td class="code">
 <pre><code><span class="keyword">function</span> <span class="variable">getStyle</span>(<span class="variable">el</span>, <span class="variable">styleProp</span>) {
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">window</span> === <span class="string">'undefined'</span>) <span class="keyword">return</span>;
+
   <span class="keyword">var</span> <span class="variable">style</span>;
   <span class="keyword">if</span> (<span class="variable">el</span>.<span class="variable">currentStyle</span>) {
     <span class="variable">style</span> = <span class="variable">el</span>.<span class="variable">currentStyle</span>[<span class="variable">styleProp</span>];
@@ -360,6 +366,10 @@ Steps are the increments between each bar or line.</p>
       <span class="keyword">return</span> <span class="number integer">0</span>;
     }
 
+    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">min</span> === <span class="this">this</span>.<span class="variable">max</span>) {
+      <span class="keyword">return</span> <span class="number integer">0</span>;
+    }
+
     <span class="keyword">return</span> <span class="variable">start_value</span>;
   },</code></pre>
 </td>
@@ -422,7 +432,7 @@ Steps are the increments between each bar or line.</p>
 <td class="code">
 <pre><code>(<span class="keyword">function</span>(<span class="variable">global</span>) {
   <span class="keyword">var</span> <span class="class">Ico</span> = {
-    <span class="class">VERSION</span>: <span class="string">'0.3.0'</span>,</code></pre>
+    <span class="class">VERSION</span>: <span class="string">'0.3.1'</span>,</code></pre>
 </td>
 </tr>
 <tr class="code">

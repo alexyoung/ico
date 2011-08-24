@@ -9,6 +9,7 @@ Raphael is the only dependency.
 
 h3. News
 
+* [2011-08-24] 0.3.1: Bug fix for LineGraph, migrated tests to QUnit, moved Jakefile.js to Makefile
 * [2011-03-09] Passing default JSHint, and a minified version is now available
 * [2011-03-09] Added documentation and published it to http://alexyoung.github.com/ico/
 * [2011-03-09] 0.3.0 released: Split project into separate files, added build script, fixes for HorizontalBarGraph
