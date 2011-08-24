@@ -1,4 +1,4 @@
 *.swo
 *.swp
 .DS_Store
-reuters.html
+node_modules/

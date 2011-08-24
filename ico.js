@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.0',
+    VERSION: '0.3.1',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -43,6 +43,8 @@ function validStepDivider(value) {
  * @returns {Object} The style value
  */
 function getStyle(el, styleProp) {
+  if (typeof window === 'undefined') return;
+
   var style;
   if (el.currentStyle) {
     style = el.currentStyle[styleProp];
@@ -505,16 +507,6 @@ Object.extend(Ico.BaseGraph.prototype, {
     }
 
     this.paper.path(pathString).attr({stroke: colour, 'stroke-width': '3px'});
-    
-    // JSYANG: Draw the markers on TOP of the path, so mouseovers don't fail.
-    for (var i = 0; i < coords.length; i++) {
-      var x = coords[i][0] || 0,
-          y = coords[i][1] || 0;
-      if (this.options.markers === 'circle') {
-        var circle = this.paper.circle(x, y, this.options.marker_size);
-        circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
-      }
-    }
   },
 
   calculateCoords: function(data) {
@@ -633,7 +625,7 @@ Object.extend(Ico.BarGraph.prototype, {
    * Sensible defaults for BarGraph.
    */
   chartDefaults: function() {
-    return { plot_padding: 0, bar_padding: 5};
+    return { plot_padding: 0 };
   },
 
   /**
@@ -647,10 +639,11 @@ Object.extend(Ico.BarGraph.prototype, {
    * Options specific to BarGraph.
    */
   setChartSpecificOptions: function() {
+    this.bar_padding = 5;
     this.bar_width = this.calculateBarWidth();
     this.options.plot_padding = (this.bar_width / 2);
     this.step = this.calculateStep();
-    this.grid_start_offset = this.options.bar_padding - 1;
+    this.grid_start_offset = this.bar_padding - 1;
     this.start_y = this.options.height - this.y_padding_bottom;
   },
 
@@ -660,7 +653,7 @@ Object.extend(Ico.BarGraph.prototype, {
    * @returns {Integer} The bar width
    */
   calculateBarWidth: function() {
-    return (this.graph_width / this.data_size) - this.options.bar_padding;
+    return (this.graph_width / this.data_size) - this.bar_padding;
   },
 
   /**
@@ -669,7 +662,7 @@ Object.extend(Ico.BarGraph.prototype, {
    * @returns {Float} The start value 
    */
   calculateStep: function() {
-    return (this.graph_width - (this.options.plot_padding * 2) - (this.options.bar_padding * 2)) / validStepDivider(this.data_size);
+    return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / validStepDivider(this.data_size);
   },
 
   /**
@@ -683,7 +676,7 @@ Object.extend(Ico.BarGraph.prototype, {
    * @returns {String} The resulting path string 
    */
   drawPlot: function(index, pathString, x, y, colour) {
-    x = x + this.options.bar_padding;
+    x = x + this.bar_padding;
     pathString += 'M' + x + ',' + this.start_y;
     pathString += 'L' + x + ',' + y;
     this.paper.path(pathString).attr({stroke: colour, 'stroke-width': this.bar_width + 'px'});
@@ -695,7 +688,7 @@ Object.extend(Ico.BarGraph.prototype, {
 
   /* Change the standard options to correctly offset against the bars */
   drawHorizontalLabels: function() {
-    var x_start = this.options.bar_padding + this.options.plot_padding;
+    var x_start = this.bar_padding + this.options.plot_padding;
     this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1]);
   }
 });
@@ -713,17 +706,13 @@ Object.extend(Ico.BarGraph.prototype, {
 Ico.HorizontalBarGraph = function() { this.initialize.apply(this, arguments); };
 Object.extend(Ico.HorizontalBarGraph.prototype, Ico.BaseGraph.prototype);
 Object.extend(Ico.HorizontalBarGraph.prototype, {
-  /**
-   * Sensible defaults for HorizontalBarGraph.
-   */
-  chartDefaults: function() {
-    return { plot_padding: 0, bar_padding: 5};
-  },
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
     this.y_padding_top = 0;
     this.x_padding_left = 20 + this.longestLabel() * (this.options.font_size / 2);
+    this.bar_padding = 5;
     this.bar_width = this.calculateBarHeight();
+    this.options.plot_padding = 0;
     this.step = this.calculateStep();
   },
 
@@ -734,7 +723,7 @@ Object.extend(Ico.HorizontalBarGraph.prototype, {
 
   /* Height */
   calculateBarHeight: function() {
-    return (this.graph_height / this.data_size) - this.options.bar_padding;
+    return (this.graph_height / this.data_size) - this.bar_padding;
   },
   
   calculateStep: function() {
@@ -826,12 +815,10 @@ Object.extend(Ico.LineGraph.prototype, {
   drawPlot: function(index, pathString, x, y, colour) {
     var w = this.options.curve_amount;
 
-    /* JSYANG
     if (this.options.markers === 'circle') {
       var circle = this.paper.circle(x, y, this.options.marker_size);
       circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
     }
-    */
     
     if (index === 0) {
       return this.startPlot(pathString, x, y, colour);
@@ -972,5 +959,9 @@ Object.extend(Ico.SparkBar.prototype, {
    * Assign the Ico object as a global property.
    */
   global.Ico = Ico;
+
+  if (typeof exports !== 'undefined') {
+    module.exports = Ico;
+  }
 })(typeof window === 'undefined' ? this : window);
 

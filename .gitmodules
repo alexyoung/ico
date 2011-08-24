@@ -1,3 +1,0 @@
-[submodule "test/riot"]
-	path = test/riot
-	url = git://github.com/alexyoung/riotjs.git

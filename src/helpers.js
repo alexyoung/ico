@@ -17,6 +17,8 @@ function validStepDivider(value) {
  * @returns {Object} The style value
  */
 function getStyle(el, styleProp) {
+  if (typeof window === 'undefined') return;
+
   var style;
   if (el.currentStyle) {
     style = el.currentStyle[styleProp];

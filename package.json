@@ -1,0 +1,22 @@
+{ "name": "ico"
+, "description": "A graph plotting library"
+, "version": "0.3.1"
+, "url": "http://turingjs.com/"
+, "author": "Alex R. Young <alex@helicoid.net>"
+, "engines": ["node >= 0.4.0"]
+, "main": "./lib/index.js"
+, "devDependencies": {
+    "dox": "latest"
+  , "jake": "latest"
+  , "jsmin": "latest"
+  , "jslint": "latest"
+  , "uglify-js": "latest"
+  , "expresso": "latest"
+  , "node-raphael": "latest"
+  }
+, "repository": {
+    "type" : "git"
+  , "url" : "https://github.com/alexyoung/ico.git"
+  }
+}
+
