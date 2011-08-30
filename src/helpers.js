@@ -31,49 +31,52 @@ function getStyle(el, styleProp) {
   return style;
 }
 
-// TODO: Move
-Array.prototype.sum = function() {
-  for (var i = 0, sum = 0; i < this.length; sum += this[i++]) {}
+var Helpers = {};
+
+Helpers.sum = function(a) {
+  for (var i = 0, sum = 0; i < a.length; sum += a[i++]) {}
   return sum;
 };
 
-// TODO: Move
 if (typeof Array.prototype.max === 'undefined') {
-  Array.prototype.max = function() {
-    return Math.max.apply({}, this);
+  Helpers.max = function(a) {
+    return Math.max.apply({}, a);
+  };
+} else {
+  Helpers.max = function(a) {
+    return a.max();
   };
 }
 
-// TODO: Move
 if (typeof Array.prototype.min === 'undefined') {
-  Array.prototype.min = function() {
-    return Math.min.apply({}, this);
+  Helpers.min = function(a) {
+    return Math.min.apply({}, a);
+  };
+} else {
+  Helpers.min = function(a) {
+    return a.min();
   };
 }
 
-// TODO: Move
-Array.prototype.mean = function() {
-  return this.sum() / this.length;
+Helpers.mean = function(a) {
+  return Helpers.sum(a) / a.length;
 };
 
-// TODO: Move
-Array.prototype.variance = function() {
-  var mean = this.mean(),
+Helpers.variance = function(a) {
+  var mean = Helpers.mean(a),
       variance = 0;
-  for (var i = 0; i < this.length; i++) {
-    variance += Math.pow(this[i] - mean, 2);
+  for (var i = 0; i < a.length; i++) {
+    variance += Math.pow(a[i] - mean, 2);
   }
-  return variance / (this.length - 1);
+  return variance / (a.length - 1);
 };
 
-// TODO: Move
-Array.prototype.standard_deviation = function() {
-  return Math.sqrt(this.variance());
+Helpers.standard_deviation = function(a) {
+  return Math.sqrt(Helpers.variance(a));
 };
 
-// TODO: Move
 if (typeof Object.extend === 'undefined') {
-  Object.extend = function(destination, source) {
+  Helpers.extend = function(destination, source) {
     for (var property in source) {
       if (source.hasOwnProperty(property)) {
         destination[property] = source[property];
@@ -81,6 +84,6 @@ if (typeof Object.extend === 'undefined') {
     }
     return destination;
   };
+} else {
+  Helpers.extend = Object.extend;
 }
-
-

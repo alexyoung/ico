@@ -7,8 +7,8 @@
  * 
  */
 Ico.LineGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.LineGraph.prototype, Ico.BaseGraph.prototype);
-Object.extend(Ico.LineGraph.prototype, {
+Helpers.extend(Ico.LineGraph.prototype, Ico.BaseGraph.prototype);
+Helpers.extend(Ico.LineGraph.prototype, {
   normalise: function(value) {
     var total = this.start_value === 0 ? this.top_value : this.top_value - this.start_value;
     return ((value / total) * (this.graph_height));

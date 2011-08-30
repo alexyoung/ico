@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.1',
+    VERSION: '0.3.2',
 
     /**
      * Rounds a float to the specified number of decimal places.

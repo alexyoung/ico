@@ -9,8 +9,8 @@
  * 
  */
 Ico.SparkBar = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.SparkBar.prototype, Ico.SparkLine.prototype);
-Object.extend(Ico.SparkBar.prototype, {
+Helpers.extend(Ico.SparkBar.prototype, Ico.SparkLine.prototype);
+Helpers.extend(Ico.SparkBar.prototype, {
   calculateStep: function() {
     return this.options.width / validStepDivider(this.data.length);
   },

@@ -10,8 +10,8 @@
  *
  */
 Ico.BarGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.BarGraph.prototype, Ico.BaseGraph.prototype);
-Object.extend(Ico.BarGraph.prototype, {
+Helpers.extend(Ico.BarGraph.prototype, Ico.BaseGraph.prototype);
+Helpers.extend(Ico.BarGraph.prototype, {
   /**
    * Sensible defaults for BarGraph.
    */

@@ -9,8 +9,8 @@
  * 
  */
 Ico.HorizontalBarGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.HorizontalBarGraph.prototype, Ico.BaseGraph.prototype);
-Object.extend(Ico.HorizontalBarGraph.prototype, {
+Helpers.extend(Ico.HorizontalBarGraph.prototype, Ico.BaseGraph.prototype);
+Helpers.extend(Ico.HorizontalBarGraph.prototype, {
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
     this.y_padding_top = 0;

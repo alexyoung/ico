@@ -22,7 +22,7 @@ Ico.SparkLine.prototype = {
       background_colour: getStyle(element, 'backgroundColor') || '#ffffff',
       colour:            '#036'
     };
-    Object.extend(this.options, options || { });
+    Helpers.extend(this.options, options || { });
 
     this.step = this.calculateStep();
     this.paper = Raphael(this.element, this.options.width, this.options.height);
@@ -44,7 +44,7 @@ Ico.SparkLine.prototype = {
   },
 
   normalise: function(value) {
-    return (this.options.height / this.data.max()) * value;
+    return (this.options.height / Helpers.max(this.data)) * value;
   },
   
   draw: function() {
@@ -85,5 +85,5 @@ Ico.SparkLine.prototype = {
     circle.attr({ stroke: false, fill: this.options.highlight.colour});
   }
 };
-Object.extend(Ico.SparkLine.prototype, Ico.Base);
+Helpers.extend(Ico.SparkLine.prototype, Ico.Base);
 

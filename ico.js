@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.1',
+    VERSION: '0.3.2',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -57,49 +57,52 @@ function getStyle(el, styleProp) {
   return style;
 }
 
-// TODO: Move
-Array.prototype.sum = function() {
-  for (var i = 0, sum = 0; i < this.length; sum += this[i++]) {}
+var Helpers = {};
+
+Helpers.sum = function(a) {
+  for (var i = 0, sum = 0; i < a.length; sum += a[i++]) {}
   return sum;
 };
 
-// TODO: Move
 if (typeof Array.prototype.max === 'undefined') {
-  Array.prototype.max = function() {
-    return Math.max.apply({}, this);
+  Helpers.max = function(a) {
+    return Math.max.apply({}, a);
+  };
+} else {
+  Helpers.max = function(a) {
+    return a.max();
   };
 }
 
-// TODO: Move
 if (typeof Array.prototype.min === 'undefined') {
-  Array.prototype.min = function() {
-    return Math.min.apply({}, this);
+  Helpers.min = function(a) {
+    return Math.min.apply({}, a);
+  };
+} else {
+  Helpers.min = function(a) {
+    return a.min();
   };
 }
 
-// TODO: Move
-Array.prototype.mean = function() {
-  return this.sum() / this.length;
+Helpers.mean = function(a) {
+  return Helpers.sum(a) / a.length;
 };
 
-// TODO: Move
-Array.prototype.variance = function() {
-  var mean = this.mean(),
+Helpers.variance = function(a) {
+  var mean = Helpers.mean(a),
       variance = 0;
-  for (var i = 0; i < this.length; i++) {
-    variance += Math.pow(this[i] - mean, 2);
+  for (var i = 0; i < a.length; i++) {
+    variance += Math.pow(a[i] - mean, 2);
   }
-  return variance / (this.length - 1);
+  return variance / (a.length - 1);
 };
 
-// TODO: Move
-Array.prototype.standard_deviation = function() {
-  return Math.sqrt(this.variance());
+Helpers.standard_deviation = function(a) {
+  return Math.sqrt(Helpers.variance(a));
 };
 
-// TODO: Move
 if (typeof Object.extend === 'undefined') {
-  Object.extend = function(destination, source) {
+  Helpers.extend = function(destination, source) {
     for (var property in source) {
       if (source.hasOwnProperty(property)) {
         destination[property] = source[property];
@@ -107,9 +110,9 @@ if (typeof Object.extend === 'undefined') {
     }
     return destination;
   };
+} else {
+  Helpers.extend = Object.extend;
 }
-
-
 /**
  * Normalises lists of values to fit inside a graph.
  *
@@ -125,9 +128,9 @@ Ico.Normaliser = function(data, options) {
     this.options = options;
   }
 
-  this.min = data.min();
-  this.max = data.max();
-  this.standard_deviation = data.standard_deviation();
+  this.min = Helpers.min(data);
+  this.max = Helpers.max(data);
+  this.standard_deviation = Helpers.standard_deviation(data);
   this.range = 0;
   this.step = this.labelStep(this.max - this.min);
   this.start_value = this.calculateStart();
@@ -266,8 +269,8 @@ Ico.Base = {
  * uses a simple pattern with methods that can be overridden.
  */
 Ico.BaseGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.BaseGraph.prototype, Ico.Base);
-Object.extend(Ico.BaseGraph.prototype, {
+Helpers.extend(Ico.BaseGraph.prototype, Ico.Base);
+Helpers.extend(Ico.BaseGraph.prototype, {
   /* Data is expected to be a list, the list names are used as labels */
   initialize: function(element, data, options) {
     this.element = element;
@@ -304,8 +307,8 @@ Object.extend(Ico.BaseGraph.prototype, {
       y_padding_top:          20,
       draw:                   true
     };
-    Object.extend(this.options, this.chartDefaults() || { });
-    Object.extend(this.options, options || { });
+    Helpers.extend(this.options, this.chartDefaults() || { });
+    Helpers.extend(this.options, options || { });
 
     this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
     this.label_step = this.normaliser.step;
@@ -543,7 +546,7 @@ Object.extend(Ico.BaseGraph.prototype, {
   },
 
   drawMeanLine: function(data) {
-    var offset = data.sum() / data.length,
+    var offset = Helpers.sum(data) / data.length,
         pathString = '';
  
     pathString += 'M' + (this.x_padding_left - 1) + ',' + (this.options.height - this.y_padding_bottom - offset);
@@ -589,7 +592,7 @@ Object.extend(Ico.BaseGraph.prototype, {
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset),
         pathString = '',
         font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: "#000"};
-    Object.extend(font_options, extra_font_options || {});
+    Helpers.extend(font_options, extra_font_options || {});
     
     for (var i = 0; i < labels.length; i++) {
       pathString += 'M' + x + ',' + y;
@@ -626,8 +629,8 @@ Object.extend(Ico.BaseGraph.prototype, {
  *
  */
 Ico.BarGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.BarGraph.prototype, Ico.BaseGraph.prototype);
-Object.extend(Ico.BarGraph.prototype, {
+Helpers.extend(Ico.BarGraph.prototype, Ico.BaseGraph.prototype);
+Helpers.extend(Ico.BarGraph.prototype, {
   /**
    * Sensible defaults for BarGraph.
    */
@@ -711,8 +714,8 @@ Object.extend(Ico.BarGraph.prototype, {
  * 
  */
 Ico.HorizontalBarGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.HorizontalBarGraph.prototype, Ico.BaseGraph.prototype);
-Object.extend(Ico.HorizontalBarGraph.prototype, {
+Helpers.extend(Ico.HorizontalBarGraph.prototype, Ico.BaseGraph.prototype);
+Helpers.extend(Ico.HorizontalBarGraph.prototype, {
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
     this.y_padding_top = 0;
@@ -786,8 +789,8 @@ Object.extend(Ico.HorizontalBarGraph.prototype, {
  * 
  */
 Ico.LineGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.LineGraph.prototype, Ico.BaseGraph.prototype);
-Object.extend(Ico.LineGraph.prototype, {
+Helpers.extend(Ico.LineGraph.prototype, Ico.BaseGraph.prototype);
+Helpers.extend(Ico.LineGraph.prototype, {
   normalise: function(value) {
     var total = this.start_value === 0 ? this.top_value : this.top_value - this.start_value;
     return ((value / total) * (this.graph_height));
@@ -867,7 +870,7 @@ Ico.SparkLine.prototype = {
       background_colour: getStyle(element, 'backgroundColor') || '#ffffff',
       colour:            '#036'
     };
-    Object.extend(this.options, options || { });
+    Helpers.extend(this.options, options || { });
 
     this.step = this.calculateStep();
     this.paper = Raphael(this.element, this.options.width, this.options.height);
@@ -889,7 +892,7 @@ Ico.SparkLine.prototype = {
   },
 
   normalise: function(value) {
-    return (this.options.height / this.data.max()) * value;
+    return (this.options.height / Helpers.max(this.data)) * value;
   },
   
   draw: function() {
@@ -930,7 +933,7 @@ Ico.SparkLine.prototype = {
     circle.attr({ stroke: false, fill: this.options.highlight.colour});
   }
 };
-Object.extend(Ico.SparkLine.prototype, Ico.Base);
+Helpers.extend(Ico.SparkLine.prototype, Ico.Base);
 
 /**
  * Draws spark bar graphs.
@@ -943,8 +946,8 @@ Object.extend(Ico.SparkLine.prototype, Ico.Base);
  * 
  */
 Ico.SparkBar = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.SparkBar.prototype, Ico.SparkLine.prototype);
-Object.extend(Ico.SparkBar.prototype, {
+Helpers.extend(Ico.SparkBar.prototype, Ico.SparkLine.prototype);
+Helpers.extend(Ico.SparkBar.prototype, {
   calculateStep: function() {
     return this.options.width / validStepDivider(this.data.length);
   },

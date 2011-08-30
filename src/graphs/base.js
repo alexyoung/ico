@@ -3,8 +3,8 @@
  * uses a simple pattern with methods that can be overridden.
  */
 Ico.BaseGraph = function() { this.initialize.apply(this, arguments); };
-Object.extend(Ico.BaseGraph.prototype, Ico.Base);
-Object.extend(Ico.BaseGraph.prototype, {
+Helpers.extend(Ico.BaseGraph.prototype, Ico.Base);
+Helpers.extend(Ico.BaseGraph.prototype, {
   /* Data is expected to be a list, the list names are used as labels */
   initialize: function(element, data, options) {
     this.element = element;
@@ -41,8 +41,8 @@ Object.extend(Ico.BaseGraph.prototype, {
       y_padding_top:          20,
       draw:                   true
     };
-    Object.extend(this.options, this.chartDefaults() || { });
-    Object.extend(this.options, options || { });
+    Helpers.extend(this.options, this.chartDefaults() || { });
+    Helpers.extend(this.options, options || { });
 
     this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
     this.label_step = this.normaliser.step;
@@ -280,7 +280,7 @@ Object.extend(Ico.BaseGraph.prototype, {
   },
 
   drawMeanLine: function(data) {
-    var offset = data.sum() / data.length,
+    var offset = Helpers.sum(data) / data.length,
         pathString = '';
  
     pathString += 'M' + (this.x_padding_left - 1) + ',' + (this.options.height - this.y_padding_bottom - offset);
@@ -326,7 +326,7 @@ Object.extend(Ico.BaseGraph.prototype, {
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset),
         pathString = '',
         font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: "#000"};
-    Object.extend(font_options, extra_font_options || {});
+    Helpers.extend(font_options, extra_font_options || {});
     
     for (var i = 0; i < labels.length; i++) {
       pathString += 'M' + x + ',' + y;

@@ -13,9 +13,9 @@ Ico.Normaliser = function(data, options) {
     this.options = options;
   }
 
-  this.min = data.min();
-  this.max = data.max();
-  this.standard_deviation = data.standard_deviation();
+  this.min = Helpers.min(data);
+  this.max = Helpers.max(data);
+  this.standard_deviation = Helpers.standard_deviation(data);
   this.range = 0;
   this.step = this.labelStep(this.max - this.min);
   this.start_value = this.calculateStart();
