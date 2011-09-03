@@ -5,13 +5,28 @@
 Ico.BaseGraph = function() { this.initialize.apply(this, arguments); };
 Helpers.extend(Ico.BaseGraph.prototype, Ico.Base);
 Helpers.extend(Ico.BaseGraph.prototype, {
-  /* Data is expected to be a list, the list names are used as labels */
+  /**
+   * This base class is used by the other graphs in Ico.
+   * 
+   * Options:
+   *
+   *   `width`: The width of the container element
+   *   `height`: The height of the container element
+   *   `labels`: The textual labels
+   *   `label_count`: The number of numerical labels to display
+   *   `label_step`: The value to increment each numerical label
+   *   `start_value`: The value to start plotting from (generally 0)
+   *
+   * @param {Object} A DOM element
+   * @param {Array|Object} Data to display
+   * @param {Object} Options
+   *
+   */
   initialize: function(element, data, options) {
+    options = options || {};
     this.element = element;
-
     this.data_sets = this.buildDataSets(data, options);
     this.flat_data = this.flatten(data);
-
     this.data_size = this.longestDataSetLength();
 
     /* If one colour is specified, map it to a compatible set */
@@ -41,13 +56,14 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       y_padding_top:          20,
       draw:                   true
     };
-    Helpers.extend(this.options, this.chartDefaults() || { });
-    Helpers.extend(this.options, options || { });
+    Helpers.extend(this.options, this.chartDefaults() || {});
+    Helpers.extend(this.options, options);
 
     this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
-    this.label_step = this.normaliser.step;
+    this.label_step = options.label_step || this.normaliser.step;
+
     this.range = this.normaliser.range;
-    this.start_value = this.normaliser.start_value;
+    this.start_value = options.start_value || this.normaliser.start_value;
 
     /* Padding around the graph area to make room for labels */
     this.x_padding_left = 10 + this.paddingLeftOffset();
@@ -63,9 +79,13 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     this.step = this.calculateStep();
 
     /* Calculate how many labels are required */
-    this.y_label_count = Math.ceil(this.range / this.label_step);
-    if ((this.normaliser.min + (this.y_label_count * this.normaliser.step)) < this.normaliser.max) {
-      this.y_label_count += 1;
+    if (options.label_count) {
+      this.y_label_count = options.label_count;
+    } else {
+      this.y_label_count = Math.ceil(this.range / this.label_step);
+      if ((this.normaliser.min + (this.y_label_count * this.normaliser.step)) < this.normaliser.max) {
+        this.y_label_count += 1;
+      }
     }
     this.value_labels = this.makeValueLabels(this.y_label_count);
     this.top_value = this.value_labels[this.value_labels.length - 1];
