@@ -205,6 +205,21 @@ code .this { color: #19469D; }</style>
 };
 </code></pre>
 </td>
+</tr><tr class="filename"><td><h2 id="src/end.js"><a href="#">end</a></h2></td><td>src/end.js</td></tr><tr class="code">
+<td class="docs">
+<p>Assign the Ico object as a global property.
+   </p>
+</td>
+<td class="code">
+<pre><code><span class="variable">global</span>.<span class="class">Ico</span> = <span class="class">Ico</span>;
+
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">exports</span> !== <span class="string">'undefined'</span>) {
+    <span class="variable">module</span>.<span class="variable">exports</span> = <span class="class">Ico</span>;
+  }
+})(<span class="keyword">typeof</span> <span class="variable">window</span> === <span class="string">'undefined'</span> ? <span class="this">this</span> : <span class="variable">window</span>);
+
+</code></pre>
+</td>
 </tr><tr class="filename"><td><h2 id="src/helpers.js"><a href="#">helpers</a></h2></td><td>src/helpers.js</td></tr><tr class="code">
 <td class="docs">
 <p>Determines if a value is valid as a 'step' value.
@@ -300,21 +315,6 @@ Steps are the increments between each bar or line.</p>
 } <span class="keyword">else</span> {
   <span class="class">Helpers</span>.<span class="variable">extend</span> = <span class="class">Object</span>.<span class="variable">extend</span>;
 }
-</code></pre>
-</td>
-</tr><tr class="filename"><td><h2 id="src/end.js"><a href="#">end</a></h2></td><td>src/end.js</td></tr><tr class="code">
-<td class="docs">
-<p>Assign the Ico object as a global property.
-   </p>
-</td>
-<td class="code">
-<pre><code><span class="variable">global</span>.<span class="class">Ico</span> = <span class="class">Ico</span>;
-
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">exports</span> !== <span class="string">'undefined'</span>) {
-    <span class="variable">module</span>.<span class="variable">exports</span> = <span class="class">Ico</span>;
-  }
-})(<span class="keyword">typeof</span> <span class="variable">window</span> === <span class="string">'undefined'</span> ? <span class="this">this</span> : <span class="variable">window</span>);
-
 </code></pre>
 </td>
 </tr><tr class="filename"><td><h2 id="src/normaliser.js"><a href="#">normaliser</a></h2></td><td>src/normaliser.js</td></tr><tr class="code">
@@ -435,7 +435,7 @@ Steps are the increments between each bar or line.</p>
 <td class="code">
 <pre><code>(<span class="keyword">function</span>(<span class="variable">global</span>) {
   <span class="keyword">var</span> <span class="class">Ico</span> = {
-    <span class="class">VERSION</span>: <span class="string">'0.3.2'</span>,</code></pre>
+    <span class="class">VERSION</span>: <span class="string">'0.3.4'</span>,</code></pre>
 </td>
 </tr>
 <tr class="code">

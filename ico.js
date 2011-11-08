@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.3',
+    VERSION: '0.3.4',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -294,6 +294,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     this.data_sets = this.buildDataSets(data, options);
     this.flat_data = this.flatten(data);
     this.data_size = this.longestDataSetLength();
+    this.plottedCoords = [];
 
     /* If one colour is specified, map it to a compatible set */
     if (options && options.colour) {
@@ -320,11 +321,14 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       grid:                   false,
       grid_colour:            '#ccc',
       y_padding_top:          20,
-      draw:                   true
+      draw:                   true,
+      bar_labels:             false                                  // Display values on the top of bars
     };
+
     Helpers.extend(this.options, this.chartDefaults() || {});
     Helpers.extend(this.options, options);
 
+    this.font_options = { 'font': this.options.font_size + 'px "Arial"', stroke: 'none', fill: '#000' };
     this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
     this.label_step = options.label_step || this.normaliser.step;
 
@@ -336,6 +340,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     this.x_padding_right = 20;
     this.x_padding = this.x_padding_left + this.x_padding_right;
     this.y_padding_top = this.options.y_padding_top;
+
     this.y_padding_bottom = 20 + this.paddingBottomOffset();
     this.y_padding = this.y_padding_top + this.y_padding_bottom;
     
@@ -343,6 +348,11 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     this.graph_height = this.options.height - (this.y_padding);
 
     this.step = this.calculateStep();
+    
+    if (this.options.bar_labels) {
+      // TODO: Improve this so extra padding is used instead
+      this.range += this.normaliser.step;
+    }
 
     /* Calculate how many labels are required */
     if (options.label_count) {
@@ -497,10 +507,10 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
 
   drawGrid: function() {
-    var pathString = '', i;
+    var pathString = '', i, y;
 
     if (this.options.show_vertical_labels) {
-      var y = this.graph_height + this.y_padding_top;
+      y = this.graph_height + this.y_padding_top;
       for (i = 0; i < this.y_label_count; i++) {
         y = y - (this.graph_height / this.y_label_count);
         pathString += 'M' + this.x_padding_left + ',' + y;
@@ -510,7 +520,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
  
     if (this.options.show_horizontal_labels) {
       var x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset,
-          x_labels = this.options.labels.length;
+          x_labels = this.options.labels.length,
+          i;
 
       for (i = 0; i < x_labels; i++) {
         pathString += 'M' + x + ',' + this.y_padding_top;
@@ -523,28 +534,36 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       pathString += 'L' + x + ',' + (this.y_padding_top + this.graph_height);
     }
 
-    this.paper.path(pathString).attr({ stroke: this.options.grid_colour, 'stroke-width': '1px'});
+    this.paper.path(pathString).attr({ stroke: this.options.grid_colour, 'stroke-width': '1px' });
   },
 
   drawLines: function(label, colour, data) {
     var coords = this.calculateCoords(data),
-        pathString = '';
+        pathString = '',
+        i, x, y;
 
-    for (var i = 0; i < coords.length; i++) {
-      var x = coords[i][0] || 0,
-          y = coords[i][1] || 0;
+    for (i = 0; i < coords.length; i++) {
+      x = coords[i][0] || 0;
+      y = coords[i][1] || 0;
+      this.plottedCoords.push([x + this.bar_padding, y]);      
       pathString = this.drawPlot(i, pathString, x, y, colour);
     }
+    
+    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': '3px' });
 
-    this.paper.path(pathString).attr({stroke: colour, 'stroke-width': '3px'});
+    if (this.options.bar_labels) {
+      this.drawBarMarkers();
+    }
   },
 
   calculateCoords: function(data) {
     var x = this.x_padding_left + this.options.plot_padding - this.step,
         y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value),
         y = 0,
-        coords = [];
-    for (var i = 0; i < data.length; i++) {
+        coords = [],
+        i;
+
+    for (i = 0; i < data.length; i++) {
       y = y_offset - data[i];
       x = x + this.step;
       coords.push([x, y]);
@@ -562,7 +581,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     pathString += 'L' + (x - length) + ',' + (y - length);
     pathString += 'M' + x + ',' + (y - length);
     pathString += 'L' + (x - length) + ',' + (y - (length * 2));
-    this.paper.path(pathString).attr({stroke: this.options.label_colour, 'stroke-width': 2});
+    this.paper.path(pathString).attr({ stroke: this.options.label_colour, 'stroke-width': 2 });
   },
 
   drawMeanLine: function(data) {
@@ -611,10 +630,11 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     var x = this.x_padding_left - 1 + x_offset(start_offset),
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset),
         pathString = '',
-        font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: "#000"};
+        i,
+        font_options = this.font_options;
     Helpers.extend(font_options, extra_font_options || {});
     
-    for (var i = 0; i < labels.length; i++) {
+    for (i = 0; i < labels.length; i++) {
       pathString += 'M' + x + ',' + y;
       if (typeof labels[i] !== 'undefined' && (labels[i] + '').length > 0) {
         pathString += 'L' + (x + y_offset(5)) + ',' + (y + x_offset(5));
@@ -629,7 +649,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   
   drawVerticalLabels: function() {
     var y_step = this.graph_height / this.y_label_count; 
-    this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
+    this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { 'text-anchor': 'end' });
   },
   
   drawHorizontalLabels: function() {
@@ -720,6 +740,23 @@ Helpers.extend(Ico.BarGraph.prototype, {
   drawHorizontalLabels: function() {
     var x_start = this.bar_padding + this.options.plot_padding;
     this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1]);
+  },
+
+  drawBarMarkers: function() {
+    if (this.plottedCoords.length === 0) {
+      return;
+    }
+
+    var i, length = this.flat_data.length, x, y, label, font_options;
+    font_options = this.font_options;
+    font_options['text-anchor'] = 'center';
+
+    for (i = 0; i < length; i++) {
+      label = this.roundValue(this.flat_data[i], 2).toString();
+      x = this.plottedCoords[i][0];
+      y = this.roundValue(this.plottedCoords[i][1], 0);
+      this.paper.text(x, y - this.options.font_size, label).attr(font_options).toFront();
+    }
   }
 });
 

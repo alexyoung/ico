@@ -81,6 +81,23 @@ Helpers.extend(Ico.BarGraph.prototype, {
   drawHorizontalLabels: function() {
     var x_start = this.bar_padding + this.options.plot_padding;
     this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1]);
+  },
+
+  drawBarMarkers: function() {
+    if (this.plottedCoords.length === 0) {
+      return;
+    }
+
+    var i, length = this.flat_data.length, x, y, label, font_options;
+    font_options = this.font_options;
+    font_options['text-anchor'] = 'center';
+
+    for (i = 0; i < length; i++) {
+      label = this.roundValue(this.flat_data[i], 2).toString();
+      x = this.plottedCoords[i][0];
+      y = this.roundValue(this.plottedCoords[i][1], 0);
+      this.paper.text(x, y - this.options.font_size, label).attr(font_options).toFront();
+    }
   }
 });
 
