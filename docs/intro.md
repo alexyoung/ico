@@ -16,4 +16,6 @@ An array or object can be passed as data:
        { colours: {shoe_size: '#990000' },
          grid: true });
 
+## Support
 
+[Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=support%40helicoid%2enet&lc=GB&item_name=Helicoid%20Limited&no_note=0&cn=Add%20special%20instructions%20to%20the%20seller&no_shipping=2&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)

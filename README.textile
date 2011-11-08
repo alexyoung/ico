@@ -7,6 +7,10 @@ Raphael is the only dependency.
 * "Documentation":http://alexyoung.github.com/ico
 * "Examples":http://alexyoung.github.com/ico/examples.html
 
+h3. Support
+
+Donations to support future development are welcome and appreciated: "Donate":https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=support%40helicoid%2enet&lc=GB&item_name=Helicoid%20Limited&no_note=0&cn=Add%20special%20instructions%20to%20the%20seller&no_shipping=2&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
+
 h3. News
 
 * [2011-11-08] 0.3.4.1: Added <code>bar_labels</code> option that displays values above the standard bar graphs
