@@ -88,8 +88,8 @@ Helpers.extend(Ico.BarGraph.prototype, {
       return;
     }
 
-    var i, length = this.flat_data.length, x, y, label, font_options;
-    font_options = this.font_options;
+    var i, length = this.flat_data.length, x, y, label, font_options = {};
+    Helpers.extend(font_options, this.font_options);
     font_options['text-anchor'] = 'center';
 
     for (i = 0; i < length; i++) {

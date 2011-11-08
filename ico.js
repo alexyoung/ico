@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.4',
+    VERSION: '0.3.4.1',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -631,7 +631,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset),
         pathString = '',
         i,
-        font_options = this.font_options;
+        font_options = {};
+    Helpers.extend(font_options, this.font_options);
     Helpers.extend(font_options, extra_font_options || {});
     
     for (i = 0; i < labels.length; i++) {
@@ -747,8 +748,8 @@ Helpers.extend(Ico.BarGraph.prototype, {
       return;
     }
 
-    var i, length = this.flat_data.length, x, y, label, font_options;
-    font_options = this.font_options;
+    var i, length = this.flat_data.length, x, y, label, font_options = {};
+    Helpers.extend(font_options, this.font_options);
     font_options['text-anchor'] = 'center';
 
     for (i = 0; i < length; i++) {

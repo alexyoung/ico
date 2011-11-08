@@ -365,7 +365,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset),
         pathString = '',
         i,
-        font_options = this.font_options;
+        font_options = {};
+    Helpers.extend(font_options, this.font_options);
     Helpers.extend(font_options, extra_font_options || {});
     
     for (i = 0; i < labels.length; i++) {
