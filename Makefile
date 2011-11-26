@@ -19,4 +19,10 @@ docs: min
 	@cp ico-min.js docs/ico-min.js
 	@cp raphael.js docs/raphael.js
 
+publishdocs:
+	$(eval PARENT_SHA := $(shell git show-ref -s refs/heads/gh-pages))
+	$(eval DOC_SHA := $(shell git ls-tree -d HEAD docs | awk '{print $$3}'))
+	$(eval COMMIT := $(shell echo "Auto-update docs." | git commit-tree $(DOC_SHA) -p $(PARENT_SHA)))
+	@git update-ref refs/heads/gh-pages $(COMMIT)
+
 .PHONY: lint docs test publishdocs
