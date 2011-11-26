@@ -1,463 +1,234 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Ico</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-		<style>body {
-    margin: 0;
-    padding: 0;
-    font: 14px/1.5 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
-    color: #252519;
-}
-a {
-    color: #252519;
-}
-a:hover {
-    text-decoration: underline;
-    color: #19469D;
-}
-p {
-    margin: 12px 0;
-}
-h1, h2, h3 {
-    margin: 0;
-    padding: 0;
-}
-table#source {
-    width: 100%;
-    border-collapse: collapse;
-}
-table#source td:first-child {
-    padding: 30px 40px 30px 40px;
-    vertical-align: top;
-}
-table#source td:first-child,
-table#source td:first-child pre {
-    width: 450px;
-}
-table#source td:last-child {
-    padding: 30px 0 30px 40px;
-    border-left: 1px solid #E5E5EE;
-    background: #F5F5FF;
-}
-table#source tr {
-    border-bottom: 1px solid #E5E5EE;
-}
-table#source tr.filename {
-    padding-top: 40px;
-    border-top: 1px solid #E5E5EE;
-}
-table#source tr.filename td:first-child {
-    text-transform: capitalize;
-}
-table#source tr.filename td:last-child {
-    font-size: 12px;
-}
-table#source tr.filename h2 {
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
-}
-table#source tr.code h1,
-table#source tr.code h2,
-table#source tr.code h3 {
-    margin-top: 30px;
-    font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
-    font-size: 18px;
-}
-table#source tr.code h2 {
-    font-size: 16px;
-}
-table#source tr.code h3 {
-    font-size: 14px;
-}
-table#source tr.code ul {
-    margin: 15px 0 15px 35px;
-    padding: 0;
-}
-table#source tr.code ul li {
-    margin: 0;
-    padding: 1px 0;
-}
-table#source tr.code ul li p {
-    margin: 0;
-    padding: 0;
-}
-table#source tr.code td:first-child pre {
-    padding: 20px;
-}
-#ribbon {
-    position: fixed;
-    top: 0;
-    right: 0;
-}
-code .string { color: #219161; }
-code .regexp { color: #219161; }
-code .keyword { color: #954121; }
-code .number { color: #19469D; }
-code .comment { color: #bbb; }
-code .this { color: #19469D; }</style>
-		<script>
-			$(function(){
-				$('tr.code').hide();
-				$('tr.filename').toggle(function(){
-					$(this).nextUntil('.filename').fadeIn();
-				}, function(){
-					$(this).nextUntil('.filename').fadeOut();
-				});
-			});
-		</script>
-	</head>
-	<body>
-<table id="source"><tbody><tr><td><h1>Ico</h1><p>Ico is a JavaScript graph library that uses <a href="http://raphaeljs.com/">Raphael</a> to draw.  This means it can draw charts in multiple browsers (including IE).</p>
-
-<p>Get it at GitHub: <a href="https://github.com/alexyoung/ico">alexyoung / ico</a> or <a href="http://alexyoung.github.com/ico/examples.html">view examples</a>.</p>
-
-<p>The API uses a data parameter then an additional option for customisation:</p>
-
-<pre><code> new Ico.BarGraph(dom_element, data, options);</code></pre>
-
-<p>An array or object can be passed as data:</p>
-
-<pre><code> new Ico.BarGraph(dom_element, [1, 2, 3, 4], { grid: true });
-
- new Ico.BarGraph($('dom_element'), {
-     shoe_size: [1, 1, 1, 0, 2, 4, 6, 8, 3, 9, 6]
-   },
-   { colours: {shoe_size: '#990000' },
-     grid: true });</code></pre>
-
-<h2>Support</h2>
-
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=support%40helicoid%2enet&lc=GB&item_name=Helicoid%20Limited&no_note=0&cn=Add%20special%20instructions%20to%20the%20seller&no_shipping=2&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted">Donate</a></p></td><td></td></tr><tr class="filename"><td><h2 id="src/base.js"><a href="#">base</a></h2></td><td>src/base.js</td></tr><tr class="code">
-<td class="docs">
-<p>The Ico.Base object which contains useful generic functions.
- </p>
-</td>
-<td class="code">
-<pre><code><span class="class">Ico</span>.<span class="class">Base</span> = {</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Runs this.normalise on each value.</p>
-
-<h2></h2>
-
-<ul><li><p><strong>param</strong>: <em>Array</em>  data Values to normalise</p></li><li><p><strong>returns</strong>: <em>Array</em>  Normalised values</p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="variable">normaliseData</span>: <span class="keyword">function</span>(<span class="variable">data</span>) {
-    <span class="keyword">var</span> <span class="variable">values</span> = [],
-        <span class="variable">i</span>      = <span class="number integer">0</span>;
-    <span class="keyword">for</span> (<span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
-      <span class="variable">values</span>.<span class="variable">push</span>(<span class="this">this</span>.<span class="variable">normalise</span>(<span class="variable">data</span>[<span class="variable">i</span>]));
+<head>
+  <meta charset='utf-8'>
+  <title>alexyoung/ico @ GitHub</title>
+  <link href="prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="prettify.js"></script>  
+  <style type="text/css">
+    body {
+      margin-top: 1.0em;
+      background-color: #ffffff;
+      font-family: Helvetica, Arial, FreeSans, san-serif;
+      color: #000000;
     }
-    <span class="keyword">return</span> <span class="variable">values</span>;
-  },</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Flattens objects into an array.</p>
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+    h1 { font-size: 3.8em; color: #000000; margin-bottom: 3px; }
+    h1 .small { font-size: 0.4em; }
+    h1 a { text-decoration: none }
+    h2 { font-size: 1.5em; color: #000000; }
+    h3 { color: #000000; }
+    a { color: #000000; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+    pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
 
-<h2></h2>
+    code { padding: 2px 4px; }
 
-<ul><li><p><strong>param</strong>: <em>Object</em>  data Values to flatten</p></li><li><p><strong>returns</strong>: <em>Array</em>  Flattened values</p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="variable">flatten</span>: <span class="keyword">function</span>(<span class="variable">data</span>) {
-    <span class="keyword">var</span> <span class="variable">flat_data</span> = [];
+    /* Pretty printing styles. Used with prettify.js. */
+    /* Vim sunburst theme by David Leibovic */
 
-    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">data</span>.<span class="variable">length</span> === <span class="string">'undefined'</span>) {
-      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">data</span> === <span class="string">'object'</span>) {
-        <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">key</span> <span class="keyword">in</span> <span class="variable">data</span>) {
-          <span class="keyword">if</span> (<span class="variable">data</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">key</span>))
-            <span class="variable">flat_data</span> = <span class="variable">flat_data</span>.<span class="variable">concat</span>(<span class="this">this</span>.<span class="variable">flatten</span>(<span class="variable">data</span>[<span class="variable">key</span>]));
-        }
-      } <span class="keyword">else</span> {
-        <span class="keyword">return</span> [];
-      }
+    pre .str, code .str { color: #65B042; } /* string  - green */
+    pre .kwd, code .kwd { color: #E28964; } /* keyword - dark pink */
+    pre .com, code .com { color: #AEAEAE; font-style: italic; } /* comment - gray */
+    pre .typ, code .typ { color: #89bdff; } /* type - light blue */
+    pre .lit, code .lit { color: #3387CC; } /* literal - blue */
+    pre .pun, code .pun { color: #fff; } /* punctuation - white */
+    pre .pln, code .pln { color: #fff; } /* plaintext - white */
+    pre .tag, code .tag { color: #89bdff; } /* html/xml tag    - light blue */
+    pre .atn, code .atn { color: #bdb76b; } /* html/xml attribute name  - khaki */
+    pre .atv, code .atv { color: #65B042; } /* html/xml attribute value - green */
+    pre .dec, code .dec { color: #3387CC; } /* decimal - blue */
+
+    pre.prettyprint, code.prettyprint {
+      background-color: #111111;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      -o-border-radius: 8px;
+      -ms-border-radius: 8px;
+      -khtml-border-radius: 8px;
+      border-radius: 8px;
     }
 
-    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">data</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
-      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">data</span>[<span class="variable">i</span>].<span class="variable">length</span> === <span class="string">'number'</span>) {
-        <span class="variable">flat_data</span> = <span class="variable">flat_data</span>.<span class="variable">concat</span>(<span class="this">this</span>.<span class="variable">flatten</span>(<span class="variable">data</span>[<span class="variable">i</span>]));
-      } <span class="keyword">else</span> {
-        <span class="variable">flat_data</span>.<span class="variable">push</span>(<span class="variable">data</span>[<span class="variable">i</span>]);
-      }
+    pre.prettyprint {
+      width: 95%;
+      margin: 1em auto;
+      padding: 1em;
+      white-space: pre-wrap;
     }
-    <span class="keyword">return</span> <span class="variable">flat_data</span>;
-  },</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Handy method to produce an array of numbers.</p>
 
-<h2></h2>
+    /* Specify class=linenums on a pre to get line numbering */
+    ol.linenums { margin-top: 0; margin-bottom: 0; color: #AEAEAE; } /* IE indents via margin-left */
+    li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
+    /* Alternate shading for lines */
+    li.L1,li.L3,li.L5,li.L7,li.L9 { }
 
-<ul><li><p><strong>param</strong>: <em>Integer</em>  start A number to start at</p></li><li><p><strong>param</strong>: <em>Integer</em>  end A number to end at</p></li><li><p><strong>returns</strong>: <em>Array</em>  An array of values</p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="variable">makeRange</span>: <span class="keyword">function</span>(<span class="variable">start</span>, <span class="variable">end</span>) {
-    <span class="keyword">var</span> <span class="variable">values</span> = [], <span class="variable">i</span>;
-    <span class="keyword">for</span> (<span class="variable">i</span> = <span class="variable">start</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">end</span>; <span class="variable">i</span>++) {
-      <span class="variable">values</span>.<span class="variable">push</span>(<span class="variable">i</span>);
+    @media print {
+      pre .str, code .str { color: #060; }
+      pre .kwd, code .kwd { color: #006; font-weight: bold; }
+      pre .com, code .com { color: #600; font-style: italic; }
+      pre .typ, code .typ { color: #404; font-weight: bold; }
+      pre .lit, code .lit { color: #044; }
+      pre .pun, code .pun { color: #440; }
+      pre .pln, code .pln { color: #000; }
+      pre .tag, code .tag { color: #006; font-weight: bold; }
+      pre .atn, code .atn { color: #404; }
+      pre .atv, code .atv { color: #060; }
     }
-    <span class="keyword">return</span> <span class="variable">values</span>;
-  }
-};
+
+    #linegraph { width: 700px; height: 300px }
+
+  </style>
+</head>
+<body onload="prettyPrint()">
+  <a href="http://github.com/alexyoung/ico"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/alexyoung/ico/zipball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a href="http://github.com/alexyoung/ico/tarball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+
+    <h1><a href="http://github.com/alexyoung/ico">ico</a>
+      <span class="small">by <a href="http://github.com/alexyoung">alexyoung</a></span></h1>
+
+<h3>Ico</h3>
+
+<p>Ico (GitHub: <a href="https://github.com/alexyoung/ico">alexyoung / ico</a>, License: <em>MIT</em>) is a JavaScript graph library.</p>
+
+<p>The <a href="http://alexyoung.github.com/ico/examples.html">Ico Example Page</a> has a lot of examples that demonstrate Ico's usage.</p>
+
+<h3>Usage</h3>
+
+<p>Graphs are created by instantiated classes.  The available classes are:</p>
+
+<ul>
+<li><code>Ico.SparkLine</code>: Creates a small line graph intended for use within text</li>
+<li><code>Ico.SparkBar</code>: Creates a small bar graph intended for use within text</li>
+<li><code>Ico.BarGraph</code>: Creates a bar graph</li>
+<li><code>Ico.HorizontalBarGraph</code>: Creates a horizontal bar graph</li>
+<li><code>Ico.LineGraph</code>: Creates a line graph</li>
+</ul>
+
+<p>Each of these classes can be instantiated with the same arguments:</p>
+
+<pre class="prettyprint lang-js"><code>
+// Basic signature
+new Ico.SparkLine(element, data, options);
+
+// Real examples
+new Ico.SparkLine($('sparkline'),
+  [21, 41, 32, 1, 10, 5, 32, 10, 23],
+  { width: 30, height: 14, background_colour: '#ccc' }
+);
+
+new Ico.BarGraph($('bargraph'), { one: $random(1, 25) }, { bar_labels: true });
 </code></pre>
-</td>
-</tr><tr class="filename"><td><h2 id="src/end.js"><a href="#">end</a></h2></td><td>src/end.js</td></tr><tr class="code">
-<td class="docs">
-<p>Assign the Ico object as a global property.
-   </p>
-</td>
-<td class="code">
-<pre><code><span class="variable">global</span>.<span class="class">Ico</span> = <span class="class">Ico</span>;
 
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">exports</span> !== <span class="string">'undefined'</span>) {
-    <span class="variable">module</span>.<span class="variable">exports</span> = <span class="class">Ico</span>;
+<p>The third argument, <code>options</code>, may vary between graphs.</p>
+
+<h3>Live Example</h3>
+
+<pre class="prettyprint lang-js"><code>
+new Ico.LineGraph($('linegraph'), {
+    one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
+    two: [10, 9, 3, 30, 1, 10, 5, 33, 33],
+    three: [5, 4, 10, 1, 30, 11, 33, 12, 22]
+  }, {
+    markers: 'circle',
+    colours: { one: '#990000', two: '#009900', three: '#000099'},
+    labels: ['one', 'two', 'three', 'four',
+             'five', 'six', 'seven', 'eight', 'nine'],
+    meanline: true,
+    grid: true
   }
-})(<span class="keyword">typeof</span> <span class="variable">window</span> === <span class="string">'undefined'</span> ? <span class="this">this</span> : <span class="variable">window</span>);
-
+);
 </code></pre>
-</td>
-</tr><tr class="filename"><td><h2 id="src/helpers.js"><a href="#">helpers</a></h2></td><td>src/helpers.js</td></tr><tr class="code">
-<td class="docs">
-<p>Determines if a value is valid as a 'step' value.
-Steps are the increments between each bar or line.</p>
 
-<h2></h2>
-
-<ul><li><p><strong>param</strong>: <em>Integer</em>  value A number to test</p></li><li><p><strong>returns</strong>: <em>Integer</em>  A valid step value</p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="keyword">function</span> <span class="variable">validStepDivider</span>(<span class="variable">value</span>) {
-  <span class="keyword">return</span> <span class="variable">value</span> &<span class="variable">gt</span>; <span class="number integer">1</span> ? <span class="variable">value</span> - <span class="number integer">1</span> : <span class="number integer">1</span>;
-}</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Gets a CSS style property.</p>
-
-<h2></h2>
-
-<ul><li><p><strong>param</strong>: <em>Object</em>  el A DOM element</p></li><li><p><strong>param</strong>: <em>String</em>  styleProp The name of a style property</p></li><li><p><strong>returns</strong>: <em>Object</em>  The style value</p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="keyword">function</span> <span class="variable">getStyle</span>(<span class="variable">el</span>, <span class="variable">styleProp</span>) {
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">window</span> === <span class="string">'undefined'</span>) <span class="keyword">return</span>;
-
-  <span class="keyword">var</span> <span class="variable">style</span>;
-  <span class="keyword">if</span> (<span class="variable">el</span>.<span class="variable">currentStyle</span>) {
-    <span class="variable">style</span> = <span class="variable">el</span>.<span class="variable">currentStyle</span>[<span class="variable">styleProp</span>];
-  } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">window</span>.<span class="variable">getComputedStyle</span>) {
-    <span class="variable">style</span> = <span class="variable">document</span>.<span class="variable">defaultView</span>.<span class="variable">getComputedStyle</span>(<span class="variable">el</span>, <span class="keyword">null</span>).<span class="variable">getPropertyValue</span>(<span class="variable">styleProp</span>);
-  }
-  <span class="keyword">if</span> (<span class="variable">style</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; <span class="variable">style</span>.<span class="variable">length</span> === <span class="number integer">0</span>) {
-    <span class="variable">style</span> = <span class="keyword">null</span>;
-  }
-  <span class="keyword">return</span> <span class="variable">style</span>;
+<script type="text/javascript" src="raphael.js"></script>
+<script type="text/javascript" src="ico-min.js"></script>
+<div id="linegraph"></div>
+<script type="text/javascript">
+new Ico.LineGraph(document.getElementById('linegraph'), {
+  one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
+  two: [10, 9, 3, 30, 1, 10, 5, 33, 33],
+  three: [5, 4, 10, 1, 30, 11, 33, 12, 22]
+}, {
+  markers: 'circle',
+  colours: { one: '#990000', two: '#009900', three: '#000099'},
+  labels: ['one', 'two', 'three', 'four',
+           'five', 'six', 'seven', 'eight', 'nine'],
+  meanline: true,
+  grid: true
 }
+);
+</script>
 
-<span class="keyword">var</span> <span class="class">Helpers</span> = {};
+<h3>Options for <code>Ico.SparkLine</code></h3>
 
-<span class="class">Helpers</span>.<span class="variable">sum</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-  <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>, <span class="variable">sum</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">a</span>.<span class="variable">length</span>; <span class="variable">sum</span> += <span class="variable">a</span>[<span class="variable">i</span>++]) {}
-  <span class="keyword">return</span> <span class="variable">sum</span>;
-};
+<ul>
+<li><code>width</code>: Width of the graph, defaults to the element's width</li>
+<li><code>height</code>: Height of the graph, defaults to the element's height</li>
+<li><code>highlight</code>: Highlight options <code>highlight: { colour: '#ff0000' }</code> -- used to pick out the last value</li>
+<li><code>background_colour</code>: The graph's background colour, defaults to the element's background colour if set</li>
+<li><code>colour</code>: The colour for drawing lines</li>
+<li><code>acceptable_range</code>: An array of two values, <code>[min, max]</code>, for setting the size of the background rectangle</li>
+</ul>
 
-<span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">max</span> === <span class="string">'undefined'</span>) {
-  <span class="class">Helpers</span>.<span class="variable">max</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-    <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">max</span>.<span class="variable">apply</span>({}, <span class="variable">a</span>);
-  };
-} <span class="keyword">else</span> {
-  <span class="class">Helpers</span>.<span class="variable">max</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-    <span class="keyword">return</span> <span class="variable">a</span>.<span class="variable">max</span>();
-  };
-}
+<h3>Options for <code>Ico.SparkBar</code></h3>
 
-<span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="class">Array</span>.<span class="variable">prototype</span>.<span class="variable">min</span> === <span class="string">'undefined'</span>) {
-  <span class="class">Helpers</span>.<span class="variable">min</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-    <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">min</span>.<span class="variable">apply</span>({}, <span class="variable">a</span>);
-  };
-} <span class="keyword">else</span> {
-  <span class="class">Helpers</span>.<span class="variable">min</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-    <span class="keyword">return</span> <span class="variable">a</span>.<span class="variable">min</span>();
-  };
-}
+<p><code>Ico.SparkBar</code> options are the same as <code>Ico.SparkLine</code>.</p>
 
-<span class="class">Helpers</span>.<span class="variable">mean</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-  <span class="keyword">return</span> <span class="class">Helpers</span>.<span class="variable">sum</span>(<span class="variable">a</span>) / <span class="variable">a</span>.<span class="variable">length</span>;
-};
+<h3>Shared Options for <code>Ico.BarGraph</code>, <code>Ico.HorizontalBarGraph</code>, and <code>Ico.LineGraph</code></h3>
 
-<span class="class">Helpers</span>.<span class="variable">variance</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-  <span class="keyword">var</span> <span class="variable">mean</span> = <span class="class">Helpers</span>.<span class="variable">mean</span>(<span class="variable">a</span>),
-      <span class="variable">variance</span> = <span class="number integer">0</span>;
-  <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">i</span> = <span class="number integer">0</span>; <span class="variable">i</span> &<span class="variable">lt</span>; <span class="variable">a</span>.<span class="variable">length</span>; <span class="variable">i</span>++) {
-    <span class="variable">variance</span> += <span class="class">Math</span>.<span class="variable">pow</span>(<span class="variable">a</span>[<span class="variable">i</span>] - <span class="variable">mean</span>, <span class="number integer">2</span>);
-  }
-  <span class="keyword">return</span> <span class="variable">variance</span> / (<span class="variable">a</span>.<span class="variable">length</span> - <span class="number integer">1</span>);
-};
+<ul>
+<li><code>width</code>: The width of the container element, defaults to the element's width</li>
+<li><code>height</code>: The height of the container element, defaults to the element's height</li>
+<li><code>background_colour</code>: The graph's background colour, defaults to the element's background colour if set</li>
+<li><code>labels</code>: An array of text labels (for each bar or line)</li>
+<li><code>show_horizontal_labels</code>: Set to <code>false</code> to hide horizontal labels</li>
+<li><code>show_vertical_labels</code>: Set to <code>false</code> to hide vertical labels</li>
+<li><code>label_count</code>: The number of numerical labels to display</li>
+<li><code>label_step</code>: The value to increment each numerical label</li>
+<li><code>start_value</code>: The value to start plotting from (generally 0).  This can be used to force 0 in cases where the normaliser starts from another value</li>
+<li><code>font_size</code>: The size of the fonts used in the graph</li>
+<li><code>meanline</code>: Display a line through the mean value</li>
+<li><code>grid</code>: Display a grid to make reading values easier</li>
+<li><code>grid_colour</code>: Change the colour of the grid</li>
+</ul>
 
-<span class="class">Helpers</span>.<span class="variable">standard_deviation</span> = <span class="keyword">function</span>(<span class="variable">a</span>) {
-  <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">sqrt</span>(<span class="class">Helpers</span>.<span class="variable">variance</span>(<span class="variable">a</span>));
-};
+<h3>Options for <code>Ico.BarGraph</code></h3>
 
-<span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="class">Object</span>.<span class="variable">extend</span> === <span class="string">'undefined'</span>) {
-  <span class="class">Helpers</span>.<span class="variable">extend</span> = <span class="keyword">function</span>(<span class="variable">destination</span>, <span class="variable">source</span>) {
-    <span class="keyword">for</span> (<span class="keyword">var</span> <span class="variable">property</span> <span class="keyword">in</span> <span class="variable">source</span>) {
-      <span class="keyword">if</span> (<span class="variable">source</span>.<span class="variable">hasOwnProperty</span>(<span class="variable">property</span>)) {
-        <span class="variable">destination</span>[<span class="variable">property</span>] = <span class="variable">source</span>[<span class="variable">property</span>];
-      }
-    }
-    <span class="keyword">return</span> <span class="variable">destination</span>;
-  };
-} <span class="keyword">else</span> {
-  <span class="class">Helpers</span>.<span class="variable">extend</span> = <span class="class">Object</span>.<span class="variable">extend</span>;
-}
-</code></pre>
-</td>
-</tr><tr class="filename"><td><h2 id="src/normaliser.js"><a href="#">normaliser</a></h2></td><td>src/normaliser.js</td></tr><tr class="code">
-<td class="docs">
-<p>Normalises lists of values to fit inside a graph.</p>
+<ul>
+<li><code>bar_size</code>: Set the size for a bar in a bar graph</li>
+<li><code>max_bar_size</code>: Set the maximum size for a bar in a bar graph</li>
+<li><code>bar_labels</code>: Display the actual value of each bar in a bar graph</li>
+</ul>
 
-<h2></h2>
+<h3>Options for <code>Ico.HorizontalBarGraph</code></h3>
 
-<ul><li><p><strong>param</strong>: <em>Array</em>  data A list of values</p></li><li><p><strong>param</strong>: <em>Object</em>  options Can be used to set the <code>start_value</code></p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="class">Ico</span>.<span class="class">Normaliser</span> = <span class="keyword">function</span>(<span class="variable">data</span>, <span class="variable">options</span>) {
-  <span class="this">this</span>.<span class="variable">options</span> = {
-    <span class="variable">start_value</span>: <span class="keyword">null</span>
-  };
+<ul>
+<li><code>bar_size</code>: Set the size for a bar in a bar graph</li>
+<li><code>max_bar_size</code>: Set the maximum size for a bar in a bar graph</li>
+</ul>
 
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable">options</span> !== <span class="string">'undefined'</span>) {
-    <span class="this">this</span>.<span class="variable">options</span> = <span class="variable">options</span>;
-  }
+<h3>Options for <code>Ico.LineGraph</code></h3>
 
-  <span class="this">this</span>.<span class="variable">min</span> = <span class="class">Helpers</span>.<span class="variable">min</span>(<span class="variable">data</span>);
-  <span class="this">this</span>.<span class="variable">max</span> = <span class="class">Helpers</span>.<span class="variable">max</span>(<span class="variable">data</span>);
-  <span class="this">this</span>.<span class="variable">standard_deviation</span> = <span class="class">Helpers</span>.<span class="variable">standard_deviation</span>(<span class="variable">data</span>);
-  <span class="this">this</span>.<span class="variable">range</span> = <span class="number integer">0</span>;
-  <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">labelStep</span>(<span class="this">this</span>.<span class="variable">max</span> - <span class="this">this</span>.<span class="variable">min</span>);
-  <span class="this">this</span>.<span class="variable">start_value</span> = <span class="this">this</span>.<span class="variable">calculateStart</span>();
-  <span class="this">this</span>.<span class="variable">process</span>();
-};
+<ul>
+<li><code>markers</code>: Set to <code>'circle'</code> to display markers at each point on a line graph</li>
+<li><code>marker_size</code>: The size of each marker</li>
+</ul>
 
-<span class="class">Ico</span>.<span class="class">Normaliser</span>.<span class="variable">prototype</span> = {</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Calculates the start value.  This is often 0.
-## </p>
+<h3>Data Normalisation</h3>
 
-<ul><li><p><strong>returns</strong>: <em>Float</em>  The start value </p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="variable">calculateStart</span>: <span class="keyword">function</span>() {
-    <span class="keyword">var</span> <span class="variable">min</span> = <span class="keyword">typeof</span> <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">start_value</span> !== <span class="string">'undefined'</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; <span class="this">this</span>.<span class="variable">min</span> &<span class="variable">gt</span>;= <span class="number integer">0</span> ? <span class="this">this</span>.<span class="variable">options</span>.<span class="variable">start_value</span> : <span class="this">this</span>.<span class="variable">min</span>,
-        <span class="variable">start_value</span> = <span class="this">this</span>.<span class="variable">round</span>(<span class="variable">min</span>, <span class="number integer">1</span>);</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p> This is a boundary condition </p>
-</td>
-<td class="code">
-<pre><code><span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">min</span> &<span class="variable">gt</span>; <span class="number integer">0</span> &<span class="variable">amp</span>;&<span class="variable">amp</span>; <span class="variable">start_value</span> &<span class="variable">gt</span>; <span class="this">this</span>.<span class="variable">min</span>) {
-      <span class="keyword">return</span> <span class="number integer">0</span>;
-    }
-
-    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">min</span> === <span class="this">this</span>.<span class="variable">max</span>) {
-      <span class="keyword">return</span> <span class="number integer">0</span>;
-    }
-
-    <span class="keyword">return</span> <span class="variable">start_value</span>;
-  },</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p> Given a value, this method rounds it to the nearest good value for an origin </p>
-</td>
-<td class="code">
-<pre><code><span class="variable">round</span>: <span class="keyword">function</span>(<span class="variable">value</span>, <span class="variable">offset</span>) {
-    <span class="variable">offset</span> = <span class="variable">offset</span> || <span class="number integer">1</span>;
-    <span class="keyword">var</span> <span class="variable">roundedValue</span> = <span class="variable">value</span>;
-
-    <span class="keyword">if</span> (<span class="this">this</span>.<span class="variable">standard_deviation</span> &<span class="variable">gt</span>; <span class="number float">0.1</span>) {
-      <span class="keyword">var</span> <span class="variable">multiplier</span> = <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, -<span class="variable">offset</span>);
-      <span class="variable">roundedValue</span> = <span class="class">Math</span>.<span class="variable">round</span>(<span class="variable">value</span> * <span class="variable">multiplier</span>) / <span class="variable">multiplier</span>;
-
-      <span class="keyword">if</span> (<span class="variable">roundedValue</span> &<span class="variable">gt</span>; <span class="this">this</span>.<span class="variable">min</span>) {
-        <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">round</span>(<span class="variable">value</span> - <span class="this">this</span>.<span class="variable">step</span>);
-      }
-    }
-    <span class="keyword">return</span> <span class="variable">roundedValue</span>;
-  },</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Calculates the range and step values.
-   </p>
-</td>
-<td class="code">
-<pre><code><span class="variable">process</span>: <span class="keyword">function</span>() {
-    <span class="this">this</span>.<span class="variable">range</span> = <span class="this">this</span>.<span class="variable">max</span> - <span class="this">this</span>.<span class="variable">start_value</span>;
-    <span class="this">this</span>.<span class="variable">step</span> = <span class="this">this</span>.<span class="variable">labelStep</span>(<span class="this">this</span>.<span class="variable">range</span>);
-  },</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Calculates the label step value.</p>
-
-<h2></h2>
-
-<ul><li><p><strong>param</strong>: <em>Float</em>  value A value to convert to a label position</p></li><li><p><strong>returns</strong>: <em>Float</em>  The rounded label step result</p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="variable">labelStep</span>: <span class="keyword">function</span>(<span class="variable">value</span>) {
-    <span class="keyword">return</span> <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, <span class="class">Math</span>.<span class="variable">round</span>((<span class="class">Math</span>.<span class="variable">log</span>(<span class="variable">value</span>) / <span class="class">Math</span>.<span class="class">LN10</span>)) - <span class="number integer">1</span>);
-  }
-};
-
-
-</code></pre>
-</td>
-</tr><tr class="filename"><td><h2 id="src/start.js"><a href="#">start</a></h2></td><td>src/start.js</td></tr><tr class="code">
-<td class="docs">
-<p>The Ico object.
- </p>
-</td>
-<td class="code">
-<pre><code>(<span class="keyword">function</span>(<span class="variable">global</span>) {
-  <span class="keyword">var</span> <span class="class">Ico</span> = {
-    <span class="class">VERSION</span>: <span class="string">'0.3.4.1'</span>,</code></pre>
-</td>
-</tr>
-<tr class="code">
-<td class="docs">
-<p>Rounds a float to the specified number of decimal places.</p>
-
-<h2></h2>
-
-<ul><li><p><strong>param</strong>: <em>Float</em>  num A number to round</p></li><li><p><strong>param</strong>: <em>Integer</em>  dec The number of decimal places</p></li><li><p><strong>returns</strong>: <em>Float</em>  The rounded result</p><p> </p></li></ul>
-</td>
-<td class="code">
-<pre><code><span class="variable">round</span>: <span class="keyword">function</span>(<span class="variable">num</span>, <span class="variable">dec</span>) {
-      <span class="keyword">var</span> <span class="variable">result</span> = <span class="class">Math</span>.<span class="variable">round</span>(<span class="variable">num</span> * <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, <span class="variable">dec</span>)) / <span class="class">Math</span>.<span class="variable">pow</span>(<span class="number integer">10</span>, <span class="variable">dec</span>);
-      <span class="keyword">return</span> <span class="variable">result</span>;
-    }
-  };
-
-</code></pre>
-</td>
-</tr>	</body>
-</html></tbody></table>
+<p>Data is mapped to plottable values by <code>Ico.Normaliser</code>.  This class also attempts to calculate a sensible value to start plotting from on the X axis and the X axis label increment.  These values can be overridden through <code>start_value</code> and <code>label_step</code> in graphs to support data that is difficult to plot.</p>
+</body>
+</html>

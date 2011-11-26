@@ -16,6 +16,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
    *   `label_count`: The number of numerical labels to display
    *   `label_step`: The value to increment each numerical label
    *   `start_value`: The value to start plotting from (generally 0)
+   *   `bar_size`: Set the size for a bar in a bar chart
+   *   `max_bar_size`: Set the maximum size for a bar in a bar chart
    *
    * @param {Object} A DOM element
    * @param {Array|Object} Data to display

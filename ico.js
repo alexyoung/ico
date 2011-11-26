@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.4.1',
+    VERSION: '0.3.5',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -282,6 +282,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
    *   `label_count`: The number of numerical labels to display
    *   `label_step`: The value to increment each numerical label
    *   `start_value`: The value to start plotting from (generally 0)
+   *   `bar_size`: Set the size for a bar in a bar chart
+   *   `max_bar_size`: Set the maximum size for a bar in a bar chart
    *
    * @param {Object} A DOM element
    * @param {Array|Object} Data to display
@@ -663,10 +665,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
  *
  * Example:
  * 
- *         new Ico.LineGraph($('linegraph_2'),
- *           [100, 10, 90, 20, 80, 30],
- *           { meanline: { stroke: '#AA0000' },
- *             grid: true } );
+ *         new Ico.BarGraph($('bargraph'), [100, 10, 90, 20, 80, 30]);
  *
  */
 Ico.BarGraph = function() { this.initialize.apply(this, arguments); };
@@ -690,9 +689,14 @@ Helpers.extend(Ico.BarGraph.prototype, {
    * Options specific to BarGraph.
    */
   setChartSpecificOptions: function() {
-    this.bar_padding = 5;
-    this.bar_width = this.calculateBarWidth();
-    this.options.plot_padding = (this.bar_width / 2);
+    this.bar_padding = this.options.bar_padding || 5;
+    this.bar_width = this.options.bar_size || this.calculateBarWidth();
+
+    if (this.options.bar_size && !this.options.bar_padding) {
+      this.bar_padding = this.graph_width / this.data_size;
+    }
+
+    this.options.plot_padding = (this.bar_width / 2) - (this.bar_padding / 2);
     this.step = this.calculateStep();
     this.grid_start_offset = this.bar_padding - 1;
     this.start_y = this.options.height - this.y_padding_bottom;
@@ -704,7 +708,14 @@ Helpers.extend(Ico.BarGraph.prototype, {
    * @returns {Integer} The bar width
    */
   calculateBarWidth: function() {
-    return (this.graph_width / this.data_size) - this.bar_padding;
+    var width = (this.graph_width / this.data_size) - this.bar_padding;
+
+    if (this.options.max_bar_size && width > this.options.max_bar_size) {
+      width = this.options.max_bar_size;
+      this.bar_padding = this.graph_width / this.data_size;
+    }
+
+    return width;
   },
 
   /**
@@ -778,8 +789,13 @@ Helpers.extend(Ico.HorizontalBarGraph.prototype, {
     // Approximate the width required by the labels
     this.y_padding_top = 0;
     this.x_padding_left = 20 + this.longestLabel() * (this.options.font_size / 2);
-    this.bar_padding = 5;
-    this.bar_width = this.calculateBarHeight();
+    this.bar_padding = this.options.bar_padding || 5;
+    this.bar_width = this.options.bar_size || this.calculateBarHeight();
+
+    if (this.options.bar_size && !this.options.bar_padding) {
+      this.bar_padding = this.graph_height / this.data_size;
+    }
+
     this.options.plot_padding = 0;
     this.step = this.calculateStep();
   },
@@ -791,7 +807,14 @@ Helpers.extend(Ico.HorizontalBarGraph.prototype, {
 
   /* Height */
   calculateBarHeight: function() {
-    return (this.graph_height / this.data_size) - this.bar_padding;
+    var height = (this.graph_height / this.data_size) - this.bar_padding;
+
+    if (this.options.max_bar_size && height > this.options.max_bar_size) {
+      height = this.options.max_bar_size;
+      this.bar_padding = this.graph_height / this.data_size;
+    }
+
+    return height;
   },
   
   calculateStep: function() {

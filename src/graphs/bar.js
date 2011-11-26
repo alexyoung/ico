@@ -3,10 +3,7 @@
  *
  * Example:
  * 
- *         new Ico.LineGraph($('linegraph_2'),
- *           [100, 10, 90, 20, 80, 30],
- *           { meanline: { stroke: '#AA0000' },
- *             grid: true } );
+ *         new Ico.BarGraph($('bargraph'), [100, 10, 90, 20, 80, 30]);
  *
  */
 Ico.BarGraph = function() { this.initialize.apply(this, arguments); };
@@ -30,9 +27,14 @@ Helpers.extend(Ico.BarGraph.prototype, {
    * Options specific to BarGraph.
    */
   setChartSpecificOptions: function() {
-    this.bar_padding = 5;
-    this.bar_width = this.calculateBarWidth();
-    this.options.plot_padding = (this.bar_width / 2);
+    this.bar_padding = this.options.bar_padding || 5;
+    this.bar_width = this.options.bar_size || this.calculateBarWidth();
+
+    if (this.options.bar_size && !this.options.bar_padding) {
+      this.bar_padding = this.graph_width / this.data_size;
+    }
+
+    this.options.plot_padding = (this.bar_width / 2) - (this.bar_padding / 2);
     this.step = this.calculateStep();
     this.grid_start_offset = this.bar_padding - 1;
     this.start_y = this.options.height - this.y_padding_bottom;
@@ -44,7 +46,14 @@ Helpers.extend(Ico.BarGraph.prototype, {
    * @returns {Integer} The bar width
    */
   calculateBarWidth: function() {
-    return (this.graph_width / this.data_size) - this.bar_padding;
+    var width = (this.graph_width / this.data_size) - this.bar_padding;
+
+    if (this.options.max_bar_size && width > this.options.max_bar_size) {
+      width = this.options.max_bar_size;
+      this.bar_padding = this.graph_width / this.data_size;
+    }
+
+    return width;
   },
 
   /**

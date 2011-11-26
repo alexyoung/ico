@@ -131,7 +131,7 @@ new Ico.LineGraph($('linegraph_5'), { shoe_size: [15,14,10]},{ markers: 'circle'
 new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#ccc' });
 new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
 new Ico.HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
-new Ico.HorizontalBarGraph($('bargraph_8'), [0.23, 0.1, 0.9, 0.95, 0.99, 0.3, 0.5, 0.35, 0.3], { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
+new Ico.HorizontalBarGraph($('bargraph_8'), [0.23, 0.1, 0.9, 0.95, 0.99, 0.3, 0.5, 0.35, 0.3], { bar_size: 25, colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
 
 new Ico.LineGraph($('linegraph_small_high'), $map(1, 25, function() { return Math.round(Math.random() + 100); }));
 new Ico.LineGraph($('linegraph_med_high'), $map(1, 25, function() { return Math.round((Math.random() * 10) + 1000); } ));
@@ -139,12 +139,12 @@ new Ico.LineGraph($('linegraph_negative'), [57,-31,-87,-66,-30,-77,-88,75,-25,48
 new Ico.LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77,-88,-75,-25,-48,-56,-91,-16,-41,-87,-69,-65,-62,-58,-15,-49,-75,-42,-78,-79]);
 new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
 new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-20,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
-new Ico.BarGraph($('rics_poll'), [20, 20],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+new Ico.BarGraph($('rics_poll'), [20, 20],  { max_bar_size: 100, font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
 new Ico.LineGraph($('issue4'), [20, 20, 20, 20, 20],  { font_size: 10, colour: '#ff0099' });
 new Ico.BarGraph($('rics_poll4'), [20, 19, 15, 10],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
 new Ico.BarGraph($('rics_poll5'), [10.1, 10.2, 10.5, 11],  { font_size: 10, colour: '#ff0099' });
 new Ico.BarGraph($('rics_poll2'), [20, -20, -30],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two', 'label three'] });
-new Ico.BarGraph($('rics_poll3'), [2000, 2000],  { font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
+new Ico.BarGraph($('rics_poll3'), [2000, 2000],  { bar_padding: 100, font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
 new Ico.LineGraph($('miki'), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],  { label_count: 3, label_step: 1, font_size: 10, colour: '#ff0099', labels: ['2/7', '4/7', '6/7', '8/7', '10/7', '12/7', '14/7', '16/7', '18/7', '20/7', '22/7', '24/7', '26/7', '28/7', '30/7', '1/8'] });
     </script>
   </body>

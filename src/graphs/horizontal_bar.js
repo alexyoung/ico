@@ -15,8 +15,13 @@ Helpers.extend(Ico.HorizontalBarGraph.prototype, {
     // Approximate the width required by the labels
     this.y_padding_top = 0;
     this.x_padding_left = 20 + this.longestLabel() * (this.options.font_size / 2);
-    this.bar_padding = 5;
-    this.bar_width = this.calculateBarHeight();
+    this.bar_padding = this.options.bar_padding || 5;
+    this.bar_width = this.options.bar_size || this.calculateBarHeight();
+
+    if (this.options.bar_size && !this.options.bar_padding) {
+      this.bar_padding = this.graph_height / this.data_size;
+    }
+
     this.options.plot_padding = 0;
     this.step = this.calculateStep();
   },
@@ -28,7 +33,14 @@ Helpers.extend(Ico.HorizontalBarGraph.prototype, {
 
   /* Height */
   calculateBarHeight: function() {
-    return (this.graph_height / this.data_size) - this.bar_padding;
+    var height = (this.graph_height / this.data_size) - this.bar_padding;
+
+    if (this.options.max_bar_size && height > this.options.max_bar_size) {
+      height = this.options.max_bar_size;
+      this.bar_padding = this.graph_height / this.data_size;
+    }
+
+    return height;
   },
   
   calculateStep: function() {

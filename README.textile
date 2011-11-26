@@ -1,6 +1,6 @@
 h2. Introduction
 
-Ico is a JavaScript graph library that uses "Raphael":http://raphaeljs.com/ to draw.  This means it can draw charts in multiple browsers (including IE).
+Ico is a JavaScript graph library that uses "Raphael":http://raphaeljs.com/ to draw.  This means it can draw graphs in multiple browsers (including IE).
 
 Raphael is the only dependency.  I've tested the examples with Raphael 2.0 and they appear to work correctly, but please report bugs through GitHub.
 
@@ -13,6 +13,8 @@ Donations to support future development are welcome and appreciated: "Donate":ht
 
 h3. News
 
+* [2011-11-26] Updated documentation to include details on each graph's options
+* [2011-11-26] 0.3.5: Added <code>max_bar_width</code> option for controlling the maximum width a bar can be, <code>bar_padding</code> for controlling the padding between bars, and <code>bar_width</code> for forcing a given bar width.  These options also apply to horizontal bar graphs
 * [2011-11-08] 0.3.4.1: Added <code>bar_labels</code> option that displays values above the standard bar graphs
 * [2011-09-30] 0.3.3: Added <code>label_step</code> and <code>label_count</code> options so numerical labels can be controlled
 * [2011-08-30] 0.3.2: No longer extending native prototypes
@@ -47,7 +49,6 @@ Built with QUnit and Node unit tests.
 
 h3. Todo
 
-* Update Raphael, tag a release that works with the older version
 * Humanize labels: rather than showing 1,000,000 optionally show "1m"
 
 h2. Examples

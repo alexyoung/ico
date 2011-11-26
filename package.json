@@ -12,7 +12,6 @@
   , "jslint": "latest"
   , "uglify-js": "latest"
   , "expresso": "latest"
-  , "node-raphael": "latest"
   }
 , "repository": {
     "type" : "git"
