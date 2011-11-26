@@ -229,6 +229,8 @@ new Ico.LineGraph(document.getElementById('linegraph'), {
 
 <h3>Data Normalisation</h3>
 
-<p>Data is mapped to plottable values by <code>Ico.Normaliser</code>.  This class also attempts to calculate a sensible value to start plotting from on the X axis and the X axis label increment.  These values can be overridden through <code>start_value</code> and <code>label_step</code> in graphs to support data that is difficult to plot.</p>
+<p>Data is mapped to plottable values by <code>Ico.Normaliser</code>.  In addition, this class attempts to calculate a sensible value to start plotting from on the X axis, and also calculates the width for each item (the "step").</p>
+
+<p>These values can be overridden by setting <code>start_value</code> and <code>label_step</code>.  This can help display data that is difficult to plot, but you can raise issues through GitHub to report such data.</p>
 </body>
 </html>
