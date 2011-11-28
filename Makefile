@@ -7,7 +7,7 @@ build: $(SRC)
 	@cat $^ > ico.js
 
 min: build
-	./node_modules/.bin/uglifyjs --no-mangle ico.js > ico.min.js
+	@./node_modules/.bin/uglifyjs --no-mangle ico.js > ico.min.js
 
 test: build
 	./node_modules/.bin/expresso
@@ -16,7 +16,8 @@ docs: min
 	@markdown docs/index.md \
 	  | cat docs/layout/begin.html - docs/layout/end.html \
 	  > docs/index.html
-	@cp ico-min.js docs/ico-min.js
+	@cp ico.min.js docs/ico.min.js
+	@cp ico.js docs/ico.js
 	@cp raphael.js docs/raphael.js
 
 publishdocs:

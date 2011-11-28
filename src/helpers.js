@@ -17,7 +17,9 @@ function validStepDivider(value) {
  * @returns {Object} The style value
  */
 function getStyle(el, styleProp) {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') {
+    return;
+  }
 
   var style;
   if (el.currentStyle) {
@@ -34,7 +36,8 @@ function getStyle(el, styleProp) {
 var Helpers = {};
 
 Helpers.sum = function(a) {
-  for (var i = 0, sum = 0; i < a.length; sum += a[i++]) {}
+  var i, sum;
+  for (i = 0, sum = 0; i < a.length; sum += a[i++]) {}
   return sum;
 };
 
@@ -86,4 +89,22 @@ if (typeof Object.extend === 'undefined') {
   };
 } else {
   Helpers.extend = Object.extend;
+}
+
+if (Object.keys) {
+  Helpers.keys = Object.keys;
+} else {
+  Helpers.keys = function(o) {
+    if (o !== Object(o)) {
+      throw new TypeError('Object.keys called on non-object');
+    }
+
+    var ret = [], p;
+    for (p in o) {
+      if (Object.prototype.hasOwnProperty.call(o,p)) {
+        ret.push(p);
+      }
+    }
+    return ret;
+  }
 }

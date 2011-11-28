@@ -9,6 +9,28 @@
 Ico.BarGraph = function() { this.initialize.apply(this, arguments); };
 Helpers.extend(Ico.BarGraph.prototype, Ico.BaseGraph.prototype);
 Helpers.extend(Ico.BarGraph.prototype, {
+  // Overridden to handle grouped bar graphs
+  buildDataSets: function(data, options) {
+    if (typeof data.length !== 'undefined') {
+      if (typeof data[0].length !== 'undefined') {
+        this.grouped = true;
+        // TODO: Find longest?
+        this.group_size = data[0].length;
+        var o = {}, k, i = 0;
+        for (k in options.labels) {
+          k = options.labels[k];
+          o[k] = data[i];
+          i++;
+        }
+        return o;
+      } else {
+        return { 'one': data };
+      }
+    } else {
+      return data;
+    }
+  },
+
   /**
    * Sensible defaults for BarGraph.
    */
@@ -48,6 +70,10 @@ Helpers.extend(Ico.BarGraph.prototype, {
   calculateBarWidth: function() {
     var width = (this.graph_width / this.data_size) - this.bar_padding;
 
+    if (this.grouped) {
+      //width = width / this.group_size - (this.bar_padding * this.group_size);
+    }
+
     if (this.options.max_bar_size && width > this.options.max_bar_size) {
       width = this.options.max_bar_size;
       this.bar_padding = this.graph_width / this.data_size;
@@ -79,7 +105,7 @@ Helpers.extend(Ico.BarGraph.prototype, {
     x = x + this.bar_padding;
     pathString += 'M' + x + ',' + this.start_y;
     pathString += 'L' + x + ',' + y;
-    this.paper.path(pathString).attr({stroke: colour, 'stroke-width': this.bar_width + 'px'});
+    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': this.bar_width + 'px' });
     pathString = '';
     x = x + this.step;
     pathString += 'M' + x + ',' + this.start_y;
@@ -88,8 +114,14 @@ Helpers.extend(Ico.BarGraph.prototype, {
 
   /* Change the standard options to correctly offset against the bars */
   drawHorizontalLabels: function() {
-    var x_start = this.bar_padding + this.options.plot_padding;
-    this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1]);
+    var x_start = this.bar_padding + this.options.plot_padding,
+        step = this.step;
+    if (this.grouped) {
+      step = step * this.group_size;
+      x_start = ((this.bar_width * this.group_size) + (this.bar_padding * this.group_size)) / 2
+      x_start = this.roundValue(x_start, 0);
+    }
+    this.drawMarkers(this.options.labels, [1, 0], step, x_start, [0, (this.options.font_size + 7) * -1]);
   },
 
   drawBarMarkers: function() {

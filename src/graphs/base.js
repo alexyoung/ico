@@ -156,6 +156,12 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
   
   longestDataSetLength: function() {
+    if (this.grouped) {
+      // Return the total number of grouped values rather than
+      // the longest array of data
+      return this.flat_data.length;
+    }
+
     var length = 0;
     for (var key in this.data_sets) {
       if (this.data_sets.hasOwnProperty(key)) {
@@ -173,8 +179,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
   
   roundValues: function(data, length) {
-    var roundedData = [];
-    for (var i = 0; i < data.length; i++) {
+    var roundedData = [], i;
+    for (i = 0; i < data.length; i++) {
       roundedData.push(this.roundValue(data[i], length));
     }
     return roundedData;
@@ -230,10 +236,14 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       this.drawHorizontalLabels();
     }
 
-    for (var key in this.data_sets) {
-      if (this.data_sets.hasOwnProperty(key)) {
-        var data = this.data_sets[key];
-        this.drawLines(key, this.options.colours[key], this.normaliseData(data));
+    if (this.grouped) {
+      this.drawLines(key, null, this.normaliseData(this.flat_data));
+    } else {
+      for (var key in this.data_sets) {
+        if (this.data_sets.hasOwnProperty(key)) {
+          var data = this.data_sets[key];
+          this.drawLines(key, this.options.colours[key], this.normaliseData(data));
+        }
       }
     }
     
@@ -253,10 +263,10 @@ Helpers.extend(Ico.BaseGraph.prototype, {
         pathString += 'L' + (this.x_padding_left + this.graph_width) + ',' + y;
       }
     }
- 
+
     if (this.options.show_horizontal_labels) {
       var x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset,
-          x_labels = this.options.labels.length,
+          x_labels = this.grouped ? this.flat_data.length : this.options.labels.length,
           i;
 
       for (i = 0; i < x_labels; i++) {
@@ -281,10 +291,15 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     for (i = 0; i < coords.length; i++) {
       x = coords[i][0] || 0;
       y = coords[i][1] || 0;
-      this.plottedCoords.push([x + this.bar_padding, y]);      
+
+      if (this.grouped && this.options.colours) {
+        colour = this.options.colours[i % this.group_size];
+      }
+
+      this.plottedCoords.push([x + this.bar_padding, y]);
       pathString = this.drawPlot(i, pathString, x, y, colour);
     }
-    
+
     this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': '3px' });
 
     if (this.options.bar_labels) {
@@ -370,7 +385,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
         font_options = {};
     Helpers.extend(font_options, this.font_options);
     Helpers.extend(font_options, extra_font_options || {});
-    
+
     for (i = 0; i < labels.length; i++) {
       pathString += 'M' + x + ',' + y;
       if (typeof labels[i] !== 'undefined' && (labels[i] + '').length > 0) {
@@ -393,4 +408,3 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
   }
 });
-

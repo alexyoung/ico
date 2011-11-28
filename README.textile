@@ -13,6 +13,7 @@ Donations to support future development are welcome and appreciated: "Donate":ht
 
 h3. News
 
+* [2011-11-28] 0.3.6: Added grouped bar graphs, for documentation see "Grouped Bar Graphs":http://alexyoung.github.com/ico/
 * [2011-11-26] Updated documentation to include details on each graph's options
 * [2011-11-26] 0.3.5: Added <code>max_bar_width</code> option for controlling the maximum width a bar can be, <code>bar_padding</code> for controlling the padding between bars, and <code>bar_width</code> for forcing a given bar width.  These options also apply to horizontal bar graphs
 * [2011-11-08] 0.3.4.1: Added <code>bar_labels</code> option that displays values above the standard bar graphs
