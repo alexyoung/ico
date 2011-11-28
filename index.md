@@ -50,8 +50,8 @@ new Ico.LineGraph($('linegraph'), {
 </code></pre>
 
 <script type="text/javascript" src="raphael.js"></script>
-<script type="text/javascript" src="ico-min.js"></script>
-<div id="linegraph"></div>
+<script type="text/javascript" src="ico.min.js"></script>
+<div id="linegraph" class="graph"></div>
 <script type="text/javascript">
 new Ico.LineGraph(document.getElementById('linegraph'), {
   one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
@@ -102,6 +102,33 @@ new Ico.LineGraph(document.getElementById('linegraph'), {
 * `bar_size`: Set the size for a bar in a bar graph
 * `max_bar_size`: Set the maximum size for a bar in a bar graph
 * `bar_labels`: Display the actual value of each bar in a bar graph
+
+### Grouped Bar Graphs
+
+Multidimensional arrays will be rendered as 'grouped' bar graphs.  Notice that two colours are specified, one for each bar in the group.  This is still a work in progress and hasn't been tested thoroughly yet.
+
+<pre class="prettyprint lang-js"><code>
+new Ico.BarGraph(
+  $('grouped_bars'),
+  [[10, 15], [18, 19], [17, 23], [11, 22]],
+  { grid: true, font_size: 10,
+    colours: ['#ff0099', '#339933'],
+    labels: ['Winter', 'Spring', 'Summer', 'Autumn']
+  }
+);
+</code></pre>    
+
+<div id="grouped_bars" class="graph"></div>
+<script type="text/javascript">
+new Ico.BarGraph(
+  document.getElementById('grouped_bars'),
+  [[10, 15], [18, 19], [17, 23], [11, 22]],
+  { grid: true, font_size: 10,
+    colours: ['#ff0099', '#339933'],
+    labels: ['Winter', 'Spring', 'Summer', 'Autumn']
+  }
+);
+</script>
 
 ### Options for `Ico.HorizontalBarGraph`
 
