@@ -132,8 +132,11 @@ new Ico.LineGraph($('linegraph_4'), $random(1, 25));
 
 new Ico.LineGraph($('linegraph_5'), { shoe_size: [15,14,10]},{ markers: 'circle', colours: { shoe_size: '#990000' }, grid: true });
 
-new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#ccc' });
-new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
+// TODO: Grid isn't tall enough here:
+new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, grid: true, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#fff' });
+
+new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { grid: true, labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
+
 new Ico.HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
 new Ico.HorizontalBarGraph($('bargraph_8'), [0.23, 0.1, 0.9, 0.95, 0.99, 0.3, 0.5, 0.35, 0.3], { bar_size: 25, colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
 
