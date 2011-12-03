@@ -11,20 +11,6 @@ h3. Support
 
 Donations to support future development are welcome and appreciated: "Donate":https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=support%40helicoid%2enet&lc=GB&item_name=Helicoid%20Limited&no_note=0&cn=Add%20special%20instructions%20to%20the%20seller&no_shipping=2&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 
-h3. News
-
-* [2011-11-28] 0.3.6: Added grouped bar graphs, for documentation see "Grouped Bar Graphs":http://alexyoung.github.com/ico/
-* [2011-11-26] Updated documentation to include details on each graph's options
-* [2011-11-26] 0.3.5: Added <code>max_bar_width</code> option for controlling the maximum width a bar can be, <code>bar_padding</code> for controlling the padding between bars, and <code>bar_width</code> for forcing a given bar width.  These options also apply to horizontal bar graphs
-* [2011-11-08] 0.3.4.1: Added <code>bar_labels</code> option that displays values above the standard bar graphs
-* [2011-09-30] 0.3.3: Added <code>label_step</code> and <code>label_count</code> options so numerical labels can be controlled
-* [2011-08-30] 0.3.2: No longer extending native prototypes
-* [2011-08-24] 0.3.1: Bug fix for LineGraph, migrated tests to QUnit, moved Jakefile.js to Makefile
-* [2011-03-09] Passing default JSHint, and a minified version is now available
-* [2011-03-09] Added documentation and published it to http://alexyoung.github.com/ico/
-* [2011-03-09] 0.3.0 released: Split project into separate files, added build script, fixes for HorizontalBarGraph
-* [2011-03-01] 0.2.2 released: Ico.SparkLine will now work correctly, particularly in IE6
-
 h3. Targeted graph types
 
 * Sparklines

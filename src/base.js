@@ -60,10 +60,18 @@ Ico.Base = {
    * @param {Integer} end A number to end at
    * @returns {Array} An array of values
    */
-  makeRange: function(start, end) {
+  makeRange: function(start, end, options) {
     var values = [], i;
     for (i = start; i < end; i++) {
-      values.push(i);
+      if (options && options.skip) {
+        if (i % options.skip === 0) {
+          values.push(i);
+        } else {
+          values.push(undefined);
+        }
+      } else {
+        values.push(i);
+      }
     }
     return values;
   }

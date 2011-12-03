@@ -277,10 +277,18 @@ Ico.Base = {
    * @param {Integer} end A number to end at
    * @returns {Array} An array of values
    */
-  makeRange: function(start, end) {
+  makeRange: function(start, end, options) {
     var values = [], i;
     for (i = start; i < end; i++) {
-      values.push(i);
+      if (options && options.skip) {
+        if (i % options.skip === 0) {
+          values.push(i);
+        } else {
+          values.push(undefined);
+        }
+      } else {
+        values.push(i);
+      }
     }
     return values;
   }
@@ -331,7 +339,6 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     this.options = {
       width:                  parseInt(getStyle(element, 'width'), 10),
       height:                 parseInt(getStyle(element, 'height'), 10),
-      labels:                 this.makeRange(1, this.data_size + 1), // Label data
       plot_padding:           10,                                    // Padding for the graph line/bar plots
       font_size:              10,                                    // Label font size
       show_horizontal_labels: true,
@@ -371,7 +378,17 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     this.graph_height = this.options.height - (this.y_padding);
 
     this.step = this.calculateStep();
-    
+    this.grid_step = this.step;
+
+    if (this.options.labels) {
+      if (!this.grouped) {
+        this.grid_step = this.graph_width / this.options.labels.length;
+        this.snap_to_grid = true;
+      }
+    } else {
+      this.options.labels = this.makeRange(1, this.data_size + 1);
+    }
+
     if (this.options.bar_labels) {
       // TODO: Improve this so extra padding is used instead
       this.range += this.normaliser.step;
@@ -554,12 +571,13 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     if (this.options.show_horizontal_labels) {
       var x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset,
           x_labels = this.grouped ? this.flat_data.length : this.options.labels.length,
-          i;
+          i,
+          step = this.grid_step || this.step;
 
       for (i = 0; i < x_labels; i++) {
         pathString += 'M' + x + ',' + this.y_padding_top;
         pathString += 'L' + x +',' + (this.y_padding_top + this.graph_height);
-        x = x + this.step;
+        x = x + step;
       }
 
       x = x - this.options.plot_padding - 1;
@@ -692,7 +710,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
   
   drawHorizontalLabels: function() {
-    this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
+    var step = this.snap_to_grid ? this.grid_step : this.step;
+    this.drawMarkers(this.options.labels, [1, 0], step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
   }
 });
 /**
@@ -711,6 +730,7 @@ Helpers.extend(Ico.BarGraph.prototype, {
     if (typeof data.length !== 'undefined') {
       if (typeof data[0].length !== 'undefined') {
         this.grouped = true;
+
         // TODO: Find longest?
         this.group_size = data[0].length;
         var o = {}, k, i = 0;

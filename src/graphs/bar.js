@@ -14,6 +14,7 @@ Helpers.extend(Ico.BarGraph.prototype, {
     if (typeof data.length !== 'undefined') {
       if (typeof data[0].length !== 'undefined') {
         this.grouped = true;
+
         // TODO: Find longest?
         this.group_size = data[0].length;
         var o = {}, k, i = 0;
