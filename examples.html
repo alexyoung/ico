@@ -92,6 +92,7 @@ p.example { color: #555; }
     <h2>Grouped Bars</h2>
 
     <div class="linegraph" id="grouped_bars"></div>
+    <div class="linegraph" id="grouped_bars_2"></div>
 
     <h2>Contributed Examples</h2>
 
@@ -132,8 +133,11 @@ new Ico.LineGraph($('linegraph_4'), $random(1, 25));
 
 new Ico.LineGraph($('linegraph_5'), { shoe_size: [15,14,10]},{ markers: 'circle', colours: { shoe_size: '#990000' }, grid: true });
 
-new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#ccc' });
-new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
+// TODO: Grid isn't tall enough here:
+new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, grid: true, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#fff' });
+
+new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { grid: true, labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
+
 new Ico.HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
 new Ico.HorizontalBarGraph($('bargraph_8'), [0.23, 0.1, 0.9, 0.95, 0.99, 0.3, 0.5, 0.35, 0.3], { bar_size: 25, colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
 
@@ -145,6 +149,7 @@ new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75
 new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-20,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
 
 new Ico.BarGraph($('grouped_bars'), [[10, 15, 4], [18, 19, 12], [17, 23, 11], [11, 22, 14]],  { grid: true, font_size: 10, colours: ['#ff0099', '#339933', '#333399'], labels: ['Winter', 'Spring', 'Summer', 'Autumn'] });
+new Ico.BarGraph($('grouped_bars_2'), [[10, 15, 4], [18, 19, 12], [17, 23, 11], [11, 22, 14]],  { line: [17, 20, 18, 10], grid: true, font_size: 10, colours: ['#ff0099', '#339933', '#333399'], labels: ['Winter', 'Spring', 'Summer', 'Autumn'] });
 
 new Ico.BarGraph($('rics_poll'), [20, 20],  { max_bar_size: 100, font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
 new Ico.LineGraph($('issue4'), [20, 20, 20, 20, 20],  { font_size: 10, colour: '#ff0099' });
