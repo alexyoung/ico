@@ -156,10 +156,19 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
   
   makeRandomColours: function() {
-    var colours = {};
-    for (var key in this.data_sets) {
-      if (!colours.hasOwnProperty(key))
-        colours[key] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+    var colours;
+    if (this.grouped) {
+      colours = [];
+      // Colours are supplied as integers for groups, because there's no obvious way to associate the bar name
+      for (var i = 0; i < this.group_size; i++) {
+        colours.push(Raphael.hsb2rgb(Math.random(), 1, 0.75).hex);
+      }
+    } else {
+      colours = {};
+      for (var key in this.data_sets) {
+        if (!colours.hasOwnProperty(key))
+          colours[key] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+      }
     }
     return colours;
   },
