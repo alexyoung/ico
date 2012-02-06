@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.7',
+    VERSION: '0.3.8',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -150,7 +150,7 @@ Ico.Normaliser = function(data, options) {
   }
 
   this.min = Helpers.min(data);
-  this.max = Helpers.max(data);
+  this.max = options.max || Helpers.max(data);
   this.standard_deviation = Helpers.standard_deviation(data);
   this.range = 0;
   this.step = this.labelStep(this.max - this.min);
@@ -451,10 +451,19 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
   
   makeRandomColours: function() {
-    var colours = {};
-    for (var key in this.data_sets) {
-      if (!colours.hasOwnProperty(key))
-        colours[key] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+    var colours;
+    if (this.grouped) {
+      colours = [];
+      // Colours are supplied as integers for groups, because there's no obvious way to associate the bar name
+      for (var i = 0; i < this.group_size; i++) {
+        colours.push(Raphael.hsb2rgb(Math.random(), 1, 0.75).hex);
+      }
+    } else {
+      colours = {};
+      for (var key in this.data_sets) {
+        if (!colours.hasOwnProperty(key))
+          colours[key] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+      }
     }
     return colours;
   },
@@ -610,6 +619,34 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     if (this.options.bar_labels) {
       this.drawBarMarkers();
     }
+
+    if (this.options.line) {
+      this.additionalLine(label, colour, this.normaliseData(this.options.line));
+    }
+  },
+
+  additionalLine: function(label, colour, data) {
+    var coords = this.calculateCoords(data),
+        pathString = '',
+        i, x, y, step, lineWidth = 3;
+
+    if (this.grouped) {
+      step = this.step * (this.group_size - 1);
+    }
+
+    for (i = 0; i < coords.length; i++) {
+      x = coords[i][0] || 0;
+      y = coords[i][1] || 0;
+
+      if (this.grouped) {
+        x += (step * i) + this.roundValue(step / 2, 0);
+      }
+      x += lineWidth;
+
+      pathString = Ico.LineGraph.prototype.drawPlot.apply(this, [i, pathString, this.roundValue(x, 0), y, colour]);
+    }
+
+    this.paper.path(pathString).attr({ stroke: '#ff0000', 'stroke-width': lineWidth + 'px' });
   },
 
   calculateCoords: function(data) {
@@ -624,6 +661,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       x = x + this.step;
       coords.push([x, y]);
     }
+
     return coords;
   },
 
@@ -759,7 +797,8 @@ Helpers.extend(Ico.BarGraph.prototype, {
    * Ensures the normalises is always 0.
    */
   normaliserOptions: function() {
-    return { start_value: 0 };
+    // Make sure the true largest value is used for max
+    return this.options.line ? { start_value: 0, max: Helpers.max([Helpers.max(this.options.line), Helpers.max(this.flat_data)]) } : { start_value: 0 };
   },
 
   /**
@@ -986,11 +1025,6 @@ Helpers.extend(Ico.LineGraph.prototype, {
     return (this.graph_width - (this.options.plot_padding * 2)) / validStepDivider(this.data_size);
   },
 
-  startPlot: function(pathString, x, y, colour) {
-    this.lastPoint = { x: x, y: y }; 
-    return pathString + 'M' + x + ',' + y;
-  },
-
   drawPlot: function(index, pathString, x, y, colour) {
     var w = this.options.curve_amount;
 
@@ -1000,7 +1034,8 @@ Helpers.extend(Ico.LineGraph.prototype, {
     }
     
     if (index === 0) {
-      return this.startPlot(pathString, x, y, colour);
+      this.lastPoint = { x: x, y: y }; 
+      return pathString + 'M' + x + ',' + y;
     }
 
     if (w) {

@@ -102,6 +102,7 @@ new Ico.LineGraph(document.getElementById('linegraph'), {
 * `bar_size`: Set the size for a bar in a bar graph
 * `max_bar_size`: Set the maximum size for a bar in a bar graph
 * `bar_labels`: Display the actual value of each bar in a bar graph
+* `line`: Provide an array to plot a line alongside a bar graph
 
 ### Grouped Bar Graphs
 

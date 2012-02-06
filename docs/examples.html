@@ -92,6 +92,7 @@ p.example { color: #555; }
     <h2>Grouped Bars</h2>
 
     <div class="linegraph" id="grouped_bars"></div>
+    <div class="linegraph" id="grouped_bars_2"></div>
 
     <h2>Contributed Examples</h2>
 
@@ -148,6 +149,7 @@ new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75
 new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-20,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
 
 new Ico.BarGraph($('grouped_bars'), [[10, 15, 4], [18, 19, 12], [17, 23, 11], [11, 22, 14]],  { grid: true, font_size: 10, colours: ['#ff0099', '#339933', '#333399'], labels: ['Winter', 'Spring', 'Summer', 'Autumn'] });
+new Ico.BarGraph($('grouped_bars_2'), [[10, 15, 4], [18, 19, 12], [17, 23, 11], [11, 22, 14]],  { line: [17, 20, 18, 10], grid: true, font_size: 10, colours: ['#ff0099', '#339933', '#333399'], labels: ['Winter', 'Spring', 'Summer', 'Autumn'] });
 
 new Ico.BarGraph($('rics_poll'), [20, 20],  { max_bar_size: 100, font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });
 new Ico.LineGraph($('issue4'), [20, 20, 20, 20, 20],  { font_size: 10, colour: '#ff0099' });

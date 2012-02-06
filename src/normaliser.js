@@ -14,7 +14,7 @@ Ico.Normaliser = function(data, options) {
   }
 
   this.min = Helpers.min(data);
-  this.max = Helpers.max(data);
+  this.max = options.max || Helpers.max(data);
   this.standard_deviation = Helpers.standard_deviation(data);
   this.range = 0;
   this.step = this.labelStep(this.max - this.min);

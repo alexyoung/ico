@@ -5,9 +5,11 @@ lint: build
 
 build: $(SRC)
 	@cat $^ > ico.js
+	@cp ico.js docs/ico.js
 
 min: build
 	@./node_modules/.bin/uglifyjs --no-mangle ico.js > ico.min.js
+	@cp ico.min.js docs/ico.min.js
 
 test: build
 	./node_modules/.bin/expresso

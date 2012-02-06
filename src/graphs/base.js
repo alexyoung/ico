@@ -324,6 +324,34 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     if (this.options.bar_labels) {
       this.drawBarMarkers();
     }
+
+    if (this.options.line) {
+      this.additionalLine(label, colour, this.normaliseData(this.options.line));
+    }
+  },
+
+  additionalLine: function(label, colour, data) {
+    var coords = this.calculateCoords(data),
+        pathString = '',
+        i, x, y, step, lineWidth = 3;
+
+    if (this.grouped) {
+      step = this.step * (this.group_size - 1);
+    }
+
+    for (i = 0; i < coords.length; i++) {
+      x = coords[i][0] || 0;
+      y = coords[i][1] || 0;
+
+      if (this.grouped) {
+        x += (step * i) + this.roundValue(step / 2, 0);
+      }
+      x += lineWidth;
+
+      pathString = Ico.LineGraph.prototype.drawPlot.apply(this, [i, pathString, this.roundValue(x, 0), y, colour]);
+    }
+
+    this.paper.path(pathString).attr({ stroke: '#ff0000', 'stroke-width': lineWidth + 'px' });
   },
 
   calculateCoords: function(data) {
@@ -338,6 +366,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       x = x + this.step;
       coords.push([x, y]);
     }
+
     return coords;
   },
 

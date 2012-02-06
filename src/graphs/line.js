@@ -36,11 +36,6 @@ Helpers.extend(Ico.LineGraph.prototype, {
     return (this.graph_width - (this.options.plot_padding * 2)) / validStepDivider(this.data_size);
   },
 
-  startPlot: function(pathString, x, y, colour) {
-    this.lastPoint = { x: x, y: y }; 
-    return pathString + 'M' + x + ',' + y;
-  },
-
   drawPlot: function(index, pathString, x, y, colour) {
     var w = this.options.curve_amount;
 
@@ -50,7 +45,8 @@ Helpers.extend(Ico.LineGraph.prototype, {
     }
     
     if (index === 0) {
-      return this.startPlot(pathString, x, y, colour);
+      this.lastPoint = { x: x, y: y }; 
+      return pathString + 'M' + x + ',' + y;
     }
 
     if (w) {

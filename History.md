@@ -1,3 +1,9 @@
+0.3.8 / 2012-02-06
+==================
+
+  * Grouped `BarGraph` will now generate random colours correctly
+  * Added line to `BarGraph`
+
 0.3.7 / 2011-11-28
 ==================
 

@@ -43,7 +43,8 @@ Helpers.extend(Ico.BarGraph.prototype, {
    * Ensures the normalises is always 0.
    */
   normaliserOptions: function() {
-    return { start_value: 0 };
+    // Make sure the true largest value is used for max
+    return this.options.line ? { start_value: 0, max: Helpers.max([Helpers.max(this.options.line), Helpers.max(this.flat_data)]) } : { start_value: 0 };
   },
 
   /**
