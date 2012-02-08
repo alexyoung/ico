@@ -104,6 +104,10 @@ new Ico.LineGraph(document.getElementById('linegraph'), {
 * `bar_labels`: Display the actual value of each bar in a bar graph
 * `line`: Provide an array to plot a line alongside a bar graph
 
+### Options for `Ico.LineGraph`
+
+* `stroke_width`: Sets the stroke width, defaults to `3px`.  Set to `0` to get a scatter plot
+
 ### Grouped Bar Graphs
 
 Multidimensional arrays will be rendered as 'grouped' bar graphs.  Notice that two colours are specified, one for each bar in the group.  This is still a work in progress and hasn't been tested thoroughly yet.
