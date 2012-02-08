@@ -14,19 +14,19 @@ Graphs are created by instantiated classes.  The available classes are:
 * `Ico.HorizontalBarGraph`: Creates a horizontal bar graph
 * `Ico.LineGraph`: Creates a line graph
 
-Each of these classes can be instantiated with the same arguments:
+Each of these classes can be instantiated with the same arguments.  The following examples use jQuery, but jQuery is not required to use Ico.
 
 <pre class="prettyprint lang-js"><code>
 // Basic signature
 new Ico.SparkLine(element, data, options);
 
 // Real examples
-new Ico.SparkLine($('sparkline'),
+new Ico.SparkLine($('#sparkline'),
   [21, 41, 32, 1, 10, 5, 32, 10, 23],
   { width: 30, height: 14, background_colour: '#ccc' }
 );
 
-new Ico.BarGraph($('bargraph'), { one: $random(1, 25) }, { bar_labels: true });
+new Ico.BarGraph($('#bargraph'), { one: [44, 12, 17, 30, 11] }, { bar_labels: true });
 </code></pre>
 
 The third argument, `options`, may vary between graphs.
@@ -34,7 +34,7 @@ The third argument, `options`, may vary between graphs.
 ### Live Example
 
 <pre class="prettyprint lang-js"><code>
-new Ico.LineGraph($('linegraph'), {
+new Ico.LineGraph($('#linegraph'), {
     one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
     two: [10, 9, 3, 30, 1, 10, 5, 33, 33],
     three: [5, 4, 10, 1, 30, 11, 33, 12, 22]

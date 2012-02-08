@@ -26,7 +26,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
    */
   initialize: function(element, data, options) {
     options = options || {};
-    this.element = element;
+
+    this.element = element.length ? element[0] : element;
     this.data_sets = this.buildDataSets(data, options);
     this.flat_data = this.flatten(data);
     this.data_size = this.longestDataSetLength();

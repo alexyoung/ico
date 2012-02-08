@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.8',
+    VERSION: '0.3.9',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -150,7 +150,7 @@ Ico.Normaliser = function(data, options) {
   }
 
   this.min = Helpers.min(data);
-  this.max = options.max || Helpers.max(data);
+  this.max = this.options.max || Helpers.max(data);
   this.standard_deviation = Helpers.standard_deviation(data);
   this.range = 0;
   this.step = this.labelStep(this.max - this.min);
@@ -321,7 +321,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
    */
   initialize: function(element, data, options) {
     options = options || {};
-    this.element = element;
+
+    this.element = element.length ? element[0] : element;
     this.data_sets = this.buildDataSets(data, options);
     this.flat_data = this.flatten(data);
     this.data_size = this.longestDataSetLength();
