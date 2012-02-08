@@ -1,3 +1,8 @@
+0.3.9 / 2012-02-06
+==================
+
+  * Added `stroke_width` option (defaults to `3px`, can be set to `0` to make scatter plots)
+
 0.3.8 / 2012-02-06
 ==================
 

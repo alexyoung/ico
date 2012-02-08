@@ -15,7 +15,7 @@ Helpers.extend(Ico.LineGraph.prototype, {
   },
 
   chartDefaults: function() {
-    return { plot_padding: 10 };
+    return { plot_padding: 10, stroke_width: '3px' };
   },
 
   setChartSpecificOptions: function() {

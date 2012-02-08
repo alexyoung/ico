@@ -614,7 +614,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       pathString = this.drawPlot(i, pathString, x, y, colour);
     }
 
-    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': '3px' });
+    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': this.options.stroke_width });
 
     if (this.options.bar_labels) {
       this.drawBarMarkers();
@@ -1004,7 +1004,7 @@ Helpers.extend(Ico.LineGraph.prototype, {
   },
 
   chartDefaults: function() {
-    return { plot_padding: 10 };
+    return { plot_padding: 10, stroke_width: '3px' };
   },
 
   setChartSpecificOptions: function() {

@@ -319,7 +319,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       pathString = this.drawPlot(i, pathString, x, y, colour);
     }
 
-    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': '3px' });
+    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': this.options.stroke_width });
 
     if (this.options.bar_labels) {
       this.drawBarMarkers();
