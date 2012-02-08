@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.8',
+    VERSION: '0.3.9',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -150,7 +150,7 @@ Ico.Normaliser = function(data, options) {
   }
 
   this.min = Helpers.min(data);
-  this.max = options.max || Helpers.max(data);
+  this.max = this.options.max || Helpers.max(data);
   this.standard_deviation = Helpers.standard_deviation(data);
   this.range = 0;
   this.step = this.labelStep(this.max - this.min);
@@ -321,7 +321,8 @@ Helpers.extend(Ico.BaseGraph.prototype, {
    */
   initialize: function(element, data, options) {
     options = options || {};
-    this.element = element;
+
+    this.element = element.length ? element[0] : element;
     this.data_sets = this.buildDataSets(data, options);
     this.flat_data = this.flatten(data);
     this.data_size = this.longestDataSetLength();
@@ -614,7 +615,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
       pathString = this.drawPlot(i, pathString, x, y, colour);
     }
 
-    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': '3px' });
+    this.paper.path(pathString).attr({ stroke: colour, 'stroke-width': this.options.stroke_width });
 
     if (this.options.bar_labels) {
       this.drawBarMarkers();
@@ -1004,7 +1005,7 @@ Helpers.extend(Ico.LineGraph.prototype, {
   },
 
   chartDefaults: function() {
-    return { plot_padding: 10 };
+    return { plot_padding: 10, stroke_width: '3px' };
   },
 
   setChartSpecificOptions: function() {
