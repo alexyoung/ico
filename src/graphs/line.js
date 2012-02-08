@@ -10,6 +10,10 @@ Ico.LineGraph = function() { this.initialize.apply(this, arguments); };
 Helpers.extend(Ico.LineGraph.prototype, Ico.BaseGraph.prototype);
 Helpers.extend(Ico.LineGraph.prototype, {
   normalise: function(value) {
+    if (value === 0) {
+      return 0;
+    }
+
     var total = this.start_value === 0 ? this.top_value : this.top_value - this.start_value;
     return ((value / total) * (this.graph_height));
   },

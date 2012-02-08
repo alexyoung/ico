@@ -71,6 +71,7 @@ p.example { color: #555; }
     <div id="linegraph_2" class="linegraph"></div>
     <div id="linegraph_3" class="linegraph"></div>
     <div id="linegraph_5" class="linegraph"></div>
+    <div id="linegraph_zero" class="linegraph"></div>
     
     <h2>Horizontal Bar Graph</h2>
     <div id="bargraph_5" class="linegraph"></div>
@@ -132,6 +133,7 @@ new Ico.LineGraph($('linegraph_3'), $map(1, 25, function() { return Math.round(M
 new Ico.LineGraph($('linegraph_4'), $random(1, 25));
 
 new Ico.LineGraph($('linegraph_5'), { shoe_size: [15,14,10]},{ markers: 'circle', colours: { shoe_size: '#990000' }, grid: true });
+new Ico.LineGraph($('linegraph_zero'), [0, 0, 0], { markers: 'circle', grid: true });
 
 // TODO: Grid isn't tall enough here:
 new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, grid: true, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#fff' });

@@ -2,6 +2,9 @@
 ==================
 
   * Added `stroke_width` option (defaults to `3px`, can be set to `0` to make scatter plots)
+  * Clarified documentation
+  * Added support for jQuery objects passed in as the graph's container element option
+  * Improves handling of graphs with all zero values
 
 0.3.8 / 2012-02-06
 ==================

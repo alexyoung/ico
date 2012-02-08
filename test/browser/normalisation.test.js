@@ -1,5 +1,11 @@
 module('Normalisation');
 
+test('test_0s', function() {
+  var normaliser = new Ico.Normaliser([0, 0, 0, 0, 0]);
+  equal(0, normaliser.step);
+  equal(0, normaliser.start_value);
+});
+
 test('test_0_to_1', function() {
   var normaliser = new Ico.Normaliser([0.1, 0.5, 0.9, 1.0]);
   equal(0.1, normaliser.step);
