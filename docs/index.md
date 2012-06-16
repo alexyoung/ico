@@ -99,6 +99,9 @@ new Ico.LineGraph(document.getElementById('linegraph'), {
 
 ### Options for `Ico.BarGraph`
 
+* `colour`: The colour for the bars
+* `colours`: An array of colours for each bar
+* `highlight_colours`: An object with the index of a bar (starting from 0) and a colour, like this `{ 3: '#ff0000' }`
 * `bar_size`: Set the size for a bar in a bar graph
 * `max_bar_size`: Set the maximum size for a bar in a bar graph
 * `bar_labels`: Display the actual value of each bar in a bar graph
@@ -111,6 +114,8 @@ new Ico.LineGraph(document.getElementById('linegraph'), {
 ### Grouped Bar Graphs
 
 Multidimensional arrays will be rendered as 'grouped' bar graphs.  Notice that two colours are specified, one for each bar in the group.  This is still a work in progress and hasn't been tested thoroughly yet.
+
+In grouped bar graphs, the index for `highlight_colours` is the index from left to right, starting from zero.
 
 <pre class="prettyprint lang-js"><code>
 new Ico.BarGraph(

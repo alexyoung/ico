@@ -35,7 +35,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
 
     /* If one colour is specified, map it to a compatible set */
     if (options && options.colour) {
-      options.colours = {};
+      if (!options.colours) options.colours = {};
       for (var key in this.data_sets) {
         if (this.data_sets.hasOwnProperty(key))
           options.colours[key] = options.colour;
