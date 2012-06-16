@@ -9,7 +9,7 @@
  */
 (function(global) {
   var Ico = {
-    VERSION: '0.3.9',
+    VERSION: '0.3.10',
 
     /**
      * Rounds a float to the specified number of decimal places.
@@ -330,7 +330,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
 
     /* If one colour is specified, map it to a compatible set */
     if (options && options.colour) {
-      options.colours = {};
+      if (!options.colours) options.colours = {};
       for (var key in this.data_sets) {
         if (this.data_sets.hasOwnProperty(key))
           options.colours[key] = options.colour;
@@ -399,11 +399,17 @@ Helpers.extend(Ico.BaseGraph.prototype, {
     if (options.label_count) {
       this.y_label_count = options.label_count;
     } else {
-      this.y_label_count = Math.ceil(this.range / this.label_step);
-      if ((this.normaliser.min + (this.y_label_count * this.normaliser.step)) < this.normaliser.max) {
-        this.y_label_count += 1;
+      if (this.range === 0) {
+        this.y_label_count = 1;
+        this.label_step = 1;
+      } else {
+        this.y_label_count = Math.ceil(this.range / this.label_step);
+        if ((this.normaliser.min + (this.y_label_count * this.normaliser.step)) < this.normaliser.max) {
+          this.y_label_count += 1;
+        }
       }
     }
+
     this.value_labels = this.makeValueLabels(this.y_label_count);
     this.top_value = this.value_labels[this.value_labels.length - 1];
 
@@ -527,6 +533,10 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
   
   normalise: function(value) {
+    if (value === 0) {
+      return 0;
+    }
+
     var total = this.start_value === 0 ? this.top_value : this.range;
     return ((value / total) * (this.graph_height));
   },
@@ -744,7 +754,7 @@ Helpers.extend(Ico.BaseGraph.prototype, {
   },
   
   drawVerticalLabels: function() {
-    var y_step = this.graph_height / this.y_label_count; 
+    var y_step = this.graph_height / this.y_label_count;
     this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { 'text-anchor': 'end' });
   },
   
@@ -859,6 +869,10 @@ Helpers.extend(Ico.BarGraph.prototype, {
    * @returns {String} The resulting path string 
    */
   drawPlot: function(index, pathString, x, y, colour) {
+    if (this.options.highlight_colours && this.options.highlight_colours.hasOwnProperty(index)) {
+      colour = this.options.highlight_colours[index];
+    }
+
     x = x + this.bar_padding;
     pathString += 'M' + x + ',' + this.start_y;
     pathString += 'L' + x + ',' + y;
@@ -1000,6 +1014,10 @@ Ico.LineGraph = function() { this.initialize.apply(this, arguments); };
 Helpers.extend(Ico.LineGraph.prototype, Ico.BaseGraph.prototype);
 Helpers.extend(Ico.LineGraph.prototype, {
   normalise: function(value) {
+    if (value === 0) {
+      return 0;
+    }
+
     var total = this.start_value === 0 ? this.top_value : this.top_value - this.start_value;
     return ((value / total) * (this.graph_height));
   },

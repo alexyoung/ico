@@ -71,6 +71,7 @@ p.example { color: #555; }
     <div id="linegraph_2" class="linegraph"></div>
     <div id="linegraph_3" class="linegraph"></div>
     <div id="linegraph_5" class="linegraph"></div>
+    <div id="linegraph_zero" class="linegraph"></div>
     
     <h2>Horizontal Bar Graph</h2>
     <div id="bargraph_5" class="linegraph"></div>
@@ -122,7 +123,7 @@ new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 3
 new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
 new Ico.SparkLine($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
 
-new Ico.BarGraph($('bargraph'), { one: $random(1, 25) }, { bar_labels: true });
+new Ico.BarGraph($('bargraph'), { one: $random(1, 25) }, { bar_labels: true, colour: '#339933', highlight_colours: { 2: '#000000' } });
 new Ico.BarGraph($('bargraph_bug'), [1.0]);
 new Ico.BarGraph($('bargraph_9'),  { shoe_size: [1, 1, 1, 0, 2, 4, 6, 8, 3, 9, 6]}, { colours: { shoe_size: '#990000' }, grid: true, bar_labels: true });
 
@@ -132,6 +133,7 @@ new Ico.LineGraph($('linegraph_3'), $map(1, 25, function() { return Math.round(M
 new Ico.LineGraph($('linegraph_4'), $random(1, 25));
 
 new Ico.LineGraph($('linegraph_5'), { shoe_size: [15,14,10]},{ markers: 'circle', colours: { shoe_size: '#990000' }, grid: true });
+new Ico.LineGraph($('linegraph_zero'), [0, 0, 0], { markers: 'circle', grid: true });
 
 // TODO: Grid isn't tall enough here:
 new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, grid: true, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099', background_colour: '#fff' });
@@ -148,7 +150,7 @@ new Ico.LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77
 new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
 new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-20,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
 
-new Ico.BarGraph($('grouped_bars'), [[10, 15, 4], [18, 19, 12], [17, 23, 11], [11, 22, 14]],  { grid: true, font_size: 10, colours: ['#ff0099', '#339933', '#333399'], labels: ['Winter', 'Spring', 'Summer', 'Autumn'] });
+new Ico.BarGraph($('grouped_bars'), [[10, 15, 4], [18, 19, 12], [17, 23, 11], [11, 22, 14]],  { grid: true, font_size: 10, colours: ['#ff0099', '#339933', '#333399'], highlight_colours: { 3: '#ff0000' }, labels: ['Winter', 'Spring', 'Summer', 'Autumn'] });
 new Ico.BarGraph($('grouped_bars_2'), [[10, 15, 4], [18, 19, 12], [17, 23, 11], [11, 22, 14]],  { line: [17, 20, 18, 10], grid: true, font_size: 10, colours: ['#ff0099', '#339933', '#333399'], labels: ['Winter', 'Spring', 'Summer', 'Autumn'] });
 
 new Ico.BarGraph($('rics_poll'), [20, 20],  { max_bar_size: 100, font_size: 10, colour: '#ff0099', labels: ['label one', 'label two'] });

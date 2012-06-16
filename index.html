@@ -208,15 +208,26 @@ new Ico.LineGraph(document.getElementById('linegraph'), {
 <h3>Options for <code>Ico.BarGraph</code></h3>
 
 <ul>
+<li><code>colour</code>: The colour for the bars</li>
+<li><code>colours</code>: An array of colours for each bar</li>
+<li><code>highlight_colours</code>: An object with the index of a bar (starting from 0) and a colour, like this <code>{ 3: '#ff0000' }</code></li>
 <li><code>bar_size</code>: Set the size for a bar in a bar graph</li>
 <li><code>max_bar_size</code>: Set the maximum size for a bar in a bar graph</li>
 <li><code>bar_labels</code>: Display the actual value of each bar in a bar graph</li>
 <li><code>line</code>: Provide an array to plot a line alongside a bar graph</li>
 </ul>
 
+<h3>Options for <code>Ico.LineGraph</code></h3>
+
+<ul>
+<li><code>stroke_width</code>: Sets the stroke width, defaults to <code>3px</code>.  Set to <code>0</code> to get a scatter plot</li>
+</ul>
+
 <h3>Grouped Bar Graphs</h3>
 
 <p>Multidimensional arrays will be rendered as 'grouped' bar graphs.  Notice that two colours are specified, one for each bar in the group.  This is still a work in progress and hasn't been tested thoroughly yet.</p>
+
+<p>In grouped bar graphs, the index for <code>highlight_colours</code> is the index from left to right, starting from zero.</p>
 
 <pre class="prettyprint lang-js"><code>
 new Ico.BarGraph(
