@@ -1,3 +1,8 @@
+0.3.10 / 2012-02-06
+==================
+
+  * Fixed issue 16: When defining labels, the vertical lines are incorrect
+
 0.3.9 / 2012-02-06
 ==================
 

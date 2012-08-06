@@ -1041,7 +1041,7 @@ Helpers.extend(Ico.LineGraph.prototype, {
   },
 
   calculateStep: function() {
-    return (this.graph_width - (this.options.plot_padding * 2)) / validStepDivider(this.data_size);
+    return this.graph_width / this.data_size;
   },
 
   drawPlot: function(index, pathString, x, y, colour) {
@@ -1053,7 +1053,7 @@ Helpers.extend(Ico.LineGraph.prototype, {
     }
     
     if (index === 0) {
-      this.lastPoint = { x: x, y: y }; 
+      this.lastPoint = { x: x, y: y };
       return pathString + 'M' + x + ',' + y;
     }
 
